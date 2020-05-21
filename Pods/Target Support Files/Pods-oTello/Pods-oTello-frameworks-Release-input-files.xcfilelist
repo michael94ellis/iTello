@@ -1,4 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-oTello/Pods-oTello-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/BRHJoyStickView/BRHJoyStickView.framework
-${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework
 ${BUILT_PRODUCTS_DIR}/SwiftSocket/SwiftSocket.framework

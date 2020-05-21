@@ -165,6 +165,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             return
         }
         DispatchQueue.main.async {
+            // Update video image with new frame
             self.videoView?.image = UIImage(cgImage: displayableImage)
         }
     }

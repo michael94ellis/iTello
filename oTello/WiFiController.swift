@@ -69,7 +69,17 @@ class WifiController: NSObject {
                 case .invalidSSIDPrefix:
                     return "Invlaid SSID Prefix"
                 case .invalid, .invalidWEPPassphrase,
-                     .invalidEAPSettings, .invalidHS20Settings, .invalidHS20DomainName, .userDenied, .pending, .systemConfiguration, .unknown, .joinOnceNotSupported, .alreadyAssociated, .applicationIsNotInForeground, .internal:
+                     .invalidEAPSettings,
+                     .invalidHS20Settings,
+                     .invalidHS20DomainName,
+                     .userDenied,
+                     .pending,
+                     .systemConfiguration,
+                     .unknown,
+                     .joinOnceNotSupported,
+                     .alreadyAssociated,
+                     .applicationIsNotInForeground,
+                     .internal:
                     return "Connection Error"
                 @unknown default:
                     return "Unknown Error"

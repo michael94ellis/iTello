@@ -40,6 +40,9 @@ class BasicDroneControllerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // TODO: Add Settings Page
+        // TODO: Make controller based on touchDown and xy drag distance from touchdown
+        // TODO: fullscreen video mode option
         setupLeftJoystick()
         setupRightJoystick()
         telloDataReadTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
@@ -53,6 +56,8 @@ class BasicDroneControllerVC: UIViewController {
         firstOpenDialog()
     }
     
+    /// Presented to the user if they just opened the app, it detects this by using the default telloSSID value `TELLO-`
+    /// Example SSID: `TELLO-5C8145`
     func firstOpenDialog() {
         if WifiController.shared.telloSSID == "TELLO-" {
             let welcomeAlert = UIAlertController(
@@ -65,10 +70,9 @@ class BasicDroneControllerVC: UIViewController {
     }
     
     func setupLeftJoystick() {
+        // Transparency
         leftJoystick.baseAlpha = 0.15
         leftJoystick.handleAlpha = 0.3
-        leftJoystick.baseImage = UIImage(named: "FancyBase")
-        leftJoystick.handleImage = UIImage(named: "FancyHandle")
         leftJoystick.monitor = .xy(monitor: { value in
             guard let tello = self.tello else { return }
             tello.yaw = Int(value.x)
@@ -78,30 +82,15 @@ class BasicDroneControllerVC: UIViewController {
     }
     
     func setupRightJoystick() {
+        // Transparency
         rightJoystick.baseAlpha = 0.15
         rightJoystick.handleAlpha = 0.3
-        rightJoystick.baseImage = UIImage(named: "FancyBase")
-        rightJoystick.handleImage = UIImage(named: "FancyHandle")
         rightJoystick.monitor = .xy(monitor: { value in
             guard let tello = self.tello else { return }
             tello.leftRight = Int(value.x)
             tello.forwardBack = Int(value.y)
             tello.updateMovementTimer()
         })
-    }
-    
-    @IBAction func videoButtonTapped(_ sender: Any) {
-        tello?.toggleCamera()
-        let isVideoEnabled = tello?.isCameraOn ?? false
-        videoButton.setBackgroundImage(isVideoEnabled ? videoEnabledImage : videoDisabledImage, for: .normal)
-    }
-    /// Tell the drone to takeoff
-    @IBAction func takeoff(_ sender: UIButton) {
-        tello?.takeOff()
-    }
-    /// Attempt to land the drone, it may need extra taps
-    @IBAction func land(_ sender: UIButton) {
-        tello?.land()
     }
     @IBAction func connectWiFi(_ sender: UIButton) {
         let currentSSID = WifiController.shared.telloSSID
@@ -138,6 +127,24 @@ class BasicDroneControllerVC: UIViewController {
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: - Drone Command Buttons
+    
+    /// This ought to not work if there is no Drone connected
+    @IBAction func videoButtonTapped(_ sender: Any) {
+        tello?.toggleCamera()
+        let isVideoEnabled = tello?.isCameraOn ?? false
+        videoButton.setBackgroundImage(isVideoEnabled ? videoEnabledImage : videoDisabledImage, for: .normal)
+    }
+    
+    /// Tell the drone to takeoff
+    @IBAction func takeoff(_ sender: UIButton) {
+        tello?.takeOff()
+    }
+    /// Attempt to land the drone, it may need extra taps
+    @IBAction func land(_ sender: UIButton) {
+        tello?.land()
     }
     /// Backflip
     @IBAction func flipA(_ sender: Any) {

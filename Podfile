@@ -7,7 +7,6 @@ target 'oTello' do
 
   # Pods for oTello
   
-  pod 'CocoaAsyncSocket'
   pod 'BRHJoyStickView'
   pod 'SwiftSocket'
   

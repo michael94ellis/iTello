@@ -1,24 +1,20 @@
 PODS:
   - BRHJoyStickView (2.1.2)
-  - CocoaAsyncSocket (7.6.4)
   - SwiftSocket (2.0.2)
 
 DEPENDENCIES:
   - BRHJoyStickView
-  - CocoaAsyncSocket
   - SwiftSocket
 
 SPEC REPOS:
   trunk:
     - BRHJoyStickView
-    - CocoaAsyncSocket
     - SwiftSocket
 
 SPEC CHECKSUMS:
   BRHJoyStickView: b332a149579ca5daa878b6bc2322c44bf47d411b
-  CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   SwiftSocket: 6f4c9c63fbc5c1d61188936bb3c599fd546f40ae
 
-PODFILE CHECKSUM: a985af2fe8c07736467b46ff61cc9c77629c2ad0
+PODFILE CHECKSUM: ab17b955dcf837e660e3d8bbb819f619e52c1149
 
 COCOAPODS: 1.9.1
