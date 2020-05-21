@@ -1,0 +1,1141 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		008C8D272AA9C136653773904D58345E /* BRHJoyStickView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 955557F8035954C5FAFDD9898028E0BD /* BRHJoyStickView-dummy.m */; };
+		0EC1806437F66CC12F06DD7ACD1FBA4A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5359E8FB322457653E676483AB72D7B1 /* Security.framework */; };
+		10FF98D32189D045D89683CE1D2CE9FC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B655093DDCC0176DEAC903ABA8E76527 /* Foundation.framework */; };
+		14703875367641811BD5FE75ACD67C96 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B655093DDCC0176DEAC903ABA8E76527 /* Foundation.framework */; };
+		1F292B5410B16DBF60D1F47A48216622 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B2501C20E933E0AEF717934242EA61E1 /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		20386C4BEBA1CEA6E5EDB1669B7ADD76 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC814063E47992E7A90FA41688C2A454 /* CFNetwork.framework */; };
+		26933DE790AD32659A054D491A443F2F /* yudpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = 90F25B79E4545EBF3EA9E7AF6D598511 /* yudpsocket.c */; };
+		2922C954DCA50DB1C087E9E9C9440393 /* CocoaAsyncSocket-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E7D7622E45921265C84838DF404F8A7 /* CocoaAsyncSocket-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		310F4A419C7777D411976A91A8977522 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFA82F25EDA5C1894B5FCFFE7F4805E /* Result.swift */; };
+		348B0FA575F66C57E9E2085AEEF27E81 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B655093DDCC0176DEAC903ABA8E76527 /* Foundation.framework */; };
+		3958B8F1AEA10A127029DD8D60B71B1A /* Pods-oTello-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F183BD8E7E2F2E71C1BB4D9B82FDC1A9 /* Pods-oTello-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		411EE6BA92B228BF3497175C14FC7A90 /* GCDAsyncUdpSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 798B7AB19F61C4F97611799D254A65D8 /* GCDAsyncUdpSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		50E76D8189538516CC18AAB06A7CC1C1 /* CoreGraphics+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F83B9654AFD8FB5389279E5E21883A8 /* CoreGraphics+Additions.swift */; };
+		516A308112B63942274C9FAA0007DC59 /* JoyStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A25F6B0E6A23FECBE5392A5F3EEB91 /* JoyStickView.swift */; };
+		590F90702C1E8FFBDE2750F2EB559F6B /* SwiftSocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = EA28E3CEFBD5BAE88034A11297A3B4C8 /* SwiftSocket-dummy.m */; };
+		5BB907C502A7DEFA00C3F7ECA55CAE2B /* SwiftSocket-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DD9A23F9DB1053971AC11D7029A99EE /* SwiftSocket-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		668620DA054C30442DE4AF117D8FECDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 259FEEABFBF57CD832D8970CC47A09CB /* Assets.xcassets */; };
+		6C237B7AA6F4A2DD17CA05EB90C83362 /* CocoaAsyncSocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF38E63DBF44DFCC40E27C10D6CC279 /* CocoaAsyncSocket-dummy.m */; };
+		701EFC638C5EEF415AFB97DD6888E839 /* BRHJoyStickView-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F9917E0B1CB4721BC6CE95DDB1ECFE7 /* BRHJoyStickView-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71719E654327DF3FE268F5B592C6221C /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = FF827DEB54FF54BA40DC9284D6B2DDD2 /* ytcpsocket.c */; };
+		7E326A09D64EB073F09CE18AB51EFADB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B655093DDCC0176DEAC903ABA8E76527 /* Foundation.framework */; };
+		83AA1BA7CB29BA51D0A1011569BAE3AA /* BRHJoyStickView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F1F40A6F099E0D63E8F2902D8A4E321 /* BRHJoyStickView.bundle */; };
+		86CABF16414D74E81AF00E487F59B6E7 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C67FF868A33346DFF69C8137520F82E /* UDPClient.swift */; };
+		9F9C4D89B9E4648A85BA2AD7E2C4911F /* TCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1EDEFDF04807B4D85F6681F79888234 /* TCPClient.swift */; };
+		A09729B1806417EAEF0123F3EA964BB9 /* Bundle+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9839CF905EB1C84D3BE76A947F568E48 /* Bundle+Additions.swift */; };
+		A55C266A5E05E86A312DA5B52F2F1470 /* Pods-oTello-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 651ED470540286534029AB2778348C81 /* Pods-oTello-dummy.m */; };
+		BD757F63E5FF4F8FFC28CC35F9F9B119 /* JoyStickViewMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116C4ED1E6D50A2DED148F2B20A488D /* JoyStickViewMonitor.swift */; };
+		BF0E4454B28437897BC092AE02CD0C13 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2F04147E8C4A2C70F7E63910C10E9E /* GCDAsyncUdpSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		D303472E6599B444367CC153A4F2DFDC /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636A292EC2C2ED089F15BCEB6A6F51FC /* Socket.swift */; };
+		DF77DA76BD5962EE7DD383126BBBBAC8 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 3334DE11D506698C805C068A4F5EB11E /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		666ABC04D629FA7A97BED47037421677 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 69DB37D32E4103D95B632DDF492B6A34;
+			remoteInfo = "BRHJoyStickView-BRHJoyStickView";
+		};
+		92FBA3006C3D06D151D64AE3FEB61D75 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6083682834ABE0AE7BD1CBF06CADD036;
+			remoteInfo = CocoaAsyncSocket;
+		};
+		94DD9622FC68DB910D5682D3416C2D8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2098E99F31975F5C89523CC6EB58B9CC;
+			remoteInfo = SwiftSocket;
+		};
+		D766D133F307E1AD0A51108677F02CD2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD6F17105988B1F38EF2A3D31277833C;
+			remoteInfo = BRHJoyStickView;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		07B4BEAAAD9C84B76BF1B101D4FEACDD /* Pods-oTello.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-oTello.modulemap"; sourceTree = "<group>"; };
+		07EE5D89BEA460D5634BA51938E9082A /* CocoaAsyncSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaAsyncSocket-prefix.pch"; sourceTree = "<group>"; };
+		090F68702142084AA98078AF534E0FB8 /* CocoaAsyncSocket-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CocoaAsyncSocket-Info.plist"; sourceTree = "<group>"; };
+		12BC3DDDC12475E51572E243472473F5 /* SwiftSocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftSocket.modulemap; sourceTree = "<group>"; };
+		20C79F8C64C48A4DC2CB2B3D4384DD33 /* CocoaAsyncSocket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CocoaAsyncSocket.debug.xcconfig; sourceTree = "<group>"; };
+		20DFE76BEC388FDC7A68F8A53B6AF13B /* Pods-oTello.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-oTello.debug.xcconfig"; sourceTree = "<group>"; };
+		259FEEABFBF57CD832D8970CC47A09CB /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = JoyStickView/Assets.xcassets; sourceTree = "<group>"; };
+		2C3CCA9623DDE3B9928F05E731CAA2A8 /* BRHJoyStickView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BRHJoyStickView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FFB449FBDD0CF2CFE6A9FE31A9ABB32 /* BRHJoyStickView-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "BRHJoyStickView-Info.plist"; sourceTree = "<group>"; };
+		3334DE11D506698C805C068A4F5EB11E /* GCDAsyncSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
+		35D3FBB188EEF180CB640BD4D8073E50 /* BRHJoyStickView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = BRHJoyStickView.modulemap; sourceTree = "<group>"; };
+		3A59C9FE3D98CF2152E03CFA05A85BFC /* SwiftSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		46A1661FC5DC689444B27FA8C9BC0221 /* BRHJoyStickView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BRHJoyStickView-prefix.pch"; sourceTree = "<group>"; };
+		4F83B9654AFD8FB5389279E5E21883A8 /* CoreGraphics+Additions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CoreGraphics+Additions.swift"; path = "JoyStickView/Src/CoreGraphics+Additions.swift"; sourceTree = "<group>"; };
+		5359E8FB322457653E676483AB72D7B1 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		5619273F74622A0B6AC757C3B004F8CD /* BRHJoyStickView.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BRHJoyStickView.release.xcconfig; sourceTree = "<group>"; };
+		56C83D9CB5D51DEEABBE9920FBCBC958 /* BRHJoyStickView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BRHJoyStickView.debug.xcconfig; sourceTree = "<group>"; };
+		5DFA82F25EDA5C1894B5FCFFE7F4805E /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Sources/Result.swift; sourceTree = "<group>"; };
+		5F1F40A6F099E0D63E8F2902D8A4E321 /* BRHJoyStickView.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BRHJoyStickView.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F9917E0B1CB4721BC6CE95DDB1ECFE7 /* BRHJoyStickView-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BRHJoyStickView-umbrella.h"; sourceTree = "<group>"; };
+		630716DDE62B76ADB4EF724215CD1E3F /* SwiftSocket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftSocket.debug.xcconfig; sourceTree = "<group>"; };
+		636A292EC2C2ED089F15BCEB6A6F51FC /* Socket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Socket.swift; path = Sources/Socket.swift; sourceTree = "<group>"; };
+		651ED470540286534029AB2778348C81 /* Pods-oTello-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-oTello-dummy.m"; sourceTree = "<group>"; };
+		6CBEFE4F9E22AFDC6347A739BB35FF8C /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F2F04147E8C4A2C70F7E63910C10E9E /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncUdpSocket.m; path = Source/GCD/GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		76B70B2363FC9ED7F54787ECF8002E27 /* SwiftSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSocket-prefix.pch"; sourceTree = "<group>"; };
+		798B7AB19F61C4F97611799D254A65D8 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncUdpSocket.h; path = Source/GCD/GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		7DD9A23F9DB1053971AC11D7029A99EE /* SwiftSocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftSocket-umbrella.h"; sourceTree = "<group>"; };
+		7E7D7622E45921265C84838DF404F8A7 /* CocoaAsyncSocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaAsyncSocket-umbrella.h"; sourceTree = "<group>"; };
+		90E069DB555C1DCAB657BB41246E20D2 /* Pods-oTello-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-oTello-acknowledgements.plist"; sourceTree = "<group>"; };
+		90F25B79E4545EBF3EA9E7AF6D598511 /* yudpsocket.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = yudpsocket.c; path = Sources/yudpsocket.c; sourceTree = "<group>"; };
+		955557F8035954C5FAFDD9898028E0BD /* BRHJoyStickView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BRHJoyStickView-dummy.m"; sourceTree = "<group>"; };
+		9839CF905EB1C84D3BE76A947F568E48 /* Bundle+Additions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Bundle+Additions.swift"; path = "JoyStickView/Src/Bundle+Additions.swift"; sourceTree = "<group>"; };
+		9BBEED9B7552ADC078458C395598D6BD /* SwiftSocket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftSocket.release.xcconfig; sourceTree = "<group>"; };
+		9C67FF868A33346DFF69C8137520F82E /* UDPClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UDPClient.swift; path = Sources/UDPClient.swift; sourceTree = "<group>"; };
+		9CF38E63DBF44DFCC40E27C10D6CC279 /* CocoaAsyncSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaAsyncSocket-dummy.m"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A409BECCF9CD5FBEF682705279D33C01 /* CocoaAsyncSocket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CocoaAsyncSocket.release.xcconfig; sourceTree = "<group>"; };
+		B021928ED40C94296AEFF402D688EB30 /* CocoaAsyncSocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CocoaAsyncSocket.modulemap; sourceTree = "<group>"; };
+		B05EC107A5BBFE6534478320E51E891E /* Pods-oTello-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-oTello-acknowledgements.markdown"; sourceTree = "<group>"; };
+		B116C4ED1E6D50A2DED148F2B20A488D /* JoyStickViewMonitor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JoyStickViewMonitor.swift; path = JoyStickView/Src/JoyStickViewMonitor.swift; sourceTree = "<group>"; };
+		B2501C20E933E0AEF717934242EA61E1 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
+		B529EF31A1DB4CE1F3B9CD5C3EABE569 /* Pods-oTello-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-oTello-Info.plist"; sourceTree = "<group>"; };
+		B655093DDCC0176DEAC903ABA8E76527 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		BFD28BBD25AE9C3D85B48788EDF4A0FE /* Pods-oTello.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-oTello.release.xcconfig"; sourceTree = "<group>"; };
+		CC814063E47992E7A90FA41688C2A454 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
+		D57BE43838CD37BC6742FEE005CF535C /* SwiftSocket-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SwiftSocket-Info.plist"; sourceTree = "<group>"; };
+		E6CB7BD3A3A513337D84D8BF95EDDDF3 /* ResourceBundle-BRHJoyStickView-BRHJoyStickView-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-BRHJoyStickView-BRHJoyStickView-Info.plist"; sourceTree = "<group>"; };
+		EA28E3CEFBD5BAE88034A11297A3B4C8 /* SwiftSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftSocket-dummy.m"; sourceTree = "<group>"; };
+		F183BD8E7E2F2E71C1BB4D9B82FDC1A9 /* Pods-oTello-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-oTello-umbrella.h"; sourceTree = "<group>"; };
+		F1EDEFDF04807B4D85F6681F79888234 /* TCPClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TCPClient.swift; path = Sources/TCPClient.swift; sourceTree = "<group>"; };
+		F4A25F6B0E6A23FECBE5392A5F3EEB91 /* JoyStickView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JoyStickView.swift; path = JoyStickView/Src/JoyStickView.swift; sourceTree = "<group>"; };
+		F68CFB5E71961B597A276F7B94077BBD /* Pods-oTello-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-oTello-frameworks.sh"; sourceTree = "<group>"; };
+		FE27BF5C60F1914848AEE386E53ADDA7 /* Pods_oTello.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_oTello.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF827DEB54FF54BA40DC9284D6B2DDD2 /* ytcpsocket.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = ytcpsocket.c; path = Sources/ytcpsocket.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		083E3FF93F5F4278001DDEBC72303329 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E326A09D64EB073F09CE18AB51EFADB /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		160EF26C734A27A9436CAB7143AF8F15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20386C4BEBA1CEA6E5EDB1669B7ADD76 /* CFNetwork.framework in Frameworks */,
+				14703875367641811BD5FE75ACD67C96 /* Foundation.framework in Frameworks */,
+				0EC1806437F66CC12F06DD7ACD1FBA4A /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		39E1614CC3F335D27B17874245992FAC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				348B0FA575F66C57E9E2085AEEF27E81 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6207A291FB7F97FEED7FB837CB541ABA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10FF98D32189D045D89683CE1D2CE9FC /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5E79910B32022DC90346FF90823C225 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		03C5C200A0787E300053CFA8F53CA094 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BDB0DD9DF2184EAAFFD00F527DE67764 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		187893340D10186FEB761D6F959FBB4E /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				12BC3DDDC12475E51572E243472473F5 /* SwiftSocket.modulemap */,
+				EA28E3CEFBD5BAE88034A11297A3B4C8 /* SwiftSocket-dummy.m */,
+				D57BE43838CD37BC6742FEE005CF535C /* SwiftSocket-Info.plist */,
+				76B70B2363FC9ED7F54787ECF8002E27 /* SwiftSocket-prefix.pch */,
+				7DD9A23F9DB1053971AC11D7029A99EE /* SwiftSocket-umbrella.h */,
+				630716DDE62B76ADB4EF724215CD1E3F /* SwiftSocket.debug.xcconfig */,
+				9BBEED9B7552ADC078458C395598D6BD /* SwiftSocket.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SwiftSocket";
+			sourceTree = "<group>";
+		};
+		18E44CA718B5146015796365E6868346 /* BRHJoyStickView */ = {
+			isa = PBXGroup;
+			children = (
+				9839CF905EB1C84D3BE76A947F568E48 /* Bundle+Additions.swift */,
+				4F83B9654AFD8FB5389279E5E21883A8 /* CoreGraphics+Additions.swift */,
+				F4A25F6B0E6A23FECBE5392A5F3EEB91 /* JoyStickView.swift */,
+				B116C4ED1E6D50A2DED148F2B20A488D /* JoyStickViewMonitor.swift */,
+				8E78A84C40B692820C420D1A22A1D0ED /* Resources */,
+				59A83CD9143F7A255702AD4E219C50A3 /* Support Files */,
+			);
+			path = BRHJoyStickView;
+			sourceTree = "<group>";
+		};
+		3AD8D361CE0C8C2E677477D4A48BB1B8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5F1F40A6F099E0D63E8F2902D8A4E321 /* BRHJoyStickView.bundle */,
+				2C3CCA9623DDE3B9928F05E731CAA2A8 /* BRHJoyStickView.framework */,
+				6CBEFE4F9E22AFDC6347A739BB35FF8C /* CocoaAsyncSocket.framework */,
+				FE27BF5C60F1914848AEE386E53ADDA7 /* Pods_oTello.framework */,
+				3A59C9FE3D98CF2152E03CFA05A85BFC /* SwiftSocket.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		59A83CD9143F7A255702AD4E219C50A3 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				35D3FBB188EEF180CB640BD4D8073E50 /* BRHJoyStickView.modulemap */,
+				955557F8035954C5FAFDD9898028E0BD /* BRHJoyStickView-dummy.m */,
+				2FFB449FBDD0CF2CFE6A9FE31A9ABB32 /* BRHJoyStickView-Info.plist */,
+				46A1661FC5DC689444B27FA8C9BC0221 /* BRHJoyStickView-prefix.pch */,
+				5F9917E0B1CB4721BC6CE95DDB1ECFE7 /* BRHJoyStickView-umbrella.h */,
+				56C83D9CB5D51DEEABBE9920FBCBC958 /* BRHJoyStickView.debug.xcconfig */,
+				5619273F74622A0B6AC757C3B004F8CD /* BRHJoyStickView.release.xcconfig */,
+				E6CB7BD3A3A513337D84D8BF95EDDDF3 /* ResourceBundle-BRHJoyStickView-BRHJoyStickView-Info.plist */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/BRHJoyStickView";
+			sourceTree = "<group>";
+		};
+		8E78A84C40B692820C420D1A22A1D0ED /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				259FEEABFBF57CD832D8970CC47A09CB /* Assets.xcassets */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		A7AFDF3BC5FBA737D4B6BCC9B65DED6B /* SwiftSocket */ = {
+			isa = PBXGroup;
+			children = (
+				5DFA82F25EDA5C1894B5FCFFE7F4805E /* Result.swift */,
+				636A292EC2C2ED089F15BCEB6A6F51FC /* Socket.swift */,
+				F1EDEFDF04807B4D85F6681F79888234 /* TCPClient.swift */,
+				9C67FF868A33346DFF69C8137520F82E /* UDPClient.swift */,
+				FF827DEB54FF54BA40DC9284D6B2DDD2 /* ytcpsocket.c */,
+				90F25B79E4545EBF3EA9E7AF6D598511 /* yudpsocket.c */,
+				187893340D10186FEB761D6F959FBB4E /* Support Files */,
+			);
+			path = SwiftSocket;
+			sourceTree = "<group>";
+		};
+		B24F01DBD8A20783DD687A2E1A9CF86E /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				B021928ED40C94296AEFF402D688EB30 /* CocoaAsyncSocket.modulemap */,
+				9CF38E63DBF44DFCC40E27C10D6CC279 /* CocoaAsyncSocket-dummy.m */,
+				090F68702142084AA98078AF534E0FB8 /* CocoaAsyncSocket-Info.plist */,
+				07EE5D89BEA460D5634BA51938E9082A /* CocoaAsyncSocket-prefix.pch */,
+				7E7D7622E45921265C84838DF404F8A7 /* CocoaAsyncSocket-umbrella.h */,
+				20C79F8C64C48A4DC2CB2B3D4384DD33 /* CocoaAsyncSocket.debug.xcconfig */,
+				A409BECCF9CD5FBEF682705279D33C01 /* CocoaAsyncSocket.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/CocoaAsyncSocket";
+			sourceTree = "<group>";
+		};
+		B7F5D3EEFE24031F9F5832DE69033464 /* CocoaAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				3334DE11D506698C805C068A4F5EB11E /* GCDAsyncSocket.h */,
+				B2501C20E933E0AEF717934242EA61E1 /* GCDAsyncSocket.m */,
+				798B7AB19F61C4F97611799D254A65D8 /* GCDAsyncUdpSocket.h */,
+				6F2F04147E8C4A2C70F7E63910C10E9E /* GCDAsyncUdpSocket.m */,
+				B24F01DBD8A20783DD687A2E1A9CF86E /* Support Files */,
+			);
+			path = CocoaAsyncSocket;
+			sourceTree = "<group>";
+		};
+		BDB0DD9DF2184EAAFFD00F527DE67764 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				CC814063E47992E7A90FA41688C2A454 /* CFNetwork.framework */,
+				B655093DDCC0176DEAC903ABA8E76527 /* Foundation.framework */,
+				5359E8FB322457653E676483AB72D7B1 /* Security.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		CB1186309A01CE793CC16DD17E66058C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				18E44CA718B5146015796365E6868346 /* BRHJoyStickView */,
+				B7F5D3EEFE24031F9F5832DE69033464 /* CocoaAsyncSocket */,
+				A7AFDF3BC5FBA737D4B6BCC9B65DED6B /* SwiftSocket */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				03C5C200A0787E300053CFA8F53CA094 /* Frameworks */,
+				CB1186309A01CE793CC16DD17E66058C /* Pods */,
+				3AD8D361CE0C8C2E677477D4A48BB1B8 /* Products */,
+				F1D59A80A7DACC1D00FECEF7E43EFAEB /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		F1D59A80A7DACC1D00FECEF7E43EFAEB /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				FCFFF16A7BB82D5EEECB2EF0B798C83A /* Pods-oTello */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		FCFFF16A7BB82D5EEECB2EF0B798C83A /* Pods-oTello */ = {
+			isa = PBXGroup;
+			children = (
+				07B4BEAAAD9C84B76BF1B101D4FEACDD /* Pods-oTello.modulemap */,
+				B05EC107A5BBFE6534478320E51E891E /* Pods-oTello-acknowledgements.markdown */,
+				90E069DB555C1DCAB657BB41246E20D2 /* Pods-oTello-acknowledgements.plist */,
+				651ED470540286534029AB2778348C81 /* Pods-oTello-dummy.m */,
+				F68CFB5E71961B597A276F7B94077BBD /* Pods-oTello-frameworks.sh */,
+				B529EF31A1DB4CE1F3B9CD5C3EABE569 /* Pods-oTello-Info.plist */,
+				F183BD8E7E2F2E71C1BB4D9B82FDC1A9 /* Pods-oTello-umbrella.h */,
+				20DFE76BEC388FDC7A68F8A53B6AF13B /* Pods-oTello.debug.xcconfig */,
+				BFD28BBD25AE9C3D85B48788EDF4A0FE /* Pods-oTello.release.xcconfig */,
+			);
+			name = "Pods-oTello";
+			path = "Target Support Files/Pods-oTello";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3DF5F5FB7106F397E75B57DD91259BC2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				701EFC638C5EEF415AFB97DD6888E839 /* BRHJoyStickView-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AD3DDA00D396E4CA7A6B6448B71BFF1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3958B8F1AEA10A127029DD8D60B71B1A /* Pods-oTello-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC3106B504678C60365EA746F2704214 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BB907C502A7DEFA00C3F7ECA55CAE2B /* SwiftSocket-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F82807D639FCFDF56A607D3970098A87 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2922C954DCA50DB1C087E9E9C9440393 /* CocoaAsyncSocket-umbrella.h in Headers */,
+				DF77DA76BD5962EE7DD383126BBBBAC8 /* GCDAsyncSocket.h in Headers */,
+				411EE6BA92B228BF3497175C14FC7A90 /* GCDAsyncUdpSocket.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2098E99F31975F5C89523CC6EB58B9CC /* SwiftSocket */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 227044261F7ABB997524D6854C4DA01A /* Build configuration list for PBXNativeTarget "SwiftSocket" */;
+			buildPhases = (
+				DC3106B504678C60365EA746F2704214 /* Headers */,
+				13487976253A0F787DA56797114477E5 /* Sources */,
+				6207A291FB7F97FEED7FB837CB541ABA /* Frameworks */,
+				99652FCBC8D3FDD8F6EA0DC26B0734B5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftSocket;
+			productName = SwiftSocket;
+			productReference = 3A59C9FE3D98CF2152E03CFA05A85BFC /* SwiftSocket.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		6083682834ABE0AE7BD1CBF06CADD036 /* CocoaAsyncSocket */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 65B2BBD8991DD61ACE6737AADB85AB43 /* Build configuration list for PBXNativeTarget "CocoaAsyncSocket" */;
+			buildPhases = (
+				F82807D639FCFDF56A607D3970098A87 /* Headers */,
+				398D9830C2C4A6872C9EEC588214E124 /* Sources */,
+				160EF26C734A27A9436CAB7143AF8F15 /* Frameworks */,
+				B7B5EDC45A81FF70431CFBFB2ABDFFEB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CocoaAsyncSocket;
+			productName = CocoaAsyncSocket;
+			productReference = 6CBEFE4F9E22AFDC6347A739BB35FF8C /* CocoaAsyncSocket.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		69DB37D32E4103D95B632DDF492B6A34 /* BRHJoyStickView-BRHJoyStickView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D090B554D56AA4D6EE7FB387200BA71A /* Build configuration list for PBXNativeTarget "BRHJoyStickView-BRHJoyStickView" */;
+			buildPhases = (
+				52F09F57870A66D62BBCEC31A614C66F /* Sources */,
+				A5E79910B32022DC90346FF90823C225 /* Frameworks */,
+				F6C1F592A54712377C9DF543152C75EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BRHJoyStickView-BRHJoyStickView";
+			productName = "BRHJoyStickView-BRHJoyStickView";
+			productReference = 5F1F40A6F099E0D63E8F2902D8A4E321 /* BRHJoyStickView.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+		B4D207EB9609460B156600704C26CF40 /* Pods-oTello */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2396DCE1542876920F54D26D391B9F8B /* Build configuration list for PBXNativeTarget "Pods-oTello" */;
+			buildPhases = (
+				8AD3DDA00D396E4CA7A6B6448B71BFF1 /* Headers */,
+				8BD3D5BD674E08D78A924D11DEB536FA /* Sources */,
+				083E3FF93F5F4278001DDEBC72303329 /* Frameworks */,
+				F3CA52E325C4F28FA84BA990B16DB637 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				30E10AD44EB7C8584F56F83DA63EEF8D /* PBXTargetDependency */,
+				2BF3AECF55FD998D9EA8AB8D6E168C67 /* PBXTargetDependency */,
+				2C2CC35E51E6A372DB9391EBAA9D6626 /* PBXTargetDependency */,
+			);
+			name = "Pods-oTello";
+			productName = "Pods-oTello";
+			productReference = FE27BF5C60F1914848AEE386E53ADDA7 /* Pods_oTello.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DD6F17105988B1F38EF2A3D31277833C /* BRHJoyStickView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F05496213AFA62E01A90E1F05089923 /* Build configuration list for PBXNativeTarget "BRHJoyStickView" */;
+			buildPhases = (
+				3DF5F5FB7106F397E75B57DD91259BC2 /* Headers */,
+				7D965CFF4659E2E2C341B287D817DCC6 /* Sources */,
+				39E1614CC3F335D27B17874245992FAC /* Frameworks */,
+				6EDEFE584061C57ED7FFE1FDFFD565F9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				89E395584C5F86F1E365A0C157D9B0AE /* PBXTargetDependency */,
+			);
+			name = BRHJoyStickView;
+			productName = BRHJoyStickView;
+			productReference = 2C3CCA9623DDE3B9928F05E731CAA2A8 /* BRHJoyStickView.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 3AD8D361CE0C8C2E677477D4A48BB1B8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DD6F17105988B1F38EF2A3D31277833C /* BRHJoyStickView */,
+				69DB37D32E4103D95B632DDF492B6A34 /* BRHJoyStickView-BRHJoyStickView */,
+				6083682834ABE0AE7BD1CBF06CADD036 /* CocoaAsyncSocket */,
+				B4D207EB9609460B156600704C26CF40 /* Pods-oTello */,
+				2098E99F31975F5C89523CC6EB58B9CC /* SwiftSocket */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6EDEFE584061C57ED7FFE1FDFFD565F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83AA1BA7CB29BA51D0A1011569BAE3AA /* BRHJoyStickView.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		99652FCBC8D3FDD8F6EA0DC26B0734B5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7B5EDC45A81FF70431CFBFB2ABDFFEB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3CA52E325C4F28FA84BA990B16DB637 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F6C1F592A54712377C9DF543152C75EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				668620DA054C30442DE4AF117D8FECDC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		13487976253A0F787DA56797114477E5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				310F4A419C7777D411976A91A8977522 /* Result.swift in Sources */,
+				D303472E6599B444367CC153A4F2DFDC /* Socket.swift in Sources */,
+				590F90702C1E8FFBDE2750F2EB559F6B /* SwiftSocket-dummy.m in Sources */,
+				9F9C4D89B9E4648A85BA2AD7E2C4911F /* TCPClient.swift in Sources */,
+				86CABF16414D74E81AF00E487F59B6E7 /* UDPClient.swift in Sources */,
+				71719E654327DF3FE268F5B592C6221C /* ytcpsocket.c in Sources */,
+				26933DE790AD32659A054D491A443F2F /* yudpsocket.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		398D9830C2C4A6872C9EEC588214E124 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C237B7AA6F4A2DD17CA05EB90C83362 /* CocoaAsyncSocket-dummy.m in Sources */,
+				1F292B5410B16DBF60D1F47A48216622 /* GCDAsyncSocket.m in Sources */,
+				BF0E4454B28437897BC092AE02CD0C13 /* GCDAsyncUdpSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52F09F57870A66D62BBCEC31A614C66F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7D965CFF4659E2E2C341B287D817DCC6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				008C8D272AA9C136653773904D58345E /* BRHJoyStickView-dummy.m in Sources */,
+				A09729B1806417EAEF0123F3EA964BB9 /* Bundle+Additions.swift in Sources */,
+				50E76D8189538516CC18AAB06A7CC1C1 /* CoreGraphics+Additions.swift in Sources */,
+				516A308112B63942274C9FAA0007DC59 /* JoyStickView.swift in Sources */,
+				BD757F63E5FF4F8FFC28CC35F9F9B119 /* JoyStickViewMonitor.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BD3D5BD674E08D78A924D11DEB536FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A55C266A5E05E86A312DA5B52F2F1470 /* Pods-oTello-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2BF3AECF55FD998D9EA8AB8D6E168C67 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CocoaAsyncSocket;
+			target = 6083682834ABE0AE7BD1CBF06CADD036 /* CocoaAsyncSocket */;
+			targetProxy = 92FBA3006C3D06D151D64AE3FEB61D75 /* PBXContainerItemProxy */;
+		};
+		2C2CC35E51E6A372DB9391EBAA9D6626 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftSocket;
+			target = 2098E99F31975F5C89523CC6EB58B9CC /* SwiftSocket */;
+			targetProxy = 94DD9622FC68DB910D5682D3416C2D8A /* PBXContainerItemProxy */;
+		};
+		30E10AD44EB7C8584F56F83DA63EEF8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = BRHJoyStickView;
+			target = DD6F17105988B1F38EF2A3D31277833C /* BRHJoyStickView */;
+			targetProxy = D766D133F307E1AD0A51108677F02CD2 /* PBXContainerItemProxy */;
+		};
+		89E395584C5F86F1E365A0C157D9B0AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "BRHJoyStickView-BRHJoyStickView";
+			target = 69DB37D32E4103D95B632DDF492B6A34 /* BRHJoyStickView-BRHJoyStickView */;
+			targetProxy = 666ABC04D629FA7A97BED47037421677 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1422B121EAEAEA11307496903FA623C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		1C060A3D306580198BBAC4628EF0C20B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5619273F74622A0B6AC757C3B004F8CD /* BRHJoyStickView.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/BRHJoyStickView/BRHJoyStickView-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/BRHJoyStickView/BRHJoyStickView-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/BRHJoyStickView/BRHJoyStickView.modulemap";
+				PRODUCT_MODULE_NAME = BRHJoyStickView;
+				PRODUCT_NAME = BRHJoyStickView;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4863FF8D63EF8BF6C0B3CD130D1AFECB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 56C83D9CB5D51DEEABBE9920FBCBC958 /* BRHJoyStickView.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/BRHJoyStickView/BRHJoyStickView-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/BRHJoyStickView/BRHJoyStickView-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/BRHJoyStickView/BRHJoyStickView.modulemap";
+				PRODUCT_MODULE_NAME = BRHJoyStickView;
+				PRODUCT_NAME = BRHJoyStickView;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		5E165F0016B1389F8B92F59B7AD4F80E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 20DFE76BEC388FDC7A68F8A53B6AF13B /* Pods-oTello.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-oTello/Pods-oTello-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-oTello/Pods-oTello.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		64E708D5C0C4B59E55EFC7DD3AAB6D4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9BBEED9B7552ADC078458C395598D6BD /* SwiftSocket.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftSocket/SwiftSocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftSocket/SwiftSocket-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SwiftSocket/SwiftSocket.modulemap";
+				PRODUCT_MODULE_NAME = SwiftSocket;
+				PRODUCT_NAME = SwiftSocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		71232F246ADDF011B771BFEE0C31105C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A409BECCF9CD5FBEF682705279D33C01 /* CocoaAsyncSocket.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket.modulemap";
+				PRODUCT_MODULE_NAME = CocoaAsyncSocket;
+				PRODUCT_NAME = CocoaAsyncSocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7637FCC9AFC67EF2CC046F30A67A0485 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 20C79F8C64C48A4DC2CB2B3D4384DD33 /* CocoaAsyncSocket.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket.modulemap";
+				PRODUCT_MODULE_NAME = CocoaAsyncSocket;
+				PRODUCT_NAME = CocoaAsyncSocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		ACF2C36E4AA85E603F3C471F34A88F30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFD28BBD25AE9C3D85B48788EDF4A0FE /* Pods-oTello.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-oTello/Pods-oTello-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-oTello/Pods-oTello.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C74C6BF01179B73513364D316677EF59 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 630716DDE62B76ADB4EF724215CD1E3F /* SwiftSocket.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftSocket/SwiftSocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftSocket/SwiftSocket-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SwiftSocket/SwiftSocket.modulemap";
+				PRODUCT_MODULE_NAME = SwiftSocket;
+				PRODUCT_NAME = SwiftSocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E6C8BF69C88A0476C20253795F65D946 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 56C83D9CB5D51DEEABBE9920FBCBC958 /* BRHJoyStickView.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BRHJoyStickView";
+				IBSC_MODULE = BRHJoyStickView;
+				INFOPLIST_FILE = "Target Support Files/BRHJoyStickView/ResourceBundle-BRHJoyStickView-BRHJoyStickView-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_NAME = BRHJoyStickView;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		ED22F1C3870C3BE1C79D461108B77789 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5619273F74622A0B6AC757C3B004F8CD /* BRHJoyStickView.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BRHJoyStickView";
+				IBSC_MODULE = BRHJoyStickView;
+				INFOPLIST_FILE = "Target Support Files/BRHJoyStickView/ResourceBundle-BRHJoyStickView-BRHJoyStickView-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_NAME = BRHJoyStickView;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		ED7888FA6713EABBF66D26A8003AD1CA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		227044261F7ABB997524D6854C4DA01A /* Build configuration list for PBXNativeTarget "SwiftSocket" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C74C6BF01179B73513364D316677EF59 /* Debug */,
+				64E708D5C0C4B59E55EFC7DD3AAB6D4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2396DCE1542876920F54D26D391B9F8B /* Build configuration list for PBXNativeTarget "Pods-oTello" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E165F0016B1389F8B92F59B7AD4F80E /* Debug */,
+				ACF2C36E4AA85E603F3C471F34A88F30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED7888FA6713EABBF66D26A8003AD1CA /* Debug */,
+				1422B121EAEAEA11307496903FA623C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		65B2BBD8991DD61ACE6737AADB85AB43 /* Build configuration list for PBXNativeTarget "CocoaAsyncSocket" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7637FCC9AFC67EF2CC046F30A67A0485 /* Debug */,
+				71232F246ADDF011B771BFEE0C31105C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8F05496213AFA62E01A90E1F05089923 /* Build configuration list for PBXNativeTarget "BRHJoyStickView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4863FF8D63EF8BF6C0B3CD130D1AFECB /* Debug */,
+				1C060A3D306580198BBAC4628EF0C20B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D090B554D56AA4D6EE7FB387200BA71A /* Build configuration list for PBXNativeTarget "BRHJoyStickView-BRHJoyStickView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6C8BF69C88A0476C20253795F65D946 /* Debug */,
+				ED22F1C3870C3BE1C79D461108B77789 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}
