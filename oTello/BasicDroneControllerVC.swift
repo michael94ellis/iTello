@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import BRHJoyStickView
 
 class BasicDroneControllerVC: UIViewController {
     
@@ -28,8 +27,6 @@ class BasicDroneControllerVC: UIViewController {
     
     @IBOutlet weak var videoButton: UIButton!
     @IBOutlet weak var videoImage: UIImageView!
-    @IBOutlet weak var leftJoystick: JoyStickView!
-    @IBOutlet weak var rightJoystick: JoyStickView!
     @IBOutlet weak var wifiButton: UIButton!
     @IBOutlet weak var wifiLabel: UILabel!
     @IBOutlet weak var batteryLabel: UILabel!
@@ -80,26 +77,26 @@ class BasicDroneControllerVC: UIViewController {
     
     func setupLeftJoystick() {
         // Transparency
-        leftJoystick.baseAlpha = 0.15
-        leftJoystick.handleAlpha = 0.3
-        leftJoystick.monitor = .xy(monitor: { value in
-            guard let tello = self.tello else { return }
-            tello.yaw = Int(value.x)
-            tello.upDown = Int(value.y)
-            tello.updateMovementTimer()
-        })
+//        leftJoystick.baseAlpha = 0.15
+//        leftJoystick.handleAlpha = 0.3
+//        leftJoystick.monitor = .xy(monitor: { value in
+//            guard let tello = self.tello else { return }
+//            tello.yaw = Int(value.x)
+//            tello.upDown = Int(value.y)
+//            tello.updateMovementTimer()
+//        })
     }
     
     func setupRightJoystick() {
         // Transparency
-        rightJoystick.baseAlpha = 0.15
-        rightJoystick.handleAlpha = 0.3
-        rightJoystick.monitor = .xy(monitor: { value in
-            guard let tello = self.tello else { return }
-            tello.leftRight = Int(value.x)
-            tello.forwardBack = Int(value.y)
-            tello.updateMovementTimer()
-        })
+//        rightJoystick.baseAlpha = 0.15
+//        rightJoystick.handleAlpha = 0.3
+//        rightJoystick.monitor = .xy(monitor: { value in
+//            guard let tello = self.tello else { return }
+//            tello.leftRight = Int(value.x)
+//            tello.forwardBack = Int(value.y)
+//            tello.updateMovementTimer()
+//        })
     }
 
     @IBAction func wifiButtonTapped(_ sender: UIButton) {
