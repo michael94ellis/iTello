@@ -9,5 +9,7 @@ target 'oTello' do
   
   pod 'BRHJoyStickView'
   pod 'SwiftSocket'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Crashlytics'
   
 end

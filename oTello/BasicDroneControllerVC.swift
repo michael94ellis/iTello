@@ -21,6 +21,10 @@ class BasicDroneControllerVC: UIViewController {
     }
     /// Updates the data variables on the UI if a Tello is connected
     var telloDataReadTimer = Timer()
+    /// Used to determine if user is spamming takeoff, which indicates a problem, and a popup message is shown
+    var takeoffSpamDetectionTimer = Timer()
+    /// Will be reset when the tap timer expires
+    var takeoffTapCount = 0
     
     @IBOutlet weak var videoButton: UIButton!
     @IBOutlet weak var videoImage: UIImageView!
@@ -47,13 +51,18 @@ class BasicDroneControllerVC: UIViewController {
         setupRightJoystick()
         telloDataReadTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
             guard let tello = self.tello else { return }
-            self.batteryLabel.text = "Battery: \(tello.battery)"
+            self.batteryLabel.text = "Battery: \(tello.battery)%"
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        firstOpenDialog()
+        if let currentSSID = WifiController.shared.wifiConnectionInfo()?["SSID"] as? String,
+            currentSSID.hasPrefix("TELLO-") {
+            self.handleWiFiConnectionSuccess(ssid: currentSSID)
+        } else {
+            firstOpenDialog()
+        }
     }
     
     /// Presented to the user if they just opened the app, it detects this by using the default telloSSID value `TELLO-`
@@ -92,41 +101,64 @@ class BasicDroneControllerVC: UIViewController {
             tello.updateMovementTimer()
         })
     }
-    @IBAction func connectWiFi(_ sender: UIButton) {
-        let currentSSID = WifiController.shared.telloSSID
-        let alert = UIAlertController(title: "Connect to WiFi",
-                                      message: "Enter the Tello's WiFi Name(SSID)",
-                                      preferredStyle: .alert)
-        alert.addTextField { (textField) in
-            textField.text = currentSSID
+
+    @IBAction func wifiButtonTapped(_ sender: UIButton) {
+        var wifiAlertTitle = "Connect to WiFi"
+        var wifiMessage = "Enter the Tello's WiFi Name(SSID)"
+        var buttonText = "Connect"
+        let savedSSID = WifiController.shared.telloSSID
+        
+        // Change message if user is already connected
+        if let currentSSID = WifiController.shared.wifiConnectionInfo()?["SSID"] as? String,
+            currentSSID.hasPrefix("TELLO-") {
+            // Currently connected to some TELLO drone's WiFi
+            wifiAlertTitle = "Reconnect?"
+            wifiMessage = "Enter the Tello's WiFi Name(SSID)"
+            buttonText = "Reconnect"
         }
-        alert.addAction(UIAlertAction(title: "Connect", style: .default, handler: { [weak alert] (_) in
-            let textField = alert?.textFields?[0]
+        presentWiFiDialog(title: wifiAlertTitle, message: wifiMessage, buttonText: buttonText, savedSSID: savedSSID)
+    }
+    
+    func presentWiFiDialog(title: String, message: String, buttonText: String, savedSSID: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.text = savedSSID
+        }
+        alert.addAction(UIAlertAction(title: buttonText, style: .default, handler: { _ in
+            let textField = alert.textFields?[0]
             guard let newSSID = textField?.text, !newSSID.isEmpty else {
                 self.wifiLabel.text = "Invalid SSID"
                 return
             }
-            print("Connecting to WiFi SSID: \(textField?.text ?? "error")")
-            if newSSID != currentSSID {
+            if newSSID != savedSSID {
                 WifiController.shared.telloSSID = newSSID
             }
-            self.wifiLabel.textColor = .lightText
-            self.wifiButton.isEnabled.toggle()
-            WifiController.shared.connectTo(ssid: newSSID) { success in
-                if success {
-                    self.wifiLabel.text = newSSID
-                    self.wifiButton.setBackgroundImage(self.wifiImage, for: .normal)
-                    self.tello = TelloController()
-                    self.tello?.videoView = self.videoImage
-                } else {
-                    self.wifiButton.setBackgroundImage(self.wifiExclamationImage, for: .normal)
-                    self.wifiLabel.text = "Not Connected"
-                    self.tello = nil
-                }
-            }
+            self.connectToDroneWiFi(ssid: newSSID)
+            print("Connecting to WiFi SSID: \(textField?.text ?? "error")")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func connectToDroneWiFi(ssid: String) {
+        self.wifiLabel.textColor = .lightText
+        self.wifiButton.isEnabled.toggle()
+        WifiController.shared.connectTo(ssid: ssid) { success in
+            guard success else {
+                self.wifiButton.setBackgroundImage(self.wifiExclamationImage, for: .normal)
+                self.wifiLabel.text = "Not Connected"
+                self.tello = nil
+                return
+            }
+            self.handleWiFiConnectionSuccess(ssid: ssid)
+        }
+    }
+    
+    func handleWiFiConnectionSuccess(ssid: String) {
+        self.wifiLabel.text = ssid
+        self.wifiButton.setBackgroundImage(self.wifiImage, for: .normal)
+        self.tello = TelloController()
+        self.tello?.videoView = self.videoImage
     }
     
     // MARK: - Drone Command Buttons
@@ -140,6 +172,22 @@ class BasicDroneControllerVC: UIViewController {
     
     /// Tell the drone to takeoff
     @IBAction func takeoff(_ sender: UIButton) {
+        if takeoffSpamDetectionTimer.isValid {
+            takeoffTapCount += 1
+            if takeoffTapCount >= 5 {
+                takeoffSpamDetectionTimer.invalidate()
+                self.takeoffTapCount = 0
+                self.presentWiFiDialog(
+                    title: "Connection Issue?",
+                    message: "It seems like you may need to reconnect",
+                    buttonText: "Connect",
+                    savedSSID: WifiController.shared.telloSSID)
+            }
+        } else {
+            takeoffSpamDetectionTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
+                self.takeoffTapCount = 0
+            }
+        }
         tello?.takeOff()
     }
     /// Attempt to land the drone, it may need extra taps

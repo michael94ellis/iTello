@@ -1,3 +1,6 @@
 ${PODS_ROOT}/Target Support Files/Pods-oTello/Pods-oTello-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/BRHJoyStickView/BRHJoyStickView.framework
+${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework
+${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework
 ${BUILT_PRODUCTS_DIR}/SwiftSocket/SwiftSocket.framework
+${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework

@@ -40,7 +40,7 @@ class WifiController: NSObject {
             if let error = error {
                 print(self.handleConnectionError(error))
                 completion(false)
-            } else if self.wifiConnectionInfoAvailable() {
+            } else if self.wifiConnectionInfo() != nil {
                 completion(true)
             } else {
                 completion(false)
@@ -48,13 +48,13 @@ class WifiController: NSObject {
         }
     }
     /// Determine if we are connected to any wifi network or none at all
-    func wifiConnectionInfoAvailable() -> Bool {
+    func wifiConnectionInfo() -> [AnyHashable: Any]? {
         guard let ifs = CFBridgingRetain( CNCopySupportedInterfaces()) as? [String],
             let ifName = ifs.first as CFString?,
-            CFBridgingRetain( CNCopyCurrentNetworkInfo((ifName))) as? [AnyHashable: Any] != nil else {
-                return false
+            let wifiInfo = CFBridgingRetain( CNCopyCurrentNetworkInfo((ifName))) as? [AnyHashable: Any] else {
+                return nil
         }
-        return true
+        return wifiInfo
     }
     
     func handleConnectionError(_ error: Error) -> String {

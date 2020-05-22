@@ -18,8 +18,8 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ioF-bT-oAJ" userLabel="Video Image">
                                 <rect key="frame" x="44" y="0.0" width="808" height="393"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Battery: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvp-VP-5J9" userLabel="Battery Label">
-                                <rect key="frame" x="709.66666666666663" y="182.66666666666666" width="75" height="20.333333333333343"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Battery: 0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvp-VP-5J9" userLabel="Battery Label">
+                                <rect key="frame" x="702.66666666666663" y="182.66666666666666" width="89" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -122,7 +122,7 @@
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <state key="normal" backgroundImage="wifi.slash" catalog="system"/>
                                         <connections>
-                                            <action selector="connectWiFi:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oeN-M7-Vfl"/>
+                                            <action selector="wifiButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oeN-M7-Vfl"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tello-WiFi" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i9v-rC-4gq" userLabel="WiFi Name">
