@@ -7,15 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F45EEB024763C0200F5C9BE /* TelloUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45EEAF24763C0200F5C9BE /* TelloUtils.swift */; };
+		2F45EEB024763C0200F5C9BE /* TelloConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */; };
 		2F8C8D7724748F4E006D40EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7624748F4E006D40EC /* AppDelegate.swift */; };
 		2F8C8D7924748F4E006D40EC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7824748F4E006D40EC /* SceneDelegate.swift */; };
 		2F8C8D7B24748F4E006D40EC /* BasicDroneControllerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7A24748F4E006D40EC /* BasicDroneControllerVC.swift */; };
 		2F8C8D7E24748F4E006D40EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7C24748F4E006D40EC /* Main.storyboard */; };
 		2F8C8D8024748F51006D40EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7F24748F51006D40EC /* Assets.xcassets */; };
 		2F8C8D8324748F51006D40EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F8C8D8124748F51006D40EC /* LaunchScreen.storyboard */; };
+		2FB2DD1624777B4000B28AC0 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2DD1524777B4000B28AC0 /* CGExtensions.swift */; };
+		2FB2DD182477E53000B28AC0 /* JoyStickMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2DD172477E53000B28AC0 /* JoyStickMonitor.swift */; };
+		2FB2DD1A2477E55200B28AC0 /* JoyStickReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2DD192477E55200B28AC0 /* JoyStickReporter.swift */; };
 		2FC59DBD24775A2600EB8B14 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FC59DBC24775A2500EB8B14 /* GoogleService-Info.plist */; };
-		2FC59DBF24776FE000EB8B14 /* JoyStick.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FC59DBE24776FE000EB8B14 /* JoyStick.xib */; };
 		2FC59DC12477711F00EB8B14 /* JoyStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC59DC02477711F00EB8B14 /* JoyStick.swift */; };
 		2FDE4B7024748FE700B8C422 /* WiFiController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE4B6C24748FE700B8C422 /* WiFiController.swift */; };
 		2FDE4B7324748FE700B8C422 /* TelloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE4B6F24748FE700B8C422 /* TelloController.swift */; };
@@ -26,7 +28,7 @@
 
 /* Begin PBXFileReference section */
 		251E4A7A6F0FF257320472BA /* Pods-oTello.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oTello.release.xcconfig"; path = "Target Support Files/Pods-oTello/Pods-oTello.release.xcconfig"; sourceTree = "<group>"; };
-		2F45EEAF24763C0200F5C9BE /* TelloUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelloUtils.swift; sourceTree = "<group>"; };
+		2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelloConstants.swift; sourceTree = "<group>"; };
 		2F8C8D7324748F4E006D40EC /* oTello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = oTello.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F8C8D7624748F4E006D40EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F8C8D7824748F4E006D40EC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,8 +37,10 @@
 		2F8C8D7F24748F51006D40EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F8C8D8224748F51006D40EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2F8C8D8424748F51006D40EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2FB2DD1524777B4000B28AC0 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
+		2FB2DD172477E53000B28AC0 /* JoyStickMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoyStickMonitor.swift; sourceTree = "<group>"; };
+		2FB2DD192477E55200B28AC0 /* JoyStickReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoyStickReporter.swift; sourceTree = "<group>"; };
 		2FC59DBC24775A2500EB8B14 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		2FC59DBE24776FE000EB8B14 /* JoyStick.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JoyStick.xib; sourceTree = "<group>"; };
 		2FC59DC02477711F00EB8B14 /* JoyStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoyStick.swift; sourceTree = "<group>"; };
 		2FDE4B6C24748FE700B8C422 /* WiFiController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiController.swift; sourceTree = "<group>"; };
 		2FDE4B6F24748FE700B8C422 /* TelloController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelloController.swift; sourceTree = "<group>"; };
@@ -85,11 +89,10 @@
 				2FDE4B742474902500B8C422 /* oTello.entitlements */,
 				2F8C8D7624748F4E006D40EC /* AppDelegate.swift */,
 				2F8C8D7824748F4E006D40EC /* SceneDelegate.swift */,
-				2FC59DBE24776FE000EB8B14 /* JoyStick.xib */,
-				2FC59DC02477711F00EB8B14 /* JoyStick.swift */,
 				2F8C8D7A24748F4E006D40EC /* BasicDroneControllerVC.swift */,
+				2FB2DD1B2477E6D500B28AC0 /* JoyStick */,
 				2FDE4B6F24748FE700B8C422 /* TelloController.swift */,
-				2F45EEAF24763C0200F5C9BE /* TelloUtils.swift */,
+				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
 				2FF52BFC2475F7CF00BB7DB5 /* VideoDecoder.swift */,
 				2FDE4B6C24748FE700B8C422 /* WiFiController.swift */,
 				2F8C8D7C24748F4E006D40EC /* Main.storyboard */,
@@ -98,6 +101,17 @@
 				2F8C8D8424748F51006D40EC /* Info.plist */,
 			);
 			path = oTello;
+			sourceTree = "<group>";
+		};
+		2FB2DD1B2477E6D500B28AC0 /* JoyStick */ = {
+			isa = PBXGroup;
+			children = (
+				2FB2DD1524777B4000B28AC0 /* CGExtensions.swift */,
+				2FC59DC02477711F00EB8B14 /* JoyStick.swift */,
+				2FB2DD172477E53000B28AC0 /* JoyStickMonitor.swift */,
+				2FB2DD192477E55200B28AC0 /* JoyStickReporter.swift */,
+			);
+			path = JoyStick;
 			sourceTree = "<group>";
 		};
 		B6133855E4B74E78DC965E86 /* Pods */ = {
@@ -179,7 +193,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F8C8D8324748F51006D40EC /* LaunchScreen.storyboard in Resources */,
-				2FC59DBF24776FE000EB8B14 /* JoyStick.xib in Resources */,
 				2FC59DBD24775A2600EB8B14 /* GoogleService-Info.plist in Resources */,
 				2F8C8D8024748F51006D40EC /* Assets.xcassets in Resources */,
 				2F8C8D7E24748F4E006D40EC /* Main.storyboard in Resources */,
@@ -235,11 +248,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F45EEB024763C0200F5C9BE /* TelloUtils.swift in Sources */,
+				2FB2DD1624777B4000B28AC0 /* CGExtensions.swift in Sources */,
+				2F45EEB024763C0200F5C9BE /* TelloConstants.swift in Sources */,
+				2FB2DD1A2477E55200B28AC0 /* JoyStickReporter.swift in Sources */,
 				2FDE4B7324748FE700B8C422 /* TelloController.swift in Sources */,
 				2F8C8D7B24748F4E006D40EC /* BasicDroneControllerVC.swift in Sources */,
 				2F8C8D7724748F4E006D40EC /* AppDelegate.swift in Sources */,
 				2FDE4B7024748FE700B8C422 /* WiFiController.swift in Sources */,
+				2FB2DD182477E53000B28AC0 /* JoyStickMonitor.swift in Sources */,
 				2FF52BFD2475F7CF00BB7DB5 /* VideoDecoder.swift in Sources */,
 				2F8C8D7924748F4E006D40EC /* SceneDelegate.swift in Sources */,
 				2FC59DC12477711F00EB8B14 /* JoyStick.swift in Sources */,
@@ -388,6 +404,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = oTello/oTello.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K2R6W9P99E;
 				INFOPLIST_FILE = oTello/Info.plist;
@@ -397,6 +414,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mellis.iTello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -408,6 +426,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = oTello/oTello.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K2R6W9P99E;
 				INFOPLIST_FILE = oTello/Info.plist;
@@ -417,6 +436,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mellis.iTello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

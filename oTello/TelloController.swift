@@ -65,8 +65,8 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     func land() {
         self.sendCommand(CMD.land)
     }
-    /// EMERGENCY STOP, drone motors will cease immediately
-    func stop() {
+    /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
+    func emergencyLand() {
         self.sendCommand(CMD.off)
     }
     /// See the FLIP enum for list of available flip directions

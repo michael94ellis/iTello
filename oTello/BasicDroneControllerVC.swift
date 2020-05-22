@@ -22,14 +22,22 @@ class BasicDroneControllerVC: UIViewController {
     var telloDataReadTimer = Timer()
     /// Used to determine if user is spamming takeoff, which indicates a problem, and a popup message is shown
     var takeoffSpamDetectionTimer = Timer()
+    /// Used to determine if user is spamming the land button, which indicates a problem, and an emergency land button will appear
+    var landingSpamDetectionTimer = Timer()
     /// Will be reset when the tap timer expires
     var takeoffTapCount = 0
+    /// Will be reset when the tap timer expires
+    var landingTapCount = 0
     
+    @IBOutlet weak var rightJoyStick: JoyStick!
+    @IBOutlet weak var leftJoyStick: JoyStick!
     @IBOutlet weak var videoButton: UIButton!
     @IBOutlet weak var videoImage: UIImageView!
-    @IBOutlet weak var wifiButton: UIButton!
+    @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var wifiLabel: UILabel!
     @IBOutlet weak var batteryLabel: UILabel!
+    @IBOutlet weak var emergencyLandButton: UIButton!
+    @IBOutlet weak var emergencyLandLabel: UILabel!
     
     // Store these images for easy access
     lazy var wifiImage = UIImage(systemName: "wifi")
@@ -54,6 +62,8 @@ class BasicDroneControllerVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.emergencyLandLabel.isHidden = true
+        self.emergencyLandButton.isHidden = true
         if let currentSSID = WifiController.shared.wifiConnectionInfo()?["SSID"] as? String,
             currentSSID.hasPrefix("TELLO-") {
             self.handleWiFiConnectionSuccess(ssid: currentSSID)
@@ -77,26 +87,26 @@ class BasicDroneControllerVC: UIViewController {
     
     func setupLeftJoystick() {
         // Transparency
-//        leftJoystick.baseAlpha = 0.15
-//        leftJoystick.handleAlpha = 0.3
-//        leftJoystick.monitor = .xy(monitor: { value in
-//            guard let tello = self.tello else { return }
-//            tello.yaw = Int(value.x)
-//            tello.upDown = Int(value.y)
-//            tello.updateMovementTimer()
-//        })
+        leftJoyStick.baseAlpha = 0.15
+        leftJoyStick.handleAlpha = 0.3
+        leftJoyStick.monitor = .xy(monitor: { value in
+            guard let tello = self.tello else { return }
+            tello.yaw = Int(value.x)
+            tello.upDown = Int(value.y)
+            tello.updateMovementTimer()
+        })
     }
     
     func setupRightJoystick() {
         // Transparency
-//        rightJoystick.baseAlpha = 0.15
-//        rightJoystick.handleAlpha = 0.3
-//        rightJoystick.monitor = .xy(monitor: { value in
-//            guard let tello = self.tello else { return }
-//            tello.leftRight = Int(value.x)
-//            tello.forwardBack = Int(value.y)
-//            tello.updateMovementTimer()
-//        })
+        rightJoyStick.baseAlpha = 0.15
+        rightJoyStick.handleAlpha = 0.3
+        rightJoyStick.monitor = .xy(monitor: { value in
+            guard let tello = self.tello else { return }
+            tello.leftRight = Int(value.x)
+            tello.forwardBack = Int(value.y)
+            tello.updateMovementTimer()
+        })
     }
 
     @IBAction func wifiButtonTapped(_ sender: UIButton) {
@@ -187,8 +197,34 @@ class BasicDroneControllerVC: UIViewController {
         }
         tello?.takeOff()
     }
-    /// Attempt to land the drone, it may need extra taps
+    @IBAction func emergencyLand(_ sender: Any) {
+        tello?.emergencyLand()
+    }
+    /// Attempt to land the drone, it may need extra taps. If extra taps are sensed the Emergency Stop option is show
     @IBAction func land(_ sender: UIButton) {
+        if landingSpamDetectionTimer.isValid {
+            guard self.emergencyLandButton.isHidden,
+                self.emergencyLandLabel.isHidden else {
+                    return
+            }
+            landingTapCount += 1
+            if landingTapCount >= 5 {
+                landingSpamDetectionTimer.invalidate()
+                self.landingTapCount = 0
+                self.emergencyLandLabel.isHidden = false
+                self.emergencyLandButton.isHidden = false
+                landingSpamDetectionTimer = Timer.scheduledTimer(withTimeInterval: 4, repeats: false) { _ in
+                    self.emergencyLandLabel.isHidden = true
+                    self.emergencyLandButton.isHidden = true
+                }
+            }
+        } else {
+            landingSpamDetectionTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
+                self.landingTapCount = 0
+                self.emergencyLandLabel.isHidden = true
+                self.emergencyLandButton.isHidden = true
+            }
+        }
         tello?.land()
     }
     /// Backflip

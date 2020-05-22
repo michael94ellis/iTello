@@ -109,7 +109,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1jM-rc-Ow4" userLabel="WiFi">
                                 <rect key="frame" x="383.33333333333331" y="10" width="129.66666666666669" height="44"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nkd-Qh-iWv" userLabel="WiFi Button">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nkd-Qh-iWv" userLabel="Settings Button">
                                         <rect key="frame" x="0.0" y="-0.66666666666666785" width="44" height="42.333333333333343"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="2Rm-KH-UGl">
@@ -179,6 +179,25 @@
                                     </label>
                                 </subviews>
                             </stackView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V0k-kj-ERs" userLabel="EmergencyLand">
+                                <rect key="frame" x="659.33333333333337" y="19.999999999999993" width="55" height="54.666666666666657"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="BEg-Fl-l8h"/>
+                                    <constraint firstAttribute="width" constant="55" id="s2K-iu-YPa"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="tintColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" backgroundImage="hand.raised.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="emergencyLand:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wL2-zt-2Nb"/>
+                                </connections>
+                            </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Emergency Landing!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kKX-e2-K9f" userLabel="EmergencyLanding">
+                                <rect key="frame" x="616.66666666666663" y="85" width="140.33333333333337" height="18"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VJc-Hf-CrV" customClass="JoyStick" customModule="oTello" customModuleProvider="target">
                                 <rect key="frame" x="672" y="213" width="150" height="150"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -206,10 +225,14 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ioF-bT-oAJ" secondAttribute="trailing" id="TRq-7n-uDk"/>
                             <constraint firstItem="ioF-bT-oAJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Us6-8m-KRn"/>
                             <constraint firstItem="VJc-Hf-CrV" firstAttribute="top" secondItem="Tvp-VP-5J9" secondAttribute="bottom" constant="10" id="WzX-2D-DSo"/>
+                            <constraint firstItem="kKX-e2-K9f" firstAttribute="top" secondItem="V0k-kj-ERs" secondAttribute="bottom" constant="10" id="YWk-mC-DER"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WyK-FW-6Cl" secondAttribute="trailing" constant="20" id="bSt-0G-rTx"/>
                             <constraint firstItem="T6P-tK-jZh" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="dm0-31-RSe"/>
                             <constraint firstItem="JTx-ei-vhh" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="fEc-7T-uFZ"/>
                             <constraint firstItem="1jM-rc-Ow4" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="fkQ-dD-zMj"/>
+                            <constraint firstItem="V0k-kj-ERs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="iLJ-8K-cOm"/>
+                            <constraint firstItem="WyK-FW-6Cl" firstAttribute="leading" secondItem="kKX-e2-K9f" secondAttribute="trailing" constant="20" id="sQy-HV-RYs"/>
+                            <constraint firstItem="V0k-kj-ERs" firstAttribute="centerX" secondItem="kKX-e2-K9f" secondAttribute="centerX" id="tLG-dJ-rBU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="JTx-ei-vhh" secondAttribute="bottom" constant="10" id="wJR-QS-swM"/>
                             <constraint firstItem="rtt-Jn-poD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="zG2-m9-MSY"/>
                         </constraints>
@@ -217,8 +240,10 @@
                     </view>
                     <connections>
                         <outlet property="batteryLabel" destination="Tvp-VP-5J9" id="cs1-bq-FdC"/>
-                        <outlet property="leftJoystick" destination="rtt-Jn-poD" id="vMU-UD-hRE"/>
-                        <outlet property="rightJoystick" destination="VJc-Hf-CrV" id="PR2-je-OWO"/>
+                        <outlet property="emergencyLandButton" destination="V0k-kj-ERs" id="s8F-fw-Oyk"/>
+                        <outlet property="emergencyLandLabel" destination="kKX-e2-K9f" id="0kr-b8-ugG"/>
+                        <outlet property="leftJoyStick" destination="rtt-Jn-poD" id="Een-h9-PUU"/>
+                        <outlet property="rightJoyStick" destination="VJc-Hf-CrV" id="cxh-Uk-dLd"/>
                         <outlet property="videoButton" destination="HwS-tt-E5N" id="475-LB-Cb0"/>
                         <outlet property="videoImage" destination="ioF-bT-oAJ" id="DqH-Tl-YsB"/>
                         <outlet property="wifiButton" destination="nkd-Qh-iWv" id="zjN-8D-CPW"/>
@@ -237,6 +262,7 @@
         <image name="arrow.uturn.left" catalog="system" width="128" height="112"/>
         <image name="arrow.uturn.right" catalog="system" width="128" height="112"/>
         <image name="arrow.uturn.up" catalog="system" width="128" height="118"/>
+        <image name="hand.raised.fill" catalog="system" width="128" height="128"/>
         <image name="pause.fill" catalog="system" width="116" height="128"/>
         <image name="play.fill" catalog="system" width="116" height="128"/>
         <image name="video.slash.fill" catalog="system" width="128" height="104"/>

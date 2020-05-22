@@ -141,7 +141,13 @@ class VideoFrameDecoder {
         let sizeParamArray = [sps.count, pps.count]
         let parameterSetSizes = UnsafePointer<Int>(sizeParamArray)
         
-        let status = CMVideoFormatDescriptionCreateFromH264ParameterSets(allocator: kCFAllocatorDefault, parameterSetCount: 2, parameterSetPointers: parameterSetPointers, parameterSetSizes: parameterSetSizes, nalUnitHeaderLength: 4, formatDescriptionOut: &formatDesc)
+        let status = CMVideoFormatDescriptionCreateFromH264ParameterSets(
+            allocator: kCFAllocatorDefault,
+            parameterSetCount: 2,
+            parameterSetPointers: parameterSetPointers,
+            parameterSetSizes: parameterSetSizes,
+            nalUnitHeaderLength: 4,
+            formatDescriptionOut: &formatDesc)
         
         return status == noErr
     }
@@ -166,12 +172,8 @@ class VideoFrameDecoder {
             formatDescription: desc, decoderSpecification: decoderParameters,
             imageBufferAttributes: destinationPixelBufferAttributes,outputCallback: &outputCallback,
             decompressionSessionOut: &decompressionSession)
-        
-        if status == noErr {
-            return true
-        } else {
-            return false
-        }
+
+        return status == noErr
     }
     
     private var callback: VTDecompressionOutputCallback = {(
@@ -182,12 +184,13 @@ class VideoFrameDecoder {
         imageBuffer: CVPixelBuffer?,
         presentationTimeStamp: CMTime,
         duration: CMTime) in
-        if imageBuffer != nil && status == noErr {
-            //            print("===== Image successfully decompressed")
-            VideoFrameDecoder.delegate?.receivedDisplayableFrame(imageBuffer!)
-        } else if status != -12909 {
-            // -12909 is Bad Video Error, nbd just some corrupt data 
-            print("===== Failed to decompress. VT Error \(status)")
+        guard let newImage = imageBuffer,
+            status == noErr, status != -12909 else {
+                // -12909 is Bad Video Error, nothing too bad unless there's no feed
+                print("===== Failed to decompress. VT Error \(status)")
+                return
         }
+        // print("===== Image successfully decompressed")
+        VideoFrameDecoder.delegate?.receivedDisplayableFrame(imageBuffer!)
     }
 }
