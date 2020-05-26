@@ -33,6 +33,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     var battery = ""
     /// Last known Signal to Noise ratio for WiFi received from tello
     var wifi = ""
+    var isInCommandMode = false
     var isCameraOn = false
     private lazy var videoDecoder = VideoFrameDecoder()
     /// A reference to the image view where the video will be displayed
@@ -40,7 +41,6 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     // Listeners
     private var videoStreamServer = UDPServer(address: Tello.ResponseIPAddress, port: Tello.VideoStreamPort)
     private var stateStreamServer = UDPServer(address: Tello.ResponseIPAddress, port: Tello.StatePort)
-    private var commandResponseServer = UDPServer(address: Tello.ResponseIPAddress, port: Tello.StatePort)
     // Broadcaster
     private var commandBroadcaster = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
     
@@ -49,21 +49,22 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
         receiveCommandResponseStream()
         receiveStateStream()
         VideoFrameDecoder.delegate = self
-        // Turn on the drone's "Command Mode" with a delay because we just turned on the sockets
-        DispatchQueue.global().async {
-            sleep(2)
-            self.sendCommand(CMD.on)
-        }
     }
     
     // MARK: - Tello Command Methods
     
     func takeOff() {
+        if !isInCommandMode {
+            self.sendCommand(CMD.on)
+            self.sendCommand(CMD.on)
+            isInCommandMode = true
+        }
         self.sendCommand(CMD.takeOff)
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
-        self.sendCommand(CMD.land)
+        self.sendCommand(CMD.land).isSuccess
+        self.sendCommand(CMD.land).isSuccess
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {
@@ -82,6 +83,8 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
                 // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                 self.moveTimer.invalidate()
             }
+            // Send 2 because UDP packets can be lost
+            self.sendCommand(self.moveCommand)
             self.sendCommand(self.moveCommand)
         }
     }
@@ -103,9 +106,9 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     }
     /// Listens to the video stream broadcast from the drone
     private func displayVideoStream() {
-        /// Video data is stored and processed in this variable as it is received
-        var videoFrameBuffer: [Byte] = []
         DispatchQueue.global(qos: .userInteractive).async {
+            /// Video data is stored and processed in this variable as it is received
+            var videoFrameBuffer: [Byte] = []
             // When user toggles camera this will cease
             while self.isCameraOn {
                 // Begin receiving video data
@@ -148,7 +151,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     private func receiveCommandResponseStream() {
         DispatchQueue.global(qos: .userInteractive).async {
             while true {
-                let (data, _, _) = self.commandResponseServer.recv(2048)
+                let (data, _, _) = self.commandBroadcaster.recv(2048)
                 if let responseData = data,
                     let response = String(bytes: responseData, encoding: .utf8) {
                     print("Command Response: \(response)")
@@ -167,6 +170,32 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
         DispatchQueue.main.async {
             // Update video image with new frame
             self.videoView?.image = UIImage(cgImage: displayableImage)
+//            let ciImage = CIImage(cgImage: displayableImage)
+//            self.findFaces(in: ciImage)
+        }
+        
+    }
+    
+    func findFaces(in image: CIImage) {
+        let options = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
+        let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options)!
+        
+        let faces = faceDetector.features(in: image)
+        
+        if let face = faces.first as? CIFaceFeature {
+            print("Found face at \(face.bounds)")
+            
+            if face.hasLeftEyePosition {
+                print("Found left eye at \(face.leftEyePosition)")
+            }
+            
+            if face.hasRightEyePosition {
+                print("Found right eye at \(face.rightEyePosition)")
+            }
+            
+            if face.hasMouthPosition {
+                print("Found mouth at \(face.mouthPosition)")
+            }
         }
     }
 }

@@ -34,7 +34,7 @@ class WifiController: NSObject {
             return
         }
         hotspotConfig.joinOnce = true
-        
+        NEHotspotConfigurationManager.shared.removeConfiguration(forSSID: ssid)
         NEHotspotConfigurationManager.shared.apply(hotspotConfig) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {

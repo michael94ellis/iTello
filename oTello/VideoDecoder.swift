@@ -75,7 +75,7 @@ class VideoFrameDecoder {
     }
     
     private func decodeFrameData(_ frameData: FrameData) {
-        let bufferPointer = UnsafeMutablePointer<UInt8>(mutating: frameData)
+        var bufferPointer = UnsafeMutableRawPointer(mutating: frameData)
         // Replace the start code with the size of the NALU
         var frameSize = CFSwapInt32HostToBig(UInt32(frameData.count - 4))
         memcpy(bufferPointer, &frameSize, 4)
@@ -191,6 +191,6 @@ class VideoFrameDecoder {
                 return
         }
         // print("===== Image successfully decompressed")
-        VideoFrameDecoder.delegate?.receivedDisplayableFrame(imageBuffer!)
+        delegate?.receivedDisplayableFrame(imageBuffer!)
     }
 }

@@ -15,7 +15,6 @@ class BasicDroneControllerVC: UIViewController {
         didSet {
             // the wifi label and button become disabled while a connection is being made
             self.wifiLabel.textColor = .label
-            self.wifiButton.isEnabled.toggle()
         }
     }
     /// Updates the data variables on the UI if a Tello is connected
@@ -149,10 +148,9 @@ class BasicDroneControllerVC: UIViewController {
     
     func connectToDroneWiFi(ssid: String) {
         self.wifiLabel.textColor = .lightText
-        self.wifiButton.isEnabled.toggle()
         WifiController.shared.connectTo(ssid: ssid) { success in
             guard success else {
-                self.wifiButton.setBackgroundImage(self.wifiExclamationImage, for: .normal)
+                self.settingsButton.setBackgroundImage(self.wifiExclamationImage, for: .normal)
                 self.wifiLabel.text = "Not Connected"
                 self.tello = nil
                 return
@@ -163,7 +161,7 @@ class BasicDroneControllerVC: UIViewController {
     
     func handleWiFiConnectionSuccess(ssid: String) {
         self.wifiLabel.text = ssid
-        self.wifiButton.setBackgroundImage(self.wifiImage, for: .normal)
+        self.settingsButton.setBackgroundImage(self.wifiImage, for: .normal)
         self.tello = TelloController()
         self.tello?.videoView = self.videoImage
     }
