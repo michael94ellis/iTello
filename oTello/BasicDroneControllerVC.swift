@@ -30,9 +30,9 @@ class BasicDroneControllerVC: UIViewController {
     
     @IBOutlet weak var rightJoyStick: JoyStick!
     @IBOutlet weak var leftJoyStick: JoyStick!
-    @IBOutlet weak var videoButton: UIButton!
-    @IBOutlet weak var videoImage: UIImageView!
     @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var videoImage: UIImageView!
+    @IBOutlet weak var wifiButton: UIButton!
     @IBOutlet weak var wifiLabel: UILabel!
     @IBOutlet weak var batteryLabel: UILabel!
     @IBOutlet weak var emergencyLandButton: UIButton!
@@ -107,7 +107,7 @@ class BasicDroneControllerVC: UIViewController {
             tello.updateMovementTimer()
         })
     }
-
+    
     @IBAction func wifiButtonTapped(_ sender: UIButton) {
         var wifiAlertTitle = "Connect to WiFi"
         var wifiMessage = "Enter the Tello's WiFi Name(SSID)"
@@ -159,6 +159,13 @@ class BasicDroneControllerVC: UIViewController {
         }
     }
     
+    @IBAction func settingsButtonTapped(_ sender: Any) {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let settingsPage = storyBoard.instantiateViewController(withIdentifier: "settingsVC") as! SettingsViewController
+        settingsPage.tello = self.tello
+        self.present(settingsPage, animated: true, completion: nil)
+    }
+    
     func handleWiFiConnectionSuccess(ssid: String) {
         self.wifiLabel.text = ssid
         self.settingsButton.setBackgroundImage(self.wifiImage, for: .normal)
@@ -171,8 +178,8 @@ class BasicDroneControllerVC: UIViewController {
     /// This ought to not work if there is no Drone connected
     @IBAction func videoButtonTapped(_ sender: Any) {
         tello?.toggleCamera()
-        let isVideoEnabled = tello?.isCameraOn ?? false
-        videoButton.setBackgroundImage(isVideoEnabled ? videoEnabledImage : videoDisabledImage, for: .normal)
+        let isVideoEnabled = Tello.isCameraOn 
+        settingsButton.setBackgroundImage(isVideoEnabled ? videoEnabledImage : videoDisabledImage, for: .normal)
     }
     
     /// Tell the drone to takeoff

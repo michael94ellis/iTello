@@ -19,13 +19,13 @@ class WifiController: NSObject {
         NEHotspotConfigurationManager.shared.removeConfiguration(forSSID: telloSSID)
     }
     // Remember the users WiFi name between sessions
-    let telloSSIDKey = "SSID"
+    private let telloSSIDKey = "SSID"
     var telloSSID: String {
         get { UserDefaults.standard.string(forKey: telloSSIDKey) ?? "TELLO-" }
         set { UserDefaults.standard.set(newValue, forKey: telloSSIDKey) }
     }
     
-    var hotspotConfig: NEHotspotConfiguration?
+    private var hotspotConfig: NEHotspotConfiguration?
     
     func connectTo(ssid: String, completion: @escaping (Bool) -> ()) {
         hotspotConfig = NEHotspotConfiguration(ssid: telloSSID)
@@ -57,7 +57,7 @@ class WifiController: NSObject {
         return wifiInfo
     }
     
-    func handleConnectionError(_ error: Error) -> String {
+    private func handleConnectionError(_ error: Error) -> String {
         let nsError = error as NSError
         if nsError.domain == "NEHotspotConfigurationErrorDomain" {
             if let configError = NEHotspotConfigurationError(rawValue: nsError.code) {

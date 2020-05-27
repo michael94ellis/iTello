@@ -23,18 +23,18 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     /// Speed of movement Clockwise or CounterClockwise
     var yaw = 0
     /// rc l/r f/b u/d yaw
-    private var moveCommand: String { "rc \(self.leftRight) \(self.forwardBack) \(self.upDown) \(self.yaw)" }
+    private var moveCommand: String { "rc \(self.leftRight + Tello.speedBoost) \(self.forwardBack + Tello.speedBoost) \(self.upDown + Tello.speedBoost) \(self.yaw + Tello.speedBoost)" }
     /// Prevents too many movement commands from being issued at once
     private var moveTimer = Timer()
     
     // MARK: - Stream Data Vars
     
+    private var responseWaiter = Timer()
     /// Last known battery amount received from tello
     var battery = ""
     /// Last known Signal to Noise ratio for WiFi received from tello
     var wifi = ""
     var isInCommandMode = false
-    var isCameraOn = false
     private lazy var videoDecoder = VideoFrameDecoder()
     /// A reference to the image view where the video will be displayed
     var videoView: UIImageView?
@@ -49,22 +49,34 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
         receiveCommandResponseStream()
         receiveStateStream()
         VideoFrameDecoder.delegate = self
+        repeatCommandForResponse(for: CMD.on)
+        if Tello.isCameraOn {
+            repeatCommandForResponse(for: CMD.streamOn)
+            displayVideoStream()
+        }
+    }
+    private var commandRepeatMax = 4
+    /// Repeats a comment until an `ok` is received from the Tello
+    private func repeatCommandForResponse(for command: String) {
+        responseWaiter = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
+            if !self.isInCommandMode, self.commandRepeatMax > 0 {
+                self.sendCommand(command)
+                self.commandRepeatMax -= 1
+            } else {
+                self.responseWaiter.invalidate()
+                self.commandRepeatMax = 4
+            }
+        }
     }
     
     // MARK: - Tello Command Methods
     
     func takeOff() {
-        if !isInCommandMode {
-            self.sendCommand(CMD.on)
-            self.sendCommand(CMD.on)
-            isInCommandMode = true
-        }
         self.sendCommand(CMD.takeOff)
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
-        self.sendCommand(CMD.land).isSuccess
-        self.sendCommand(CMD.land).isSuccess
+        repeatCommandForResponse(for: CMD.land)
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {
@@ -81,6 +93,8 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             // Concatenate the 4 int values and compare to 0 using bitwise operator AND(&)
             if self.leftRight & self.forwardBack & self.upDown & self.yaw == 0 {
                 // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
+                // Send an extra because UDP packets can be lost
+                self.sendCommand(self.moveCommand)
                 self.moveTimer.invalidate()
             }
             // Send 2 because UDP packets can be lost
@@ -97,11 +111,10 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     
     /// Called by the UI to toggle the camera state
     func toggleCamera() {
-        isCameraOn.toggle()
         // command tello to stream video
-        let videoStreamCommand = isCameraOn ? CMD.streamOn : CMD.streamOff
+        let videoStreamCommand = Tello.isCameraOn ? CMD.streamOn : CMD.streamOff
         self.sendCommand(videoStreamCommand)
-        guard self.isCameraOn else { return }
+        guard Tello.isCameraOn else { return }
         displayVideoStream()
     }
     /// Listens to the video stream broadcast from the drone
@@ -110,7 +123,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             /// Video data is stored and processed in this variable as it is received
             var videoFrameBuffer: [Byte] = []
             // When user toggles camera this will cease
-            while self.isCameraOn {
+            while Tello.isCameraOn {
                 // Begin receiving video data
                 let (data, _, _) = self.videoStreamServer.recv(2048)
                 // No frame is a full image, they must be received separately and assembled
@@ -155,6 +168,9 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
                 if let responseData = data,
                     let response = String(bytes: responseData, encoding: .utf8) {
                     print("Command Response: \(response)")
+                    if response == "ok", !self.isInCommandMode {
+                        self.isInCommandMode = true
+                    }
                 }
             }
         }
@@ -176,6 +192,8 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
         
     }
     
+    var faceBox: CGRect?
+    
     func findFaces(in image: CIImage) {
         let options = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
         let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options)!
@@ -184,18 +202,28 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
         
         if let face = faces.first as? CIFaceFeature {
             print("Found face at \(face.bounds)")
-            
-            if face.hasLeftEyePosition {
-                print("Found left eye at \(face.leftEyePosition)")
+            if !face.hasRightEyePosition {
+                print("i think i should go counter clockwise")
+            } else if !face.hasLeftEyePosition {
+                print("i think i should go clockwise")
             }
-            
-            if face.hasRightEyePosition {
-                print("Found right eye at \(face.rightEyePosition)")
+            if let lastFaceBox = faceBox {
+                if lastFaceBox.size.magnitude > face.bounds.size.magnitude + 50 {
+                    print("i think i should move back")
+                } else if lastFaceBox.size.magnitude < face.bounds.size.magnitude - 50 {
+                    print("i think i should move forward")
+                }
             }
-            
-            if face.hasMouthPosition {
-                print("Found mouth at \(face.mouthPosition)")
-            }
+            faceBox = face.bounds
         }
+    }
+}
+
+extension CGSize: Comparable {
+    
+    public var magnitude: CGFloat { height * width }
+    
+    public static func < (lhs: CGSize, rhs: CGSize) -> Bool {
+        return lhs.magnitude < rhs.magnitude
     }
 }

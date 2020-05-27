@@ -5,6 +5,9 @@
 //  Created by Michael Ellis on 5/21/20.
 //  Copyright © 2020 Mellis. All rights reserved.
 //
+
+import Foundation
+
 /// Networking Information about the DJI Tello
 struct Tello {
     /// IP Address the Tello receives UDP messages on
@@ -17,6 +20,17 @@ struct Tello {
     static let StatePort: Int32 = 8890
     /// Port the Tello sends UDP Video Stream Data on
     static let VideoStreamPort: Int32 = 11111
+    
+    static private let isCameraOnKey = "CameraKey"
+    static var isCameraOn: Bool {
+        get { UserDefaults.standard.bool(forKey: isCameraOnKey) }
+        set { UserDefaults.standard.set(newValue, forKey: isCameraOnKey) }
+    }
+    static private let speedBoostKey = "SpeedBoostKey"
+    static var speedBoost: Int {
+        get { UserDefaults.standard.integer(forKey: speedBoostKey) }
+        set { UserDefaults.standard.set(newValue, forKey: speedBoostKey) }
+    }
 }
 struct CMD {
     /// Tells the drone to enter Commandable Mode, where it will listen to these commands

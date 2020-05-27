@@ -7,21 +7,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="nMc-Xz-qtP">
-            <objects>
-                <viewController id="TZO-GW-PyE" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="3fk-6k-vCP">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="obc-NC-STA"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0Ad-Ns-YpC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="577" y="-594"/>
-        </scene>
         <!--Basic Drone ControllerVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -54,16 +39,16 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="JTx-ei-vhh" userLabel="Gimmicks">
                                 <rect key="frame" x="272.66666666666669" y="339" width="351.00000000000006" height="44"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HwS-tt-E5N" userLabel="VideoButton">
-                                        <rect key="frame" x="0.0" y="0.33333333333333215" width="55" height="43.666666666666671"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HwS-tt-E5N" userLabel="Settings">
+                                        <rect key="frame" x="0.0" y="1.3333333333333321" width="55" height="41.666666666666671"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="Puc-cU-sLl"/>
                                             <constraint firstAttribute="width" constant="55" id="SMX-QA-5CH"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <state key="normal" backgroundImage="video.slash.fill" catalog="system"/>
+                                        <state key="normal" backgroundImage="command" catalog="system"/>
                                         <connections>
-                                            <action selector="videoButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n7f-wa-9Jj"/>
+                                            <action selector="settingsButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yxR-tG-ZSa"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ua6-B0-3yz" userLabel="Flip Button">
@@ -124,7 +109,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1jM-rc-Ow4" userLabel="WiFi">
                                 <rect key="frame" x="383.33333333333331" y="10" width="129.66666666666669" height="44"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nkd-Qh-iWv" userLabel="Settings Button">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nkd-Qh-iWv" userLabel="WiFi Button">
                                         <rect key="frame" x="0.0" y="-0.66666666666666785" width="44" height="42.333333333333343"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="2Rm-KH-UGl">
@@ -138,9 +123,6 @@
                                         <state key="normal" backgroundImage="wifi.slash" catalog="system"/>
                                         <connections>
                                             <action selector="wifiButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oeN-M7-Vfl"/>
-                                            <segue destination="TZO-GW-PyE" kind="popoverPresentation" popoverAnchorView="nkd-Qh-iWv" id="eIQ-9X-1eu">
-                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                            </segue>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tello-WiFi" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i9v-rC-4gq" userLabel="WiFi Name">
@@ -262,15 +244,106 @@
                         <outlet property="emergencyLandLabel" destination="kKX-e2-K9f" id="0kr-b8-ugG"/>
                         <outlet property="leftJoyStick" destination="rtt-Jn-poD" id="Een-h9-PUU"/>
                         <outlet property="rightJoyStick" destination="VJc-Hf-CrV" id="cxh-Uk-dLd"/>
-                        <outlet property="settingsButton" destination="nkd-Qh-iWv" id="A9D-NE-lOp"/>
-                        <outlet property="videoButton" destination="HwS-tt-E5N" id="475-LB-Cb0"/>
+                        <outlet property="settingsButton" destination="HwS-tt-E5N" id="Gk8-pT-Xln"/>
                         <outlet property="videoImage" destination="ioF-bT-oAJ" id="DqH-Tl-YsB"/>
+                        <outlet property="wifiButton" destination="nkd-Qh-iWv" id="A4u-5x-00T"/>
                         <outlet property="wifiLabel" destination="i9v-rC-4gq" id="KKR-5P-mFb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="138.61607142857142" y="120.28985507246378"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="Ivc-Qq-aiJ">
+            <objects>
+                <viewController storyboardIdentifier="settingsVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="UWs-xC-vWS" customClass="SettingsViewController" customModule="oTello" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nwm-qk-rUZ">
+                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ehg-x9-IU7">
+                                <rect key="frame" x="172.66666666666663" y="82.333333333333329" width="551" height="228.33333333333337"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="jlt-yf-mFc">
+                                        <rect key="frame" x="0.0" y="0.0" width="551" height="34"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WiFi Name:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6LH-nY-nKa">
+                                                <rect key="frame" x="0.0" y="0.0" width="87" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="e.g. TELLO-5C8145" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QYm-ZK-xy1">
+                                                <rect key="frame" x="107" y="0.0" width="444" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                            </textField>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="L8w-jd-2Im">
+                                        <rect key="frame" x="0.0" y="54.000000000000014" width="551" height="31"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Enabled" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3qz-7r-Cyi">
+                                                <rect key="frame" x="0.0" y="0.0" width="482" height="31"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3TY-Fh-cd8">
+                                                <rect key="frame" x="502" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="videoEnabledSwitched:" destination="UWs-xC-vWS" eventType="valueChanged" id="PlQ-4j-3cg"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="cq1-7a-wAY">
+                                        <rect key="frame" x="0.0" y="105.00000000000003" width="551" height="70.333333333333343"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speed Boost: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3e-J5-1ab">
+                                                <rect key="frame" x="0.0" y="0.0" width="551" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="24" translatesAutoresizingMaskIntoConstraints="NO" id="2lm-8w-Uqa">
+                                                <rect key="frame" x="-2" y="40.333333333333314" width="555" height="31"/>
+                                                <connections>
+                                                    <action selector="speedBoostChanged:" destination="UWs-xC-vWS" eventType="valueChanged" id="Un5-fI-uu4"/>
+                                                </connections>
+                                            </slider>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HUh-8e-KUY">
+                                        <rect key="frame" x="0.0" y="195.33333333333337" width="551" height="33"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Done"/>
+                                        <connections>
+                                            <action selector="doneButtonTapped:" destination="UWs-xC-vWS" eventType="touchUpInside" id="oWp-Op-ZDO"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ehg-x9-IU7" firstAttribute="centerY" secondItem="tcm-Je-Ptw" secondAttribute="centerY" id="Saf-RV-2cL"/>
+                            <constraint firstItem="ehg-x9-IU7" firstAttribute="centerX" secondItem="tcm-Je-Ptw" secondAttribute="centerX" id="fCu-yA-wbH"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="tcm-Je-Ptw"/>
+                    </view>
+                    <connections>
+                        <outlet property="doneButton" destination="HUh-8e-KUY" id="PYd-RN-PNm"/>
+                        <outlet property="enableVideoSwitch" destination="3TY-Fh-cd8" id="7Dq-JO-reR"/>
+                        <outlet property="speedBoostLabel" destination="g3e-J5-1ab" id="Lxn-wo-4ws"/>
+                        <outlet property="speedBoostSlider" destination="2lm-8w-Uqa" id="NPn-Q3-DVF"/>
+                        <outlet property="wifiNameTF" destination="QYm-ZK-xy1" id="6L7-AT-dIZ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zSf-Rv-D60" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="138.61607142857142" y="1160.8695652173915"/>
         </scene>
     </scenes>
     <resources>
@@ -280,10 +353,10 @@
         <image name="arrow.uturn.left" catalog="system" width="128" height="112"/>
         <image name="arrow.uturn.right" catalog="system" width="128" height="112"/>
         <image name="arrow.uturn.up" catalog="system" width="128" height="118"/>
+        <image name="command" catalog="system" width="128" height="115"/>
         <image name="hand.raised.fill" catalog="system" width="128" height="128"/>
         <image name="pause.fill" catalog="system" width="116" height="128"/>
         <image name="play.fill" catalog="system" width="116" height="128"/>
-        <image name="video.slash.fill" catalog="system" width="128" height="104"/>
         <image name="wifi.slash" catalog="system" width="128" height="113"/>
     </resources>
 </document>
