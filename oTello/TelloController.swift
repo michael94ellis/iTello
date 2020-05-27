@@ -23,7 +23,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     /// Speed of movement Clockwise or CounterClockwise
     var yaw = 0
     /// rc l/r f/b u/d yaw
-    private var moveCommand: String { "rc \(self.leftRight + Tello.speedBoost) \(self.forwardBack + Tello.speedBoost) \(self.upDown + Tello.speedBoost) \(self.yaw + Tello.speedBoost)" }
+    private var moveCommand: String { "rc \(self.leftRight) \(self.forwardBack) \(self.upDown) \(self.yaw)" }
     /// Prevents too many movement commands from being issued at once
     private var moveTimer = Timer()
     

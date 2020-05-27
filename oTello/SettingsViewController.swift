@@ -16,6 +16,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var enableVideoSwitch: UISwitch!
     @IBOutlet weak var speedBoostLabel: UILabel!
     @IBOutlet weak var speedBoostSlider: UISlider!
+    @IBOutlet weak var showFlipsSwitch: UISwitch!
     @IBOutlet weak var doneButton: UIButton!
     
     override func viewDidLoad() {
@@ -26,9 +27,10 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         wifiNameTF.text = WifiController.shared.telloSSID
+        enableVideoSwitch.setOn(Tello.isCameraOn, animated: true)
+        showFlipsSwitch.setOn(Tello.showFlips, animated: true)
         speedBoostLabel.text = "Speed Boost: \(Tello.speedBoost)"
         speedBoostSlider.setValue(Float(Tello.speedBoost), animated: true)
-        enableVideoSwitch.isOn = Tello.isCameraOn
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -42,6 +44,10 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBAction func videoEnabledSwitched(_ sender: Any) {
         Tello.isCameraOn.toggle()
         tello?.toggleCamera()
+    }
+    @IBAction func showFlipButtonsSwitched(_ sender: Any) {
+        Tello.showFlips.toggle()
+        NotificationCenter.default.post(name: Notification.Name("HideShowFlips"), object: nil)
     }
     @IBAction func speedBoostChanged(_ sender: Any) {
         Tello.speedBoost = Int(speedBoostSlider.value)

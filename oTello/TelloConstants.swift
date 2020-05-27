@@ -31,6 +31,11 @@ struct Tello {
         get { UserDefaults.standard.integer(forKey: speedBoostKey) }
         set { UserDefaults.standard.set(newValue, forKey: speedBoostKey) }
     }
+    static private let showFlipsKey = "ShowFlipsKey"
+    static var showFlips: Bool {
+        get { UserDefaults.standard.bool(forKey: showFlipsKey) }
+        set { UserDefaults.standard.set(newValue, forKey: showFlipsKey) }
+    }
 }
 struct CMD {
     /// Tells the drone to enter Commandable Mode, where it will listen to these commands

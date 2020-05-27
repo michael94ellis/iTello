@@ -37,6 +37,10 @@ class BasicDroneControllerVC: UIViewController {
     @IBOutlet weak var batteryLabel: UILabel!
     @IBOutlet weak var emergencyLandButton: UIButton!
     @IBOutlet weak var emergencyLandLabel: UILabel!
+    @IBOutlet weak var flip1: UIButton!
+    @IBOutlet weak var flip2: UIButton!
+    @IBOutlet weak var flip3: UIButton!
+    @IBOutlet weak var flip4: UIButton!
     
     // Store these images for easy access
     lazy var wifiImage = UIImage(systemName: "wifi")
@@ -57,6 +61,8 @@ class BasicDroneControllerVC: UIViewController {
             guard let tello = self.tello else { return }
             self.batteryLabel.text = "Battery: \(tello.battery)%"
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(hideFlips), name: Notification.Name("HideShowFlips"), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -69,6 +75,7 @@ class BasicDroneControllerVC: UIViewController {
         } else {
             firstOpenDialog()
         }
+        hideFlips()
     }
     
     /// Presented to the user if they just opened the app, it detects this by using the default telloSSID value `TELLO-`
@@ -90,8 +97,22 @@ class BasicDroneControllerVC: UIViewController {
         leftJoyStick.handleAlpha = 0.3
         leftJoyStick.monitor = .xy(monitor: { value in
             guard let tello = self.tello else { return }
-            tello.yaw = Int(value.x)
-            tello.upDown = Int(value.y)
+            let x = Int(value.x)
+            let y = Int(value.y)
+            if x < 0 {
+                tello.yaw = x - Tello.speedBoost
+            } else if x > 0 {
+                tello.yaw = x + Tello.speedBoost
+            } else {
+                tello.yaw = 0
+            }
+            if y < 0 {
+                tello.upDown = y - Tello.speedBoost
+            } else if x > 0 {
+                tello.upDown = y + Tello.speedBoost
+            } else {
+                tello.upDown = 0
+            }
             tello.updateMovementTimer()
         })
     }
@@ -102,8 +123,22 @@ class BasicDroneControllerVC: UIViewController {
         rightJoyStick.handleAlpha = 0.3
         rightJoyStick.monitor = .xy(monitor: { value in
             guard let tello = self.tello else { return }
-            tello.leftRight = Int(value.x)
-            tello.forwardBack = Int(value.y)
+            let x = Int(value.x)
+            let y = Int(value.y)
+            if x < 0 {
+                tello.leftRight = x - Tello.speedBoost
+            } else if x > 0 {
+                tello.leftRight = x + Tello.speedBoost
+            } else {
+                tello.leftRight = 0
+            }
+            if y < 0 {
+                tello.forwardBack = y - Tello.speedBoost
+            } else if x > 0 {
+                tello.forwardBack = y + Tello.speedBoost
+            } else {
+                tello.forwardBack = 0
+            }
             tello.updateMovementTimer()
         })
     }
@@ -150,7 +185,7 @@ class BasicDroneControllerVC: UIViewController {
         self.wifiLabel.textColor = .lightText
         WifiController.shared.connectTo(ssid: ssid) { success in
             guard success else {
-                self.settingsButton.setBackgroundImage(self.wifiExclamationImage, for: .normal)
+                self.wifiButton.setBackgroundImage(self.wifiExclamationImage, for: .normal)
                 self.wifiLabel.text = "Not Connected"
                 self.tello = nil
                 return
@@ -178,7 +213,7 @@ class BasicDroneControllerVC: UIViewController {
     /// This ought to not work if there is no Drone connected
     @IBAction func videoButtonTapped(_ sender: Any) {
         tello?.toggleCamera()
-        let isVideoEnabled = Tello.isCameraOn 
+        let isVideoEnabled = Tello.isCameraOn
         settingsButton.setBackgroundImage(isVideoEnabled ? videoEnabledImage : videoDisabledImage, for: .normal)
     }
     
@@ -213,7 +248,7 @@ class BasicDroneControllerVC: UIViewController {
                     return
             }
             landingTapCount += 1
-            if landingTapCount >= 5 {
+            if landingTapCount >= 3 {
                 landingSpamDetectionTimer.invalidate()
                 self.landingTapCount = 0
                 self.emergencyLandLabel.isHidden = false
@@ -231,6 +266,13 @@ class BasicDroneControllerVC: UIViewController {
             }
         }
         tello?.land()
+    }
+    
+    @objc func hideFlips() {
+        flip1.isHidden = Tello.showFlips
+        flip2.isHidden = Tello.showFlips
+        flip3.isHidden = Tello.showFlips
+        flip4.isHidden = Tello.showFlips
     }
     /// Backflip
     @IBAction func flipA(_ sender: Any) {
