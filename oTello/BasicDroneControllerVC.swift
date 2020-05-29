@@ -31,6 +31,7 @@ class BasicDroneControllerVC: UIViewController {
     @IBOutlet weak var rightJoyStick: JoyStick!
     @IBOutlet weak var leftJoyStick: JoyStick!
     @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var photoButton: UIStackView!
     @IBOutlet weak var videoImage: UIImageView!
     @IBOutlet weak var wifiButton: UIButton!
     @IBOutlet weak var wifiLabel: UILabel!
@@ -63,12 +64,14 @@ class BasicDroneControllerVC: UIViewController {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(hideFlips), name: Notification.Name("HideShowFlips"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideCameraButtons), name: Notification.Name("HideCameraButtons"), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.emergencyLandLabel.isHidden = true
         self.emergencyLandButton.isHidden = true
+        self.photoButton.isHidden = Tello.isShowingRecordingButtons
         if let currentSSID = WifiController.shared.wifiConnectionInfo()?["SSID"] as? String,
             currentSSID.hasPrefix("TELLO-") {
             self.handleWiFiConnectionSuccess(ssid: currentSSID)
@@ -91,6 +94,16 @@ class BasicDroneControllerVC: UIViewController {
         }
     }
     
+    private func adjustJoyStickValue(_ value: Int, speed: Int) -> Int {
+        if value < 0 {
+            return value - speed
+        } else if value > 0 {
+            return value + speed
+        } else {
+            return 0
+        }
+    }
+    
     func setupLeftJoystick() {
         // Transparency
         leftJoyStick.baseAlpha = 0.15
@@ -99,20 +112,8 @@ class BasicDroneControllerVC: UIViewController {
             guard let tello = self.tello else { return }
             let x = Int(value.x)
             let y = Int(value.y)
-            if x < 0 {
-                tello.yaw = x - Tello.speedBoost
-            } else if x > 0 {
-                tello.yaw = x + Tello.speedBoost
-            } else {
-                tello.yaw = 0
-            }
-            if y < 0 {
-                tello.upDown = y - Tello.speedBoost
-            } else if x > 0 {
-                tello.upDown = y + Tello.speedBoost
-            } else {
-                tello.upDown = 0
-            }
+            tello.yaw = self.adjustJoyStickValue(x, speed: Tello.speedBoost)
+            tello.upDown = self.adjustJoyStickValue(y, speed: Tello.speedBoost)
             tello.updateMovementTimer()
         })
     }
@@ -125,20 +126,8 @@ class BasicDroneControllerVC: UIViewController {
             guard let tello = self.tello else { return }
             let x = Int(value.x)
             let y = Int(value.y)
-            if x < 0 {
-                tello.leftRight = x - Tello.speedBoost
-            } else if x > 0 {
-                tello.leftRight = x + Tello.speedBoost
-            } else {
-                tello.leftRight = 0
-            }
-            if y < 0 {
-                tello.forwardBack = y - Tello.speedBoost
-            } else if x > 0 {
-                tello.forwardBack = y + Tello.speedBoost
-            } else {
-                tello.forwardBack = 0
-            }
+            tello.leftRight = self.adjustJoyStickValue(x, speed: Tello.speedBoost)
+            tello.forwardBack = self.adjustJoyStickValue(y, speed: Tello.speedBoost)
             tello.updateMovementTimer()
         })
     }
@@ -194,6 +183,7 @@ class BasicDroneControllerVC: UIViewController {
         }
     }
     
+    /// Opens the settings menu
     @IBAction func settingsButtonTapped(_ sender: Any) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let settingsPage = storyBoard.instantiateViewController(withIdentifier: "settingsVC") as! SettingsViewController
@@ -201,27 +191,28 @@ class BasicDroneControllerVC: UIViewController {
         self.present(settingsPage, animated: true, completion: nil)
     }
     
+    /// Sets the label at the top of the view
     func handleWiFiConnectionSuccess(ssid: String) {
         self.wifiLabel.text = ssid
-        self.settingsButton.setBackgroundImage(self.wifiImage, for: .normal)
+        self.wifiButton.setBackgroundImage(self.wifiImage, for: .normal)
         self.tello = TelloController()
         self.tello?.videoView = self.videoImage
     }
     
-    // MARK: - Drone Command Buttons
-    
-    /// This ought to not work if there is no Drone connected
-    @IBAction func videoButtonTapped(_ sender: Any) {
-        tello?.toggleCamera()
-        let isVideoEnabled = Tello.isCameraOn
-        settingsButton.setBackgroundImage(isVideoEnabled ? videoEnabledImage : videoDisabledImage, for: .normal)
+    @IBAction func photoButtonTapped(_ sender: Any) {
+        self.tello?.takePhoto()
     }
+    
+    // MARK: - Drone Command Buttons
     
     /// Tell the drone to takeoff
     @IBAction func takeoff(_ sender: UIButton) {
+        // If there is a timer it means the button was just tapped
         if takeoffSpamDetectionTimer.isValid {
+            // The timer has been started, count the taps
             takeoffTapCount += 1
-            if takeoffTapCount >= 5 {
+            // When 3 taps happen end the timer and show the secondary action
+            if takeoffTapCount >= 3 {
                 takeoffSpamDetectionTimer.invalidate()
                 self.takeoffTapCount = 0
                 self.presentWiFiDialog(
@@ -231,6 +222,7 @@ class BasicDroneControllerVC: UIViewController {
                     savedSSID: WifiController.shared.telloSSID)
             }
         } else {
+            // Begin the timer
             takeoffSpamDetectionTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
                 self.takeoffTapCount = 0
             }
@@ -242,12 +234,15 @@ class BasicDroneControllerVC: UIViewController {
     }
     /// Attempt to land the drone, it may need extra taps. If extra taps are sensed the Emergency Stop option is show
     @IBAction func land(_ sender: UIButton) {
+        // If there is a timer it means the button was just tapped
         if landingSpamDetectionTimer.isValid {
             guard self.emergencyLandButton.isHidden,
                 self.emergencyLandLabel.isHidden else {
                     return
             }
+            // The timer has been started, count the taps
             landingTapCount += 1
+            // When 3 taps happen end the timer and show the secondary action
             if landingTapCount >= 3 {
                 landingSpamDetectionTimer.invalidate()
                 self.landingTapCount = 0
@@ -259,6 +254,7 @@ class BasicDroneControllerVC: UIViewController {
                 }
             }
         } else {
+            // Begin the timer
             landingSpamDetectionTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
                 self.landingTapCount = 0
                 self.emergencyLandLabel.isHidden = true
@@ -268,6 +264,12 @@ class BasicDroneControllerVC: UIViewController {
         tello?.land()
     }
     
+    /// Flips are major gimmick, so they don't need to be shown
+    @objc func hideCameraButtons() {
+        photoButton.isHidden = Tello.isShowingRecordingButtons
+    }
+    
+    /// Flips are major gimmick, so they don't need to be shown
     @objc func hideFlips() {
         flip1.isHidden = Tello.showFlips
         flip2.isHidden = Tello.showFlips

@@ -26,6 +26,11 @@ struct Tello {
         get { UserDefaults.standard.bool(forKey: isCameraOnKey) }
         set { UserDefaults.standard.set(newValue, forKey: isCameraOnKey) }
     }
+    static private let showCameraAndVideoButtons = "ShowCameraVideoKey"
+    static var isShowingRecordingButtons: Bool {
+        get { UserDefaults.standard.bool(forKey: showCameraAndVideoButtons) }
+        set { UserDefaults.standard.set(newValue, forKey: showCameraAndVideoButtons) }
+    }
     static private let speedBoostKey = "SpeedBoostKey"
     static var speedBoost: Int {
         get { UserDefaults.standard.integer(forKey: speedBoostKey) }

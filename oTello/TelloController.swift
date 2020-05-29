@@ -44,17 +44,17 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     // Broadcaster
     private var commandBroadcaster = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
     
+    /// The TelloController will spawn 2 threads immediately, on each thread will be on of the two UDP objects above
+    ///     A receiving/listener for both Drone State and Command Responses
+    /// If the video stream is enabled a third thread will listen/receive the video stream
     override init() {
         super.init()
         receiveCommandResponseStream()
         receiveStateStream()
         VideoFrameDecoder.delegate = self
         repeatCommandForResponse(for: CMD.on)
-        if Tello.isCameraOn {
-            repeatCommandForResponse(for: CMD.streamOn)
-            displayVideoStream()
-        }
     }
+    
     private var commandRepeatMax = 4
     /// Repeats a comment until an `ok` is received from the Tello
     private func repeatCommandForResponse(for command: String) {
@@ -65,6 +65,10 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             } else {
                 self.responseWaiter.invalidate()
                 self.commandRepeatMax = 4
+                if Tello.isCameraOn {
+                    sleep(1)
+                    self.handleVideoDisplay()
+                }
             }
         }
     }
@@ -72,14 +76,16 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     // MARK: - Tello Command Methods
     
     func takeOff() {
-        self.sendCommand(CMD.takeOff)
+//        self.sendCommand(CMD.takeOff)
+        videoDecoder.isRecording = true
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
-        repeatCommandForResponse(for: CMD.land)
+//        repeatCommandForResponse(for: CMD.land)
+        videoDecoder.isRecording = false
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
-    func emergencyLand() {
+    func emergencyLand() {      
         self.sendCommand(CMD.off)
     }
     /// See the FLIP enum for list of available flip directions
@@ -110,11 +116,13 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     }
     
     /// Called by the UI to toggle the camera state
-    func toggleCamera() {
+    func handleVideoDisplay() {
         // command tello to stream video
         let videoStreamCommand = Tello.isCameraOn ? CMD.streamOn : CMD.streamOff
-        self.sendCommand(videoStreamCommand)
-        guard Tello.isCameraOn else { return }
+        sendCommand(videoStreamCommand)
+        guard Tello.isCameraOn else {
+            return
+        }
         displayVideoStream()
     }
     /// Listens to the video stream broadcast from the drone
@@ -188,8 +196,32 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             self.videoView?.image = UIImage(cgImage: displayableImage)
 //            let ciImage = CIImage(cgImage: displayableImage)
 //            self.findFaces(in: ciImage)
+            // Record CMSampleBuffer with AVFoundation
+            if self.videoDecoder.isRecording,
+                let videoPixelBuffer = self.videoDecoder.videoWriterInputPixelBufferAdaptor,
+                videoPixelBuffer.assetWriterInput.isReadyForMoreMediaData {
+                print(videoPixelBuffer.append(frame, withPresentationTime: CMTimeMake(value: self.videoDecoder.videoFrameCounter, timescale: self.videoDecoder.videoFPS)))
+                self.videoDecoder.videoFrameCounter += 1
+            }
         }
-        
+    }
+    
+    public func takePhoto() {
+        guard let image = self.videoView?.image else {
+            print("Error: Can't take photo, no video frame is displayed")
+            return
+        }
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+
+    //MARK: - Add image to Library
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            print(error)
+        } else {
+            print("Your image has been saved to your photos.")
+        }
     }
     
     var faceBox: CGRect?

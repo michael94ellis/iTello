@@ -22,7 +22,7 @@
 		2FDE4B7024748FE700B8C422 /* WiFiController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE4B6C24748FE700B8C422 /* WiFiController.swift */; };
 		2FDE4B7324748FE700B8C422 /* TelloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE4B6F24748FE700B8C422 /* TelloController.swift */; };
 		2FDE4B762474902B00B8C422 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDE4B752474902B00B8C422 /* NetworkExtension.framework */; };
-		2FF52BFD2475F7CF00BB7DB5 /* VideoDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF52BFC2475F7CF00BB7DB5 /* VideoDecoder.swift */; };
+		2FF52BFD2475F7CF00BB7DB5 /* VideoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */; };
 		5D48379C22F808FE599F5373 /* Pods_oTello.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A613BC135FAFE9A75C65F8 /* Pods_oTello.framework */; };
 /* End PBXBuildFile section */
 
@@ -46,7 +46,7 @@
 		2FDE4B6F24748FE700B8C422 /* TelloController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelloController.swift; sourceTree = "<group>"; };
 		2FDE4B742474902500B8C422 /* oTello.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = oTello.entitlements; sourceTree = "<group>"; };
 		2FDE4B752474902B00B8C422 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
-		2FF52BFC2475F7CF00BB7DB5 /* VideoDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDecoder.swift; sourceTree = "<group>"; };
+		2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoManager.swift; sourceTree = "<group>"; };
 		D7A613BC135FAFE9A75C65F8 /* Pods_oTello.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_oTello.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF6B4935879C5E58D44ED017 /* Pods-oTello.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oTello.debug.xcconfig"; path = "Target Support Files/Pods-oTello/Pods-oTello.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,7 +93,7 @@
 				2FB2DD1B2477E6D500B28AC0 /* JoyStick */,
 				2FDE4B6F24748FE700B8C422 /* TelloController.swift */,
 				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
-				2FF52BFC2475F7CF00BB7DB5 /* VideoDecoder.swift */,
+				2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */,
 				2FDE4B6C24748FE700B8C422 /* WiFiController.swift */,
 				2F8C8D7C24748F4E006D40EC /* Main.storyboard */,
 				2F8C8D7F24748F51006D40EC /* Assets.xcassets */,
@@ -255,7 +255,7 @@
 				2F8C8D7724748F4E006D40EC /* AppDelegate.swift in Sources */,
 				2FDE4B7024748FE700B8C422 /* WiFiController.swift in Sources */,
 				2FB2DD182477E53000B28AC0 /* JoyStickMonitor.swift in Sources */,
-				2FF52BFD2475F7CF00BB7DB5 /* VideoDecoder.swift in Sources */,
+				2FF52BFD2475F7CF00BB7DB5 /* VideoManager.swift in Sources */,
 				2F8C8D7924748F4E006D40EC /* SceneDelegate.swift in Sources */,
 				2FC59DC12477711F00EB8B14 /* JoyStick.swift in Sources */,
 				2F76A7C1247EAE3F00635E1C /* SettingsViewController.swift in Sources */,

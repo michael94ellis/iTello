@@ -18,6 +18,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var speedBoostSlider: UISlider!
     @IBOutlet weak var showFlipsSwitch: UISwitch!
     @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var hideCameraSwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,16 +44,21 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func videoEnabledSwitched(_ sender: Any) {
         Tello.isCameraOn.toggle()
-        tello?.toggleCamera()
+        tello?.handleVideoDisplay()
     }
     @IBAction func showFlipButtonsSwitched(_ sender: Any) {
         Tello.showFlips.toggle()
         NotificationCenter.default.post(name: Notification.Name("HideShowFlips"), object: nil)
     }
-    @IBAction func speedBoostChanged(_ sender: Any) {
-        Tello.speedBoost = Int(speedBoostSlider.value)
-        speedBoostLabel.text = "Speed Boost: \(Int(speedBoostSlider.value))"
+    @IBAction func hideCameraSwitched(_ sender: UISwitch) {
+        Tello.isShowingRecordingButtons.toggle()
+        NotificationCenter.default.post(name: Notification.Name("HideCameraButtons"), object: nil)
     }
+    @IBAction func speedBoostChanged(_ sender: UISlider) {
+        Tello.speedBoost = Int(sender.value)
+        speedBoostLabel.text = "Speed Boost: \(Int(sender.value))"
+    }
+    
     @IBAction func doneButtonTapped(_ sender: Any) {
         self.dismiss(animated: true)
     }
