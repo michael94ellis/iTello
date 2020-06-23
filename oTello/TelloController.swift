@@ -8,10 +8,13 @@
 //
 
 import VideoToolbox
-import SwiftSocket
+import UIKit
+
 
 /// This Swift object can control a DJI Tello drone and also decode and display it's video stream
-class TelloController: NSObject, VideoFrameDecoderDelegate {
+class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
+    /// Indicates whether or not the drone has been put into command mode
+    private var commandable = false
     /// Amount of time between each movement broadcast to prevent getting spam-bocked by the drone
     private let commandDelay = 0.1
     /// Speed of Up/Down movement
@@ -26,6 +29,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     private var moveCommand: String { "rc \(self.leftRight) \(self.forwardBack) \(self.upDown) \(self.yaw)" }
     /// Prevents too many movement commands from being issued at once
     private var moveTimer = Timer()
+    // TODO: Timer to send a message(CMD.on) after every 4 second the user hasn't sent a command to keep the drone active
     
     // MARK: - Stream Data Vars
     
@@ -34,24 +38,26 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     var battery = ""
     /// Last known Signal to Noise ratio for WiFi received from tello
     var wifi = ""
-    var isInCommandMode = false
     private lazy var videoDecoder = VideoFrameDecoder()
     /// A reference to the image view where the video will be displayed
     var videoView: UIImageView?
-    // Listeners
-    private var videoStreamServer = UDPServer(address: Tello.ResponseIPAddress, port: Tello.VideoStreamPort)
-    private var stateStreamServer = UDPServer(address: Tello.ResponseIPAddress, port: Tello.StatePort)
-    // Broadcaster
-    private var commandBroadcaster = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
+    
+    // UDP Connections
+    var videoClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.VideoStreamPort)
+    var stateClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.StatePort)
+    var commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
     
     /// The TelloController will spawn 2 threads immediately, on each thread will be on of the two UDP objects above
     ///     A receiving/listener for both Drone State and Command Responses
     /// If the video stream is enabled a third thread will listen/receive the video stream
     override init() {
         super.init()
-        receiveCommandResponseStream()
-        receiveStateStream()
         VideoFrameDecoder.delegate = self
+        
+        stateClient?.delegate = self
+        commandClient?.delegate = self
+        videoClient?.delegate = self
+        
         repeatCommandForResponse(for: CMD.on)
     }
     
@@ -59,39 +65,64 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     /// Repeats a comment until an `ok` is received from the Tello
     private func repeatCommandForResponse(for command: String) {
         responseWaiter = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
-            if !self.isInCommandMode, self.commandRepeatMax > 0 {
+            if !self.commandable, self.commandRepeatMax > 0 {
                 self.sendCommand(command)
                 self.commandRepeatMax -= 1
             } else {
                 self.responseWaiter.invalidate()
                 self.commandRepeatMax = 4
-                if Tello.isCameraOn {
-                    sleep(1)
+                if TelloSettings.isCameraOn {
                     self.handleVideoDisplay()
                 }
             }
         }
     }
     
+    func handleResponse(_ client: UDPClient, data: Data) {
+        if client == stateClient,
+            let message = String(data: data, encoding: .utf8) {
+            receiveStateStream(state: message)
+        } else if client == commandClient,
+            let message = String(data: data, encoding: .utf8) {
+            handleCommandResponse(message: message)
+//        } else if client == videoClient {
+//            handleVideoStream(data: data)
+        }
+    }
+    
     // MARK: - Tello Command Methods
     
     func takeOff() {
-//        self.sendCommand(CMD.takeOff)
-        videoDecoder.isRecording = true
+        sendCommand(CMD.takeOff)
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
-//        repeatCommandForResponse(for: CMD.land)
-        videoDecoder.isRecording = false
+        repeatCommandForResponse(for: CMD.land)
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {      
-        self.sendCommand(CMD.off)
+        sendCommand(CMD.off)
     }
     /// See the FLIP enum for list of available flip directions
     func flip(_ direction: FLIP) {
-        self.sendCommand(direction.commandValue)
+        sendCommand(direction.commandValue)
     }
+    
+    func beginOrEndRecording() {
+        videoDecoder.isRecording.toggle()
+    }
+    
+    /// Called by the UI to toggle the camera state
+    func handleVideoDisplay() {
+        // command tello to stream video
+        let videoStreamCommand = TelloSettings.isCameraOn ? CMD.streamOn : CMD.streamOff
+        sendCommand(videoStreamCommand)
+        guard TelloSettings.isCameraOn else {
+            return
+        }
+//        videoClient?.delegate = self
+    }
+    
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func updateMovementTimer() {
         if moveTimer.isValid { return }
@@ -105,42 +136,49 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             }
             // Send 2 because UDP packets can be lost
             self.sendCommand(self.moveCommand)
-            self.sendCommand(self.moveCommand)
         }
     }
     
-    @discardableResult
-    private func sendCommand(_ command: String) -> Result {
+    private func sendCommand(_ command: String) {
+        guard let data = command.data(using: .utf8),
+            let udpClient =  commandClient else {
+                print("Error: cannot send command")
+                return
+        }
         print("Sending Command: \(command)")
-        return commandBroadcaster.send(string: command)
+        udpClient.sendAndReceive(data)
     }
     
-    /// Called by the UI to toggle the camera state
-    func handleVideoDisplay() {
-        // command tello to stream video
-        let videoStreamCommand = Tello.isCameraOn ? CMD.streamOn : CMD.streamOff
-        sendCommand(videoStreamCommand)
-        guard Tello.isCameraOn else {
+    // MARK: - Handle Stream Data
+    
+    /// Read data from the ongoing STATE stream
+    private func handleCommandResponse(message: String) {
+        guard message == "ok" else {
+            print("Error with command client: \(message)")
             return
         }
-        displayVideoStream()
+        print("Command: ok")
+        commandable = true
+    }
+    /// Read data from the ongoing STATE stream
+    private func receiveStateStream(state: String) {
+        let stateValues = state.split(separator: ";")
+        if let batteryLevel = stateValues.first(where: { $0.hasPrefix("bat") }) {
+            battery = batteryLevel.split(separator: ":").last?.description ?? ""
+        }
     }
     /// Listens to the video stream broadcast from the drone
-    private func displayVideoStream() {
-        DispatchQueue.global(qos: .userInteractive).async {
-            /// Video data is stored and processed in this variable as it is received
-            var videoFrameBuffer: [Byte] = []
-            // When user toggles camera this will cease
-            while Tello.isCameraOn {
-                // Begin receiving video data
-                let (data, _, _) = self.videoStreamServer.recv(2048)
-                // No frame is a full image, they must be received separately and assembled
-                self.handleVideoStream(frameBuffer: &videoFrameBuffer, data: data)
-            }
+    func handleVideoStream(data: Data) {
+        /// Video data is stored and processed in this variable as it is received
+        var videoFrameBuffer: FrameData = []
+        // When user toggles camera this will cease
+        while TelloSettings.isCameraOn {
+            // No frame is a full image, they must be received separately and assembled
+            decodeVideoData(frameBuffer: &videoFrameBuffer, data: [UInt8](data))
         }
     }
     /// Passes the received frame data to the video decoder
-    private func handleVideoStream(frameBuffer: inout [Byte], data: FrameData?) {
+    private func decodeVideoData(frameBuffer: inout FrameData, data: FrameData?) {
         if let videoStreamData = data {
             // Combine previous buffer with current buffer
             frameBuffer = frameBuffer + videoStreamData
@@ -151,35 +189,6 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
                 videoDecoder.interpretRawFrameData(&frameBuffer)
                 // Refresh the received data buffer to begin processing a new frame
                 frameBuffer = []
-            }
-        }
-    }
-    /// Read data from the ongoing STATE stream
-    private func receiveStateStream() {
-        DispatchQueue.global(qos: .userInteractive).async {
-            let (data, _, _) = self.stateStreamServer.recv(2048)
-            if let stateStreamData = data,
-                let stateString = String(bytes: stateStreamData, encoding: .utf8) {
-                let stateValues = stateString.split(separator: ";")
-                if let batteryLevel = stateValues.first(where: { $0.hasPrefix("bat") }) {
-                    self.battery = batteryLevel.split(separator: ":").last?.description ?? ""
-                }
-            }
-            self.receiveStateStream()
-        }
-    }
-    /// Read data from the ongoing STATE stream
-    private func receiveCommandResponseStream() {
-        DispatchQueue.global(qos: .userInteractive).async {
-            while true {
-                let (data, _, _) = self.commandBroadcaster.recv(2048)
-                if let responseData = data,
-                    let response = String(bytes: responseData, encoding: .utf8) {
-                    print("Command Response: \(response)")
-                    if response == "ok", !self.isInCommandMode {
-                        self.isInCommandMode = true
-                    }
-                }
             }
         }
     }
@@ -205,6 +214,8 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             }
         }
     }
+
+    // MARK: - Add image to Library
     
     public func takePhoto() {
         guard let image = self.videoView?.image else {
@@ -213,8 +224,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
         }
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
-
-    //MARK: - Add image to Library
+    
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             // we got back an error!
@@ -223,6 +233,8 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             print("Your image has been saved to your photos.")
         }
     }
+    
+    // MARK: - Facial Recognition
     
     var faceBox: CGRect?
     

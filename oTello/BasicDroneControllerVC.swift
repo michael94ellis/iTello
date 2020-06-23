@@ -65,13 +65,14 @@ class BasicDroneControllerVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(hideFlips), name: Notification.Name("HideShowFlips"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideCameraButtons), name: Notification.Name("HideCameraButtons"), object: nil)
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.emergencyLandLabel.isHidden = true
         self.emergencyLandButton.isHidden = true
-        self.photoButton.isHidden = Tello.isShowingRecordingButtons
+        self.photoButton.isHidden = TelloSettings.isShowingRecordingButtons
         if let currentSSID = WifiController.shared.wifiConnectionInfo()?["SSID"] as? String,
             currentSSID.hasPrefix("TELLO-") {
             self.handleWiFiConnectionSuccess(ssid: currentSSID)
@@ -87,7 +88,7 @@ class BasicDroneControllerVC: UIViewController {
         if WifiController.shared.telloSSID == "TELLO-" {
             let welcomeAlert = UIAlertController(
                 title: "Welcome",
-                message: "Please turn on the drone and wait a moment for it to prepare.\nThen tap the WiFi icon to set the WiFi name and connect!",
+                message: "Please turn on your Tello and wait for it to flash yellow.\n\nThen tap the WiFi or Gear icon to set the WiFi name and connect!",
                 preferredStyle: .alert)
             welcomeAlert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
             self.present(welcomeAlert, animated: true, completion: nil)
@@ -112,8 +113,8 @@ class BasicDroneControllerVC: UIViewController {
             guard let tello = self.tello else { return }
             let x = Int(value.x)
             let y = Int(value.y)
-            tello.yaw = self.adjustJoyStickValue(x, speed: Tello.speedBoost)
-            tello.upDown = self.adjustJoyStickValue(y, speed: Tello.speedBoost)
+            tello.yaw = self.adjustJoyStickValue(x, speed: TelloSettings.speedBoost)
+            tello.upDown = self.adjustJoyStickValue(y, speed: TelloSettings.speedBoost)
             tello.updateMovementTimer()
         })
     }
@@ -126,8 +127,8 @@ class BasicDroneControllerVC: UIViewController {
             guard let tello = self.tello else { return }
             let x = Int(value.x)
             let y = Int(value.y)
-            tello.leftRight = self.adjustJoyStickValue(x, speed: Tello.speedBoost)
-            tello.forwardBack = self.adjustJoyStickValue(y, speed: Tello.speedBoost)
+            tello.leftRight = self.adjustJoyStickValue(x, speed: TelloSettings.speedBoost)
+            tello.forwardBack = self.adjustJoyStickValue(y, speed: TelloSettings.speedBoost)
             tello.updateMovementTimer()
         })
     }
@@ -171,6 +172,7 @@ class BasicDroneControllerVC: UIViewController {
     }
     
     func connectToDroneWiFi(ssid: String) {
+        // Attempt to use NEHotspot to connect to the drone
         self.wifiLabel.textColor = .lightText
         WifiController.shared.connectTo(ssid: ssid) { success in
             guard success else {
@@ -266,15 +268,15 @@ class BasicDroneControllerVC: UIViewController {
     
     /// Flips are major gimmick, so they don't need to be shown
     @objc func hideCameraButtons() {
-        photoButton.isHidden = Tello.isShowingRecordingButtons
+        photoButton.isHidden = TelloSettings.isShowingRecordingButtons
     }
     
     /// Flips are major gimmick, so they don't need to be shown
     @objc func hideFlips() {
-        flip1.isHidden = Tello.showFlips
-        flip2.isHidden = Tello.showFlips
-        flip3.isHidden = Tello.showFlips
-        flip4.isHidden = Tello.showFlips
+        flip1.isHidden = TelloSettings.showFlips
+        flip2.isHidden = TelloSettings.showFlips
+        flip3.isHidden = TelloSettings.showFlips
+        flip4.isHidden = TelloSettings.showFlips
     }
     /// Backflip
     @IBAction func flipA(_ sender: Any) {

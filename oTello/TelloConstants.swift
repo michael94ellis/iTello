@@ -20,7 +20,10 @@ struct Tello {
     static let StatePort: Int32 = 8890
     /// Port the Tello sends UDP Video Stream Data on
     static let VideoStreamPort: Int32 = 11111
-    
+}
+
+/// Networking Information about the DJI Tello
+struct TelloSettings {
     static private let isCameraOnKey = "CameraKey"
     static var isCameraOn: Bool {
         get { UserDefaults.standard.bool(forKey: isCameraOnKey) }

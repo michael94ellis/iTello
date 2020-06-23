@@ -28,12 +28,13 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         wifiNameTF.text = WifiController.shared.telloSSID
-        enableVideoSwitch.setOn(Tello.isCameraOn, animated: true)
-        showFlipsSwitch.setOn(Tello.showFlips, animated: true)
-        speedBoostLabel.text = "Speed Boost: \(Tello.speedBoost)"
-        speedBoostSlider.setValue(Float(Tello.speedBoost), animated: true)
+        enableVideoSwitch.setOn(TelloSettings.isCameraOn, animated: true)
+        showFlipsSwitch.setOn(TelloSettings.showFlips, animated: true)
+        speedBoostLabel.text = "Speed Boost: \(TelloSettings.speedBoost)"
+        speedBoostSlider.setValue(Float(TelloSettings.speedBoost), animated: true)
     }
     
+    // When the user taps the Done/Enter/Return button on the device keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         wifiNameTF.resignFirstResponder()
         if let newSSID = textField.text {
@@ -43,22 +44,21 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func videoEnabledSwitched(_ sender: Any) {
-        Tello.isCameraOn.toggle()
+        TelloSettings.isCameraOn.toggle()
         tello?.handleVideoDisplay()
     }
     @IBAction func showFlipButtonsSwitched(_ sender: Any) {
-        Tello.showFlips.toggle()
+        TelloSettings.showFlips.toggle()
         NotificationCenter.default.post(name: Notification.Name("HideShowFlips"), object: nil)
     }
     @IBAction func hideCameraSwitched(_ sender: UISwitch) {
-        Tello.isShowingRecordingButtons.toggle()
+        TelloSettings.isShowingRecordingButtons.toggle()
         NotificationCenter.default.post(name: Notification.Name("HideCameraButtons"), object: nil)
     }
     @IBAction func speedBoostChanged(_ sender: UISlider) {
-        Tello.speedBoost = Int(sender.value)
+        TelloSettings.speedBoost = Int(sender.value)
         speedBoostLabel.text = "Speed Boost: \(Int(sender.value))"
     }
-    
     @IBAction func doneButtonTapped(_ sender: Any) {
         self.dismiss(animated: true)
     }

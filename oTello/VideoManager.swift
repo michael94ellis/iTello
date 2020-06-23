@@ -260,7 +260,7 @@ class VideoFrameDecoder {
         videoWriterInputPixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(
             assetWriterInput: vidInput,
             sourcePixelBufferAttributes: sourcePixelBufferAttributes)
-        
+        vidInput.expectsMediaDataInRealTime = true
         vidWriter.add(vidInput)
         guard vidWriter.startWriting() else {
             print("Error: Cant write with vid writer")

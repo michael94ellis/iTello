@@ -7,7 +7,6 @@ target 'oTello' do
 
   # Pods for oTello
   
-  pod 'SwiftSocket'
   pod 'Firebase/Analytics'
   pod 'Firebase/Crashlytics'
   

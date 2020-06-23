@@ -18,6 +18,7 @@
 		2FB2DD1624777B4000B28AC0 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2DD1524777B4000B28AC0 /* CGExtensions.swift */; };
 		2FB2DD182477E53000B28AC0 /* JoyStickMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2DD172477E53000B28AC0 /* JoyStickMonitor.swift */; };
 		2FB2DD1A2477E55200B28AC0 /* JoyStickReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2DD192477E55200B28AC0 /* JoyStickReporter.swift */; };
+		2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB55D2C24854368000EF166 /* UDPClient.swift */; };
 		2FC59DC12477711F00EB8B14 /* JoyStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC59DC02477711F00EB8B14 /* JoyStick.swift */; };
 		2FDE4B7024748FE700B8C422 /* WiFiController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE4B6C24748FE700B8C422 /* WiFiController.swift */; };
 		2FDE4B7324748FE700B8C422 /* TelloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE4B6F24748FE700B8C422 /* TelloController.swift */; };
@@ -41,6 +42,7 @@
 		2FB2DD1524777B4000B28AC0 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
 		2FB2DD172477E53000B28AC0 /* JoyStickMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoyStickMonitor.swift; sourceTree = "<group>"; };
 		2FB2DD192477E55200B28AC0 /* JoyStickReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoyStickReporter.swift; sourceTree = "<group>"; };
+		2FB55D2C24854368000EF166 /* UDPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPClient.swift; sourceTree = "<group>"; };
 		2FC59DC02477711F00EB8B14 /* JoyStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoyStick.swift; sourceTree = "<group>"; };
 		2FDE4B6C24748FE700B8C422 /* WiFiController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiController.swift; sourceTree = "<group>"; };
 		2FDE4B6F24748FE700B8C422 /* TelloController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelloController.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
 				2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */,
 				2FDE4B6C24748FE700B8C422 /* WiFiController.swift */,
+				2FB55D2C24854368000EF166 /* UDPClient.swift */,
 				2F8C8D7C24748F4E006D40EC /* Main.storyboard */,
 				2F8C8D7F24748F51006D40EC /* Assets.xcassets */,
 				2F8C8D8124748F51006D40EC /* LaunchScreen.storyboard */,
@@ -252,6 +255,7 @@
 				2FB2DD1A2477E55200B28AC0 /* JoyStickReporter.swift in Sources */,
 				2FDE4B7324748FE700B8C422 /* TelloController.swift in Sources */,
 				2F8C8D7B24748F4E006D40EC /* BasicDroneControllerVC.swift in Sources */,
+				2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */,
 				2F8C8D7724748F4E006D40EC /* AppDelegate.swift in Sources */,
 				2FDE4B7024748FE700B8C422 /* WiFiController.swift in Sources */,
 				2FB2DD182477E53000B28AC0 /* JoyStickMonitor.swift in Sources */,
