@@ -44,6 +44,11 @@ struct TelloSettings {
         get { UserDefaults.standard.bool(forKey: showFlipsKey) }
         set { UserDefaults.standard.set(newValue, forKey: showFlipsKey) }
     }
+    static private let invertJoySticksKey = "InvertJoySticks"
+    static var invertedJoySticks: Bool {
+        get { UserDefaults.standard.bool(forKey: invertJoySticksKey) }
+        set { UserDefaults.standard.set(newValue, forKey: invertJoySticksKey) }
+    }
 }
 struct CMD {
     /// Tells the drone to enter Commandable Mode, where it will listen to these commands

@@ -9,16 +9,13 @@
 import Network
 import Foundation
 
-protocol UDPListener {
-    func handleResponse(_ client: UDPClient, data: Data)
-}
-
 class UDPClient {
     
     var connection: NWConnection
     var address: NWEndpoint.Host
     var port: NWEndpoint.Port
-    var delegate: UDPListener?
+    var messageReceived: (Data) -> () = { _ in print("Message Receiver not set") }
+    var listener: NWListener?
     
     var resultHandler = NWConnection.SendCompletion.contentProcessed { NWError in
         guard NWError == nil else {
@@ -26,7 +23,7 @@ class UDPClient {
             return
         }
     }
-
+    
     init?(address newAddress: String, port newPort: Int32) {
         guard let codedAddress = IPv4Address(newAddress),
             let codedPort = NWEndpoint.Port(rawValue: NWEndpoint.Port.RawValue(newPort)) else {
@@ -35,16 +32,46 @@ class UDPClient {
         }
         address = .ipv4(codedAddress)
         port = codedPort
-        
         connection = NWConnection(host: address, port: port, using: .udp)
+    }
+    
+    func setupConnection() {
         connection.stateUpdateHandler = { newState in
             print("Connection \(newState)")
         }
         connection.start(queue: .global())
     }
     
+    func setupListener() {
+        do {
+            listener = try? NWListener(using: .udp, on: port)
+            listener?.newConnectionHandler = { incomingUdpConnection in
+                print("NWConnection Handler called ")
+                incomingUdpConnection.stateUpdateHandler = { (udpConnectionState) in
+                    switch udpConnectionState {
+                    case .ready:
+                        print("Listener ready")
+                        incomingUdpConnection.receiveMessage(completion: {(data, context, isComplete, error) in
+                            guard let data = data, !data.isEmpty else {
+                                print("Error no data received")
+                                return
+                            }
+                            self.messageReceived(data)
+                        })
+                    default:
+                        print("Connection Error")
+                        break
+                    }
+                }
+                incomingUdpConnection.start(queue: .global(qos: .userInteractive))
+            }
+            listener?.start(queue: .global(qos: .userInteractive))
+        }
+    }
+    
     deinit {
         connection.cancel()
+        listener?.cancel()
     }
     
     func sendAndReceive(_ data: Data) {
@@ -54,11 +81,7 @@ class UDPClient {
                 print("Error: Received nil Data")
                 return
             }
-            guard self.delegate != nil else {
-                print("Error: UDPClient response handler is nil")
-                return
-            }
-            self.delegate?.handleResponse(self, data: data)
+            self.messageReceived(data)
         }
     }
 }

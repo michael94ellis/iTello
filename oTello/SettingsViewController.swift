@@ -19,6 +19,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var showFlipsSwitch: UISwitch!
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var hideCameraSwitch: UISwitch!
+    @IBOutlet weak var invertJoySticks: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         showFlipsSwitch.setOn(TelloSettings.showFlips, animated: true)
         speedBoostLabel.text = "Speed Boost: \(TelloSettings.speedBoost)"
         speedBoostSlider.setValue(Float(TelloSettings.speedBoost), animated: true)
+        invertJoySticks.setOn(TelloSettings.invertedJoySticks, animated: true)
+        hideCameraSwitch.setOn(TelloSettings.isShowingRecordingButtons, animated: true)
     }
     
     // When the user taps the Done/Enter/Return button on the device keyboard
@@ -61,5 +64,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     @IBAction func doneButtonTapped(_ sender: Any) {
         self.dismiss(animated: true)
+    }
+    @IBAction func invertJoySticks(_ sender: UISwitch) {
+        TelloSettings.invertedJoySticks.toggle()
+        NotificationCenter.default.post(name: Notification.Name("InvertJoySticks"), object: nil)
     }
 }

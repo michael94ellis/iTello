@@ -65,7 +65,7 @@ class BasicDroneControllerVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(hideFlips), name: Notification.Name("HideShowFlips"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideCameraButtons), name: Notification.Name("HideCameraButtons"), object: nil)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(invertJoySticks), name: Notification.Name("InvertJoySticks"), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -277,6 +277,14 @@ class BasicDroneControllerVC: UIViewController {
         flip2.isHidden = TelloSettings.showFlips
         flip3.isHidden = TelloSettings.showFlips
         flip4.isHidden = TelloSettings.showFlips
+    }
+    /// Invert the controls for video game like usage
+    @objc func invertJoySticks() {
+        let temp = leftJoyStick
+        leftJoyStick = rightJoyStick
+        rightJoyStick = temp
+        setupLeftJoystick()
+        setupRightJoystick()
     }
     /// Backflip
     @IBAction func flipA(_ sender: Any) {

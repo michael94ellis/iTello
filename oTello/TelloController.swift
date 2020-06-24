@@ -12,7 +12,7 @@ import UIKit
 
 
 /// This Swift object can control a DJI Tello drone and also decode and display it's video stream
-class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
+class TelloController: NSObject, VideoFrameDecoderDelegate {
     /// Indicates whether or not the drone has been put into command mode
     private var commandable = false
     /// Amount of time between each movement broadcast to prevent getting spam-bocked by the drone
@@ -54,9 +54,11 @@ class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
         super.init()
         VideoFrameDecoder.delegate = self
         
-        stateClient?.delegate = self
-        commandClient?.delegate = self
-        videoClient?.delegate = self
+        commandClient?.messageReceived = handleCommandResponse(message:)
+        stateClient?.messageReceived = handleStateStream(data:)
+        videoClient?.messageReceived = handleVideoStream(data:)
+        commandClient?.setupConnection()
+        stateClient?.setupListener()
         
         repeatCommandForResponse(for: CMD.on)
     }
@@ -77,19 +79,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
             }
         }
     }
-    
-    func handleResponse(_ client: UDPClient, data: Data) {
-        if client == stateClient,
-            let message = String(data: data, encoding: .utf8) {
-            receiveStateStream(state: message)
-        } else if client == commandClient,
-            let message = String(data: data, encoding: .utf8) {
-            handleCommandResponse(message: message)
-//        } else if client == videoClient {
-//            handleVideoStream(data: data)
-        }
-    }
-    
+
     // MARK: - Tello Command Methods
     
     func takeOff() {
@@ -100,7 +90,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
         repeatCommandForResponse(for: CMD.land)
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
-    func emergencyLand() {      
+    func emergencyLand() {
         sendCommand(CMD.off)
     }
     /// See the FLIP enum for list of available flip directions
@@ -120,7 +110,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
         guard TelloSettings.isCameraOn else {
             return
         }
-//        videoClient?.delegate = self
+        //        videoClient?.delegate = self
     }
     
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
@@ -152,20 +142,23 @@ class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
     // MARK: - Handle Stream Data
     
     /// Read data from the ongoing STATE stream
-    private func handleCommandResponse(message: String) {
-        guard message == "ok" else {
-            print("Error with command client: \(message)")
+    private func handleCommandResponse(message: Data) {
+        guard let message = String(data: message, encoding: .utf8), message == "ok" else {
+            print("Error with command client response")
             return
         }
         print("Command: ok")
         commandable = true
     }
     /// Read data from the ongoing STATE stream
-    private func receiveStateStream(state: String) {
-        let stateValues = state.split(separator: ";")
-        if let batteryLevel = stateValues.first(where: { $0.hasPrefix("bat") }) {
-            battery = batteryLevel.split(separator: ":").last?.description ?? ""
+    private func handleStateStream(data: Data) {
+        guard let message = String(data: data, encoding: .utf8) else {
+                print("Error with command client response")
+                return
         }
+        let stateValues = message.split(separator: ";")
+        let batteryLevel = stateValues.first(where: { $0.hasPrefix("bat") })
+        battery = batteryLevel?.split(separator: ":").last?.description ?? ""
     }
     /// Listens to the video stream broadcast from the drone
     func handleVideoStream(data: Data) {
@@ -203,8 +196,8 @@ class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
         DispatchQueue.main.async {
             // Update video image with new frame
             self.videoView?.image = UIImage(cgImage: displayableImage)
-//            let ciImage = CIImage(cgImage: displayableImage)
-//            self.findFaces(in: ciImage)
+            //            let ciImage = CIImage(cgImage: displayableImage)
+            //            self.findFaces(in: ciImage)
             // Record CMSampleBuffer with AVFoundation
             if self.videoDecoder.isRecording,
                 let videoPixelBuffer = self.videoDecoder.videoWriterInputPixelBufferAdaptor,
@@ -214,7 +207,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate, UDPListener {
             }
         }
     }
-
+    
     // MARK: - Add image to Library
     
     public func takePhoto() {
