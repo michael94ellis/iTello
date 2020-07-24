@@ -47,9 +47,8 @@ class UDPClient {
             listener = try? NWListener(using: .udp, on: port)
             listener?.newConnectionHandler = { incomingUdpConnection in
                 print("NWConnection Handler called ")
-                incomingUdpConnection.stateUpdateHandler = { (udpConnectionState) in
-                    switch udpConnectionState {
-                    case .ready:
+                incomingUdpConnection.stateUpdateHandler = { udpConnectionState in
+                    if udpConnectionState == .ready {
                         print("Listener ready")
                         incomingUdpConnection.receiveMessage(completion: {(data, context, isComplete, error) in
                             guard let data = data, !data.isEmpty else {
@@ -58,9 +57,6 @@ class UDPClient {
                             }
                             self.messageReceived(data)
                         })
-                    default:
-                        print("Connection Error")
-                        break
                     }
                 }
                 incomingUdpConnection.start(queue: .global(qos: .userInteractive))

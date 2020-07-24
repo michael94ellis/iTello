@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="landscape" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -145,7 +145,7 @@
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <state key="normal" backgroundImage="play.fill" catalog="system"/>
                                         <connections>
-                                            <action selector="takeoff:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OBJ-He-0JE"/>
+                                            <action selector="takeoff:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0je-v9-N1l"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Take Off" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XmW-RP-WJZ" userLabel="Take Off">
@@ -275,6 +275,7 @@
                         <outlet property="photoButton" destination="jfd-Yw-wG6" id="ZGi-rm-MrE"/>
                         <outlet property="rightJoyStick" destination="VJc-Hf-CrV" id="cxh-Uk-dLd"/>
                         <outlet property="settingsButton" destination="HwS-tt-E5N" id="Gk8-pT-Xln"/>
+                        <outlet property="takeOffButton" destination="0ka-7Q-51u" id="wI8-sq-yxb"/>
                         <outlet property="videoImage" destination="ioF-bT-oAJ" id="DqH-Tl-YsB"/>
                         <outlet property="wifiButton" destination="nkd-Qh-iWv" id="A4u-5x-00T"/>
                         <outlet property="wifiLabel" destination="i9v-rC-4gq" id="KKR-5P-mFb"/>

@@ -43,7 +43,8 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     var videoView: UIImageView?
     
     // UDP Connections
-    var videoClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.VideoStreamPort)
+    // TODO: Video
+//    var videoClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.VideoStreamPort)
     var stateClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.StatePort)
     var commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
     
@@ -56,13 +57,14 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
         
         commandClient?.messageReceived = handleCommandResponse(message:)
         stateClient?.messageReceived = handleStateStream(data:)
-        videoClient?.messageReceived = handleVideoStream(data:)
+//        videoClient?.messageReceived = handleVideoStream(data:)
         commandClient?.setupConnection()
-        stateClient?.setupListener()
+//        videoClient?.setupListener()
         
         repeatCommandForResponse(for: CMD.on)
     }
     
+    /// This var will decrease as the initial command is sent multiple times
     private var commandRepeatMax = 4
     /// Repeats a comment until an `ok` is received from the Tello
     private func repeatCommandForResponse(for command: String) {
@@ -73,9 +75,11 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
             } else {
                 self.responseWaiter.invalidate()
                 self.commandRepeatMax = 4
-                if TelloSettings.isCameraOn {
-                    self.handleVideoDisplay()
-                }
+                // Now that the Tello is in command mode we can listen for State
+                self.stateClient?.setupListener()
+//                if TelloSettings.isCameraOn {
+//                    self.handleVideoDisplay()
+//                }
             }
         }
     }
@@ -137,6 +141,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
         }
         print("Sending Command: \(command)")
         udpClient.sendAndReceive(data)
+        
     }
     
     // MARK: - Handle Stream Data

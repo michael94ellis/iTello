@@ -36,6 +36,7 @@ class BasicDroneControllerVC: UIViewController {
     @IBOutlet weak var wifiButton: UIButton!
     @IBOutlet weak var wifiLabel: UILabel!
     @IBOutlet weak var batteryLabel: UILabel!
+    @IBOutlet weak var takeOffButton: UIButton!
     @IBOutlet weak var emergencyLandButton: UIButton!
     @IBOutlet weak var emergencyLandLabel: UILabel!
     @IBOutlet weak var flip1: UIButton!

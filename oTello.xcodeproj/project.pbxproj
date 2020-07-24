@@ -90,6 +90,10 @@
 				2FDE4B742474902500B8C422 /* oTello.entitlements */,
 				2F8C8D7624748F4E006D40EC /* AppDelegate.swift */,
 				2F8C8D7824748F4E006D40EC /* SceneDelegate.swift */,
+				2F8C8D8124748F51006D40EC /* LaunchScreen.storyboard */,
+				2F8C8D7F24748F51006D40EC /* Assets.xcassets */,
+				2F8C8D7C24748F4E006D40EC /* Main.storyboard */,
+				2F8C8D8424748F51006D40EC /* Info.plist */,
 				2F8C8D7A24748F4E006D40EC /* BasicDroneControllerVC.swift */,
 				2F76A7C0247EAE3F00635E1C /* SettingsViewController.swift */,
 				2FB2DD1B2477E6D500B28AC0 /* JoyStick */,
@@ -98,10 +102,6 @@
 				2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */,
 				2FDE4B6C24748FE700B8C422 /* WiFiController.swift */,
 				2FB55D2C24854368000EF166 /* UDPClient.swift */,
-				2F8C8D7C24748F4E006D40EC /* Main.storyboard */,
-				2F8C8D7F24748F51006D40EC /* Assets.xcassets */,
-				2F8C8D8124748F51006D40EC /* LaunchScreen.storyboard */,
-				2F8C8D8424748F51006D40EC /* Info.plist */,
 			);
 			path = oTello;
 			sourceTree = "<group>";
@@ -416,6 +416,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mellis.iTello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -438,6 +439,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mellis.iTello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
