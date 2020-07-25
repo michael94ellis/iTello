@@ -14,7 +14,7 @@ import UIKit
 /// This Swift object can control a DJI Tello drone and also decode and display it's video stream
 class TelloController: NSObject, VideoFrameDecoderDelegate {
     /// Indicates whether or not the drone has been put into command mode
-    private var commandable = false
+    private(set) var commandable = false
     /// Amount of time between each movement broadcast to prevent getting spam-bocked by the drone
     private let commandDelay = 0.1
     /// Speed of Up/Down movement

@@ -410,6 +410,7 @@
 				CODE_SIGN_ENTITLEMENTS = oTello/oTello.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = K2R6W9P99E;
 				INFOPLIST_FILE = oTello/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
