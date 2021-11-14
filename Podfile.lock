@@ -79,12 +79,10 @@ PODS:
   - nanopb/decode (1.30905.0)
   - nanopb/encode (1.30905.0)
   - PromisesObjC (1.2.8)
-  - SwiftSocket (2.0.2)
 
 DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Crashlytics
-  - SwiftSocket
 
 SPEC REPOS:
   trunk:
@@ -102,7 +100,6 @@ SPEC REPOS:
     - GoogleUtilities
     - nanopb
     - PromisesObjC
-    - SwiftSocket
 
 SPEC CHECKSUMS:
   Firebase: 5719b4f965f76643241a1bb8244483ff6117db39
@@ -119,8 +116,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
-  SwiftSocket: 6f4c9c63fbc5c1d61188936bb3c599fd546f40ae
 
-PODFILE CHECKSUM: 31af19139c96e108d5df6a0d250477e720eef2ec
+PODFILE CHECKSUM: 37565f30a25e88e84b344a420b480101da2f7671
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.0
