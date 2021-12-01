@@ -3,14 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		24144F630880D0D3AFBDCEFD /* Pods_iTello.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39217F5A4076722DF7179FA8 /* Pods_iTello.framework */; };
+		2F374E362742030D0073E24A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2F374E352742030D0073E24A /* FirebaseAnalytics */; };
+		2F374E382742030D0073E24A /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2F374E372742030D0073E24A /* FirebaseCrashlytics */; };
+		2F374E57274290DB0073E24A /* TelloAVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F374E56274290DB0073E24A /* TelloAVController.swift */; };
 		2F399CA22741F3B70016BE8B /* iOS-WiFiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399C9F2741F3B70016BE8B /* iOS-WiFiManager.swift */; };
 		2F399CA32741F3B70016BE8B /* WiFiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399CA02741F3B70016BE8B /* WiFiManager.swift */; };
-		2F399CD32741F9700016BE8B /* Mac-WiFiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399C9E2741F3B70016BE8B /* Mac-WiFiManager.swift */; };
 		2F399CD62741FDA30016BE8B /* iTelloApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399CD52741FDA30016BE8B /* iTelloApp.swift */; };
 		2F45EEB024763C0200F5C9BE /* TelloConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */; };
 		2F8C8D7724748F4E006D40EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7624748F4E006D40EC /* AppDelegate.swift */; };
@@ -23,12 +24,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0668DF903B137426B8278C92 /* Pods-iTello.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iTello.release.xcconfig"; path = "Target Support Files/Pods-iTello/Pods-iTello.release.xcconfig"; sourceTree = "<group>"; };
-		1014575F1A7A583DC37C5234 /* Pods-iTello.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iTello.debug.xcconfig"; path = "Target Support Files/Pods-iTello/Pods-iTello.debug.xcconfig"; sourceTree = "<group>"; };
+		2F374E56274290DB0073E24A /* TelloAVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelloAVController.swift; sourceTree = "<group>"; };
 		2F399C9E2741F3B70016BE8B /* Mac-WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Mac-WiFiManager.swift"; sourceTree = "<group>"; };
 		2F399C9F2741F3B70016BE8B /* iOS-WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "iOS-WiFiManager.swift"; sourceTree = "<group>"; };
 		2F399CA02741F3B70016BE8B /* WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiManager.swift; sourceTree = "<group>"; };
-		2F399CA82741F8D60016BE8B /* iTello Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iTello Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F399CD52741FDA30016BE8B /* iTelloApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iTelloApp.swift; sourceTree = "<group>"; };
 		2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelloConstants.swift; sourceTree = "<group>"; };
 		2F8C8D7324748F4E006D40EC /* iTello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTello.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -41,23 +40,16 @@
 		2FDE4B742474902500B8C422 /* iTello.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iTello.entitlements; sourceTree = "<group>"; };
 		2FDE4B752474902B00B8C422 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoManager.swift; sourceTree = "<group>"; };
-		39217F5A4076722DF7179FA8 /* Pods_iTello.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iTello.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2F399CA52741F8D60016BE8B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2F8C8D7024748F4E006D40EC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F374E382742030D0073E24A /* FirebaseCrashlytics in Frameworks */,
+				2F374E362742030D0073E24A /* FirebaseAnalytics in Frameworks */,
 				2FDE4B762474902B00B8C422 /* NetworkExtension.framework in Frameworks */,
-				24144F630880D0D3AFBDCEFD /* Pods_iTello.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,7 +69,6 @@
 			children = (
 				2F8C8D7524748F4E006D40EC /* iTello */,
 				2F8C8D7424748F4E006D40EC /* Products */,
-				B6133855E4B74E78DC965E86 /* Pods */,
 				C00F5C618D0DE3E20491DE30 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -86,7 +77,6 @@
 			isa = PBXGroup;
 			children = (
 				2F8C8D7324748F4E006D40EC /* iTello.app */,
-				2F399CA82741F8D60016BE8B /* iTello Mac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,6 +93,7 @@
 				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
 				2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */,
 				2F399CA02741F3B70016BE8B /* WiFiManager.swift */,
+				2F374E56274290DB0073E24A /* TelloAVController.swift */,
 				2FDE4B6C24748FE700B8C422 /* WiFiController.swift */,
 				2F399C9F2741F3B70016BE8B /* iOS-WiFiManager.swift */,
 				2F399C9E2741F3B70016BE8B /* Mac-WiFiManager.swift */,
@@ -111,20 +102,10 @@
 			path = iTello;
 			sourceTree = "<group>";
 		};
-		B6133855E4B74E78DC965E86 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				1014575F1A7A583DC37C5234 /* Pods-iTello.debug.xcconfig */,
-				0668DF903B137426B8278C92 /* Pods-iTello.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		C00F5C618D0DE3E20491DE30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				2FDE4B752474902B00B8C422 /* NetworkExtension.framework */,
-				39217F5A4076722DF7179FA8 /* Pods_iTello.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -132,38 +113,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2F399CA72741F8D60016BE8B /* iTello Mac */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2F399CCA2741F8D90016BE8B /* Build configuration list for PBXNativeTarget "iTello Mac" */;
-			buildPhases = (
-				2F399CA42741F8D60016BE8B /* Sources */,
-				2F399CA52741F8D60016BE8B /* Frameworks */,
-				2F399CA62741F8D60016BE8B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "iTello Mac";
-			productName = "iTello Mac";
-			productReference = 2F399CA82741F8D60016BE8B /* iTello Mac.app */;
-			productType = "com.apple.product-type.application";
-		};
 		2F8C8D7224748F4E006D40EC /* iTello */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2F8C8D8724748F51006D40EC /* Build configuration list for PBXNativeTarget "iTello" */;
 			buildPhases = (
-				9BE6C16E455E978CD2E1B76F /* [CP] Check Pods Manifest.lock */,
 				2F8C8D6F24748F4E006D40EC /* Sources */,
 				2F8C8D7024748F4E006D40EC /* Frameworks */,
 				2F8C8D7124748F4E006D40EC /* Resources */,
-				ECB65D61B8B2F0150BAA379B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = iTello;
+			packageProductDependencies = (
+				2F374E352742030D0073E24A /* FirebaseAnalytics */,
+				2F374E372742030D0073E24A /* FirebaseCrashlytics */,
+			);
 			productName = oTello;
 			productReference = 2F8C8D7324748F4E006D40EC /* iTello.app */;
 			productType = "com.apple.product-type.application";
@@ -178,9 +144,6 @@
 				LastUpgradeCheck = 1310;
 				ORGANIZATIONNAME = Mellis;
 				TargetAttributes = {
-					2F399CA72741F8D60016BE8B = {
-						CreatedOnToolsVersion = 13.1;
-					};
 					2F8C8D7224748F4E006D40EC = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
@@ -195,24 +158,19 @@
 				Base,
 			);
 			mainGroup = 2F8C8D6A24748F4E006D40EC;
+			packageReferences = (
+				2F374E342742030D0073E24A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 2F8C8D7424748F4E006D40EC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				2F8C8D7224748F4E006D40EC /* iTello */,
-				2F399CA72741F8D60016BE8B /* iTello Mac */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2F399CA62741F8D60016BE8B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2F8C8D7124748F4E006D40EC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -223,57 +181,7 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		9BE6C16E455E978CD2E1B76F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-iTello-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		ECB65D61B8B2F0150BAA379B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iTello/Pods-iTello-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iTello/Pods-iTello-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iTello/Pods-iTello-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		2F399CA42741F8D60016BE8B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2F399CD32741F9700016BE8B /* Mac-WiFiManager.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2F8C8D6F24748F4E006D40EC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -281,6 +189,7 @@
 				2F399CD62741FDA30016BE8B /* iTelloApp.swift in Sources */,
 				2F45EEB024763C0200F5C9BE /* TelloConstants.swift in Sources */,
 				2FDE4B7324748FE700B8C422 /* TelloController.swift in Sources */,
+				2F374E57274290DB0073E24A /* TelloAVController.swift in Sources */,
 				2F399CA32741F3B70016BE8B /* WiFiManager.swift in Sources */,
 				2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */,
 				2F8C8D7724748F4E006D40EC /* AppDelegate.swift in Sources */,
@@ -293,70 +202,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		2F399CCB2741F8D90016BE8B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CODE_SIGN_ENTITLEMENTS = "iTello Mac/iTello_Mac.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"iTello Mac/Preview Content\"";
-				DEVELOPMENT_TEAM = KLQC884752;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mellis. All rights reserved.";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "michaellis.iTello.iTello-Mac";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		2F399CCC2741F8D90016BE8B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CODE_SIGN_ENTITLEMENTS = "iTello Mac/iTello_Mac.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"iTello Mac/Preview Content\"";
-				DEVELOPMENT_TEAM = KLQC884752;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mellis. All rights reserved.";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "michaellis.iTello.iTello-Mac";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 		2F8C8D8524748F51006D40EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -475,7 +320,6 @@
 		};
 		2F8C8D8824748F51006D40EC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1014575F1A7A583DC37C5234 /* Pods-iTello.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iTello/iTello.entitlements;
@@ -492,16 +336,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = michaellis.iTello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		2F8C8D8924748F51006D40EC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0668DF903B137426B8278C92 /* Pods-iTello.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iTello/iTello.entitlements;
@@ -517,25 +360,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = michaellis.iTello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2F399CCA2741F8D90016BE8B /* Build configuration list for PBXNativeTarget "iTello Mac" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2F399CCB2741F8D90016BE8B /* Debug */,
-				2F399CCC2741F8D90016BE8B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		2F8C8D6E24748F4E006D40EC /* Build configuration list for PBXProject "iTello" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -555,6 +389,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2F374E342742030D0073E24A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2F374E352742030D0073E24A /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F374E342742030D0073E24A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		2F374E372742030D0073E24A /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F374E342742030D0073E24A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2F8C8D6B24748F4E006D40EC /* Project object */;
 }

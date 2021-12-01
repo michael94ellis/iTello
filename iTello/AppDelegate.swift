@@ -8,13 +8,13 @@
 
 import UIKit
 import Firebase
+import SwiftUI
 
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //FIXME: - Firebase
-//        FirebasApp.configure()
+//        FirebaseApp.configure()
         return true
     }
 }
