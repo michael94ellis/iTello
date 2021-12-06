@@ -45,12 +45,12 @@ class TelloController: TelloAVDelegate {
     var stateClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.StatePort)
     var commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
     
-    let avController = TelloAVController()
+    let avManager = AVManager()
     
     /// The TelloController will spawn 2 threads immediately, on each thread will be on of the two UDP objects above
     ///     A receiving/listener for both Drone State and Command Responsesf
     init() {
-        self.avController.avDelegate = self
+        self.avManager.avDelegate = self
         commandClient?.messageReceived = handleCommandResponse(message:)
         stateClient?.messageReceived = handleStateStream(data:)
         commandClient?.setupConnection()

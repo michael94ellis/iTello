@@ -1,5 +1,5 @@
 //
-//  TelloAVController.swift
+//  AVManager.swift
 //  iTello
 //
 //  Created by Michael Ellis on 11/14/21.
@@ -14,7 +14,7 @@ import VideoToolbox
 //#elseif os(iOS)
 import UIKit
 
-class TelloAVController: VideoFrameDecoderDelegate {
+class AVManager: VideoFrameDecoderDelegate {
     
     var avDelegate: TelloAVDelegate?
     private lazy var videoDecoder = VideoFrameDecoder()

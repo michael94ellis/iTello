@@ -15,60 +15,86 @@ struct iTelloApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            GeometryReader { parent in
-//                // Main Container
-//                VStack {
-//                    Spacer()
+            GeometryReader { parent in
+                VStack {
+                    Spacer()
                     HStack {
-                        ContentView()
-                        ContentView()
+                        Joystick(width: parent.size.width / 4)
+                            .padding(.leading,  parent.size.width / 10)
+                        Spacer()
+                        Joystick(width: parent.size.width / 4)
+                            .padding(.trailing, parent.size.width / 10)
                     }
-//                    Spacer()
-//                }
-//                .frame(width: parent.size.width, height: parent.size.height)
-//            }
+                    .padding(.bottom, 30)
+                }
+            }
         }
     }
 }
- 
-extension CGPoint {
-    func distance(to point: CGPoint) -> CGFloat {
-        return sqrt(pow((point.x - x), 2) + pow((point.y - y), 2))
+
+import SwiftUIJoystick
+
+struct Joystick: View {
+    
+    @State private var joystickMonitor: JoystickMonitor
+    private var dragDiameter: CGFloat
+    private let arrowOffset: CGFloat
+    
+    init(width: CGFloat) {
+        self.dragDiameter = width
+        self.arrowOffset = (width / 2) - (width / 10)
+        self.joystickMonitor = JoystickMonitor(diameter: width)
     }
-}
-
-struct ContentView: View {
-
-    @State private var position = CGPoint(x: 100, y: 100)
-    private var dragDiametr: CGFloat = 200.0
+    
     var body: some View {
-
-    return
-        VStack{
-            Text("current position = (x: \(Int(position.x)), y: \(Int(position.y)))")
-            Circle()
-              .fill(Color.red)
-              .frame(width: dragDiametr, height: dragDiametr)
-              .overlay(
-                Circle()
-                  .fill(Color.black)
-                  .frame(width: dragDiametr / 4, height: dragDiametr / 4)
-                  .position(x: position.x, y: position.y)
-                  .gesture(DragGesture()
-                  .onChanged(){value in
-                    let currentLocation = value.location
-                    let center = CGPoint(x: self.dragDiametr/2, y: self.dragDiametr/2)
-                    let distance = center.distance(to:currentLocation)
-                    if distance > self.dragDiametr / 2 {
-                        let k = (self.dragDiametr / 2) / distance
-                        let newLocationX = (currentLocation.x - center.x) * k+center.x
-                        let newLocationY = (currentLocation.y - center.y) * k+center.y
-                        self.position = CGPoint(x: newLocationX, y: newLocationY)
-                    }else{
-                        self.position = value.location
+        HStack{
+            JoystickBuilder(
+                monitor: joystickMonitor,
+                width: dragDiameter,
+                shape: .circle,
+                background: {
+                    ZStack {
+                        Circle()
+                            .fill(RadialGradient(colors: [.darkStart, .darkEnd], center: .center, startRadius: 1, endRadius: 115))
+                            .overlay(Circle().stroke(Color.black)
+                                        .shadow(color: Color.white, radius: 5))
+                        Image(systemName: "arrowtriangle.forward")
+                            .offset(x: arrowOffset, y: 0)
+                            .foregroundColor(.white)
+                        Image(systemName: "arrowtriangle.backward")
+                            .offset(x: -arrowOffset, y: 0)
+                            .foregroundColor(.white)
+                        Image(systemName: "arrowtriangle.up")
+                            .offset(x: 0, y: -arrowOffset)
+                            .foregroundColor(.white)
+                        Image(systemName: "arrowtriangle.down")
+                            .offset(x: 0, y: arrowOffset)
+                            .foregroundColor(.white)
+                        
                     }
-                  })
-              )
+                },
+                foreground: {
+                    Circle()
+                        .fill(RadialGradient(colors: [.white, .gray], center: .center, startRadius: 1, endRadius: 30))
+                        .overlay(
+                            Circle()
+                                .stroke(Color.gray, lineWidth: 4)
+                                .blur(radius: 4)
+                                .offset(x: 2, y: 2)
+                                .mask(Circle().fill(LinearGradient(Color.black, Color.clear)))
+                                .shadow(color: Color.white, radius: 5)
+                        )
+                        .overlay(
+                            Circle()
+                                .stroke(Color.white, lineWidth: 8)
+                                .blur(radius: 4)
+                                .offset(x: -2, y: -2)
+                                .mask(Circle().fill(LinearGradient(Color.clear, Color.black)))
+                                .shadow(color: Color.white, radius: 5)
+                                .blur(radius: 1)
+                        )
+                },
+                locksInPlace: false)
         }
     }
 }

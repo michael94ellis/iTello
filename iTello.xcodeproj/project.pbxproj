@@ -9,25 +9,24 @@
 /* Begin PBXBuildFile section */
 		2F374E362742030D0073E24A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2F374E352742030D0073E24A /* FirebaseAnalytics */; };
 		2F374E382742030D0073E24A /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2F374E372742030D0073E24A /* FirebaseCrashlytics */; };
-		2F374E57274290DB0073E24A /* TelloAVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F374E56274290DB0073E24A /* TelloAVController.swift */; };
-		2F399CA22741F3B70016BE8B /* iOS-WiFiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399C9F2741F3B70016BE8B /* iOS-WiFiManager.swift */; };
-		2F399CA32741F3B70016BE8B /* WiFiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399CA02741F3B70016BE8B /* WiFiManager.swift */; };
+		2F374E57274290DB0073E24A /* AVManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F374E56274290DB0073E24A /* AVManager.swift */; };
+		2F399CA22741F3B70016BE8B /* WiFiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399C9F2741F3B70016BE8B /* WiFiManager.swift */; };
 		2F399CD62741FDA30016BE8B /* iTelloApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399CD52741FDA30016BE8B /* iTelloApp.swift */; };
 		2F45EEB024763C0200F5C9BE /* TelloConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */; };
+		2F81DC88275C629400760EF5 /* SwiftUIJoystick in Frameworks */ = {isa = PBXBuildFile; productRef = 2F81DC87275C629400760EF5 /* SwiftUIJoystick */; };
 		2F8C8D7724748F4E006D40EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7624748F4E006D40EC /* AppDelegate.swift */; };
 		2F8C8D8024748F51006D40EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7F24748F51006D40EC /* Assets.xcassets */; };
 		2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB55D2C24854368000EF166 /* UDPClient.swift */; };
-		2FDE4B7024748FE700B8C422 /* WiFiController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE4B6C24748FE700B8C422 /* WiFiController.swift */; };
+		2FDB56EB275E3B6B00DF04DF /* Color-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EA275E3B6B00DF04DF /* Color-Extension.swift */; };
+		2FDB56ED275E3B9C00DF04DF /* LinearGradient-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */; };
 		2FDE4B7324748FE700B8C422 /* TelloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE4B6F24748FE700B8C422 /* TelloController.swift */; };
 		2FDE4B762474902B00B8C422 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDE4B752474902B00B8C422 /* NetworkExtension.framework */; };
-		2FF52BFD2475F7CF00BB7DB5 /* VideoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */; };
+		2FF52BFD2475F7CF00BB7DB5 /* VideoFrameDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF52BFC2475F7CF00BB7DB5 /* VideoFrameDecoder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2F374E56274290DB0073E24A /* TelloAVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelloAVController.swift; sourceTree = "<group>"; };
-		2F399C9E2741F3B70016BE8B /* Mac-WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Mac-WiFiManager.swift"; sourceTree = "<group>"; };
-		2F399C9F2741F3B70016BE8B /* iOS-WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "iOS-WiFiManager.swift"; sourceTree = "<group>"; };
-		2F399CA02741F3B70016BE8B /* WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiManager.swift; sourceTree = "<group>"; };
+		2F374E56274290DB0073E24A /* AVManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVManager.swift; sourceTree = "<group>"; };
+		2F399C9F2741F3B70016BE8B /* WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiManager.swift; sourceTree = "<group>"; };
 		2F399CD52741FDA30016BE8B /* iTelloApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iTelloApp.swift; sourceTree = "<group>"; };
 		2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelloConstants.swift; sourceTree = "<group>"; };
 		2F8C8D7324748F4E006D40EC /* iTello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTello.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,11 +34,12 @@
 		2F8C8D7F24748F51006D40EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F8C8D8424748F51006D40EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FB55D2C24854368000EF166 /* UDPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPClient.swift; sourceTree = "<group>"; };
-		2FDE4B6C24748FE700B8C422 /* WiFiController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiController.swift; sourceTree = "<group>"; };
+		2FDB56EA275E3B6B00DF04DF /* Color-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color-Extension.swift"; sourceTree = "<group>"; };
+		2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LinearGradient-Extension.swift"; sourceTree = "<group>"; };
 		2FDE4B6F24748FE700B8C422 /* TelloController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelloController.swift; sourceTree = "<group>"; };
 		2FDE4B742474902500B8C422 /* iTello.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iTello.entitlements; sourceTree = "<group>"; };
 		2FDE4B752474902B00B8C422 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
-		2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoManager.swift; sourceTree = "<group>"; };
+		2FF52BFC2475F7CF00BB7DB5 /* VideoFrameDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFrameDecoder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +49,7 @@
 			files = (
 				2F374E382742030D0073E24A /* FirebaseCrashlytics in Frameworks */,
 				2F374E362742030D0073E24A /* FirebaseAnalytics in Frameworks */,
+				2F81DC88275C629400760EF5 /* SwiftUIJoystick in Frameworks */,
 				2FDE4B762474902B00B8C422 /* NetworkExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,20 +87,35 @@
 			children = (
 				2FDE4B742474902500B8C422 /* iTello.entitlements */,
 				2F8C8D8424748F51006D40EC /* Info.plist */,
+				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
 				2F8C8D7624748F4E006D40EC /* AppDelegate.swift */,
 				2F399CD52741FDA30016BE8B /* iTelloApp.swift */,
 				2FDE4B6F24748FE700B8C422 /* TelloController.swift */,
 				2F399CD42741FB8B0016BE8B /* Assets */,
-				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
-				2FF52BFC2475F7CF00BB7DB5 /* VideoManager.swift */,
-				2F399CA02741F3B70016BE8B /* WiFiManager.swift */,
-				2F374E56274290DB0073E24A /* TelloAVController.swift */,
-				2FDE4B6C24748FE700B8C422 /* WiFiController.swift */,
-				2F399C9F2741F3B70016BE8B /* iOS-WiFiManager.swift */,
-				2F399C9E2741F3B70016BE8B /* Mac-WiFiManager.swift */,
+				2FDB56E8275E3A8F00DF04DF /* Extensions */,
+				2FDB56E9275E3AA100DF04DF /* Managers */,
 				2FB55D2C24854368000EF166 /* UDPClient.swift */,
 			);
 			path = iTello;
+			sourceTree = "<group>";
+		};
+		2FDB56E8275E3A8F00DF04DF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2FDB56EA275E3B6B00DF04DF /* Color-Extension.swift */,
+				2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		2FDB56E9275E3AA100DF04DF /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				2F374E56274290DB0073E24A /* AVManager.swift */,
+				2FF52BFC2475F7CF00BB7DB5 /* VideoFrameDecoder.swift */,
+				2F399C9F2741F3B70016BE8B /* WiFiManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		C00F5C618D0DE3E20491DE30 /* Frameworks */ = {
@@ -129,6 +145,7 @@
 			packageProductDependencies = (
 				2F374E352742030D0073E24A /* FirebaseAnalytics */,
 				2F374E372742030D0073E24A /* FirebaseCrashlytics */,
+				2F81DC87275C629400760EF5 /* SwiftUIJoystick */,
 			);
 			productName = oTello;
 			productReference = 2F8C8D7324748F4E006D40EC /* iTello.app */;
@@ -160,6 +177,7 @@
 			mainGroup = 2F8C8D6A24748F4E006D40EC;
 			packageReferences = (
 				2F374E342742030D0073E24A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				2F81DC86275C629400760EF5 /* XCRemoteSwiftPackageReference "SwiftUIJoystick" */,
 			);
 			productRefGroup = 2F8C8D7424748F4E006D40EC /* Products */;
 			projectDirPath = "";
@@ -189,13 +207,13 @@
 				2F399CD62741FDA30016BE8B /* iTelloApp.swift in Sources */,
 				2F45EEB024763C0200F5C9BE /* TelloConstants.swift in Sources */,
 				2FDE4B7324748FE700B8C422 /* TelloController.swift in Sources */,
-				2F374E57274290DB0073E24A /* TelloAVController.swift in Sources */,
-				2F399CA32741F3B70016BE8B /* WiFiManager.swift in Sources */,
+				2FDB56EB275E3B6B00DF04DF /* Color-Extension.swift in Sources */,
+				2F374E57274290DB0073E24A /* AVManager.swift in Sources */,
 				2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */,
+				2FDB56ED275E3B9C00DF04DF /* LinearGradient-Extension.swift in Sources */,
 				2F8C8D7724748F4E006D40EC /* AppDelegate.swift in Sources */,
-				2F399CA22741F3B70016BE8B /* iOS-WiFiManager.swift in Sources */,
-				2FDE4B7024748FE700B8C422 /* WiFiController.swift in Sources */,
-				2FF52BFD2475F7CF00BB7DB5 /* VideoManager.swift in Sources */,
+				2F399CA22741F3B70016BE8B /* WiFiManager.swift in Sources */,
+				2FF52BFD2475F7CF00BB7DB5 /* VideoFrameDecoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +417,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		2F81DC86275C629400760EF5 /* XCRemoteSwiftPackageReference "SwiftUIJoystick" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/michael94ellis/SwiftUIJoystick";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -411,6 +437,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F374E342742030D0073E24A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
+		};
+		2F81DC87275C629400760EF5 /* SwiftUIJoystick */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F81DC86275C629400760EF5 /* XCRemoteSwiftPackageReference "SwiftUIJoystick" */;
+			productName = SwiftUIJoystick;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

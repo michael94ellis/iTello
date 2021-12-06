@@ -108,6 +108,15 @@
           "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
           "version": "1.18.0"
         }
+      },
+      {
+        "package": "SwiftUIJoystick",
+        "repositoryURL": "https://github.com/michael94ellis/SwiftUIJoystick",
+        "state": {
+          "branch": "main",
+          "revision": "4eb232164044d53213679aa2ad5c357d949d874b",
+          "version": null
+        }
       }
     ]
   },

@@ -1,5 +1,5 @@
 //
-//  MobileWifiManager.swift
+//  WifiManager.swift
 //  iTello
 //
 //  Created by Michael Ellis on 5/19/20.
@@ -10,7 +10,7 @@ import SwiftUI
 import Network
 import NetworkExtension
 
-final public class MobileWifiManager: WiFiManager, ObservableObject {
+final public class WifiManager: ObservableObject {
     
     // Remember the users WiFi name between sessions
     private static let telloSSIDKey = "SSID"
@@ -20,7 +20,7 @@ final public class MobileWifiManager: WiFiManager, ObservableObject {
     private let networkStatusMonitor = NWPathMonitor()
     private var hotspotConfig: NEHotspotConfiguration?
 
-    static var shared = MobileWifiManager()
+    static var shared = WifiManager()
     private init() {
         networkStatusMonitor.pathUpdateHandler = { networkPath in
             self.isConnectedToWiFi = networkPath.status == .satisfied
