@@ -43,8 +43,7 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     var videoView: UIImageView?
     
     // UDP Connections
-    // TODO: Video
-//    var videoClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.VideoStreamPort)
+    var videoClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.VideoStreamPort)
     var stateClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.StatePort)
     var commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
     
@@ -54,32 +53,34 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     override init() {
         super.init()
         VideoFrameDecoder.delegate = self
-        
+        // Setup UDP client to send commands
         commandClient?.messageReceived = handleCommandResponse(message:)
-        stateClient?.messageReceived = handleStateStream(data:)
-//        videoClient?.messageReceived = handleVideoStream(data:)
         commandClient?.setupConnection()
-//        videoClient?.setupListener()
-        
-        repeatCommandForResponse(for: CMD.on)
+        // Setup drone status stream
+        stateClient?.messageReceived = handleStateStream(data:)
+        // Setup video connection
+        videoClient?.messageReceived = handleVideoStream(data:)
+        videoClient?.setupListener()
+        // Turn on the Tello
+        initializeDroneCommandState()
     }
     
     /// This var will decrease as the initial command is sent multiple times
     private var commandRepeatMax = 4
     /// Repeats a comment until an `ok` is received from the Tello
-    private func repeatCommandForResponse(for command: String) {
+    private func initializeDroneCommandState() {
         responseWaiter = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
             if !self.commandable, self.commandRepeatMax > 0 {
-                self.sendCommand(command)
+                self.sendCommand(CMD.on)
                 self.commandRepeatMax -= 1
             } else {
                 self.responseWaiter.invalidate()
                 self.commandRepeatMax = 4
                 // Now that the Tello is in command mode we can listen for State
                 self.stateClient?.setupListener()
-//                if TelloSettings.isCameraOn {
-//                    self.handleVideoDisplay()
-//                }
+                if TelloSettings.isCameraOn {
+                    self.handleVideoDisplay()
+                }
             }
         }
     }
@@ -91,7 +92,11 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
-        repeatCommandForResponse(for: CMD.land)
+        sendCommand(CMD.land)
+        DispatchQueue.global().async {
+            sleep(2)
+            self.sendCommand(CMD.land)
+        }
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {
@@ -108,13 +113,12 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     
     /// Called by the UI to toggle the camera state
     func handleVideoDisplay() {
-        // command tello to stream video
-        let videoStreamCommand = TelloSettings.isCameraOn ? CMD.streamOn : CMD.streamOff
-        sendCommand(videoStreamCommand)
         guard TelloSettings.isCameraOn else {
             return
         }
-        //        videoClient?.delegate = self
+        // command tello to stream video
+        let videoStreamCommand = TelloSettings.isCameraOn ? CMD.streamOn : CMD.streamOff
+        sendCommand(videoStreamCommand)
     }
     
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
@@ -234,31 +238,31 @@ class TelloController: NSObject, VideoFrameDecoderDelegate {
     
     // MARK: - Facial Recognition
     
-    var faceBox: CGRect?
-    
-    func findFaces(in image: CIImage) {
-        let options = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
-        let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options)!
-        
-        let faces = faceDetector.features(in: image)
-        
-        if let face = faces.first as? CIFaceFeature {
-            print("Found face at \(face.bounds)")
-            if !face.hasRightEyePosition {
-                print("i think i should go counter clockwise")
-            } else if !face.hasLeftEyePosition {
-                print("i think i should go clockwise")
-            }
-            if let lastFaceBox = faceBox {
-                if lastFaceBox.size.magnitude > face.bounds.size.magnitude + 50 {
-                    print("i think i should move back")
-                } else if lastFaceBox.size.magnitude < face.bounds.size.magnitude - 50 {
-                    print("i think i should move forward")
-                }
-            }
-            faceBox = face.bounds
-        }
-    }
+//    var faceBox: CGRect?
+//
+//    func findFaces(in image: CIImage) {
+//        let options = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
+//        let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options)!
+//
+//        let faces = faceDetector.features(in: image)
+//
+//        if let face = faces.first as? CIFaceFeature {
+//            print("Found face at \(face.bounds)")
+//            if !face.hasRightEyePosition {
+//                print("i think i should go counter clockwise")
+//            } else if !face.hasLeftEyePosition {
+//                print("i think i should go clockwise")
+//            }
+//            if let lastFaceBox = faceBox {
+//                if lastFaceBox.size.magnitude > face.bounds.size.magnitude + 50 {
+//                    print("i think i should move back")
+//                } else if lastFaceBox.size.magnitude < face.bounds.size.magnitude - 50 {
+//                    print("i think i should move forward")
+//                }
+//            }
+//            faceBox = face.bounds
+//        }
+//    }
 }
 
 extension CGSize: Comparable {
