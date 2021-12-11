@@ -27,10 +27,12 @@ final public class WifiManager: ObservableObject {
         }
     }
     deinit {
+        networkStatusMonitor.pathUpdateHandler = nil
+        networkStatusMonitor.cancel()
         NEHotspotConfigurationManager.shared.removeConfiguration(forSSID: self.telloSSID)
     }
     
-    func connect(completion: @escaping (Bool) -> ()) {
+    func connect(completion: @escaping (Bool, Error?) -> ()) {
         let newHotspotConfig = NEHotspotConfiguration(ssid: self.telloSSID)
         self.hotspotConfig = newHotspotConfig
         newHotspotConfig.joinOnce = true
@@ -39,9 +41,10 @@ final public class WifiManager: ObservableObject {
             // Capture reference to [weak self]
             guard let self = self else { return }
             if let error = error {
-                print(self.handleConnectionError(error))
+                completion(false, error)
+            } else {
+                completion(self.isConnectedToWiFi, nil)
             }
-            completion(self.isConnectedToWiFi)
         }
     }
     

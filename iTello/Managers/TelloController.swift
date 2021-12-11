@@ -14,9 +14,9 @@ protocol TelloAVDelegate: AnyObject {
 }
 
 /// This Swift object can control a DJI Tello drone and also decode and display it's video stream
-class TelloController: TelloAVDelegate {
+class TelloController: TelloAVDelegate, ObservableObject {
     /// Indicates whether or not the drone has been put into command mode
-    private(set) var commandable = false
+    @Published private(set) var commandable = false
     /// Amount of time between each movement broadcast to prevent getting spam-bocked by the drone
     private let commandDelay = 0.1
     /// Speed of Up/Down movement
@@ -30,12 +30,10 @@ class TelloController: TelloAVDelegate {
     /// rc l/r f/b u/d yaw
     private var moveCommand: String { "rc \(self.leftRight) \(self.forwardBack) \(self.upDown) \(self.yaw)" }
     /// Prevents too many movement commands from being issued at once
-    private var moveTimer = Timer()
     // TODO: Timer to send a message(CMD.on) after every 4 second the user hasn't sent a command to keep the drone active
     
     // MARK: - Stream Data Vars
     
-    private var responseWaiter = Timer()
     /// Last known battery amount received from tello
     var battery = ""
     /// Last known Signal to Noise ratio for WiFi received from tello
@@ -61,20 +59,20 @@ class TelloController: TelloAVDelegate {
     private var commandRepeatMax = 4
     /// Repeats a comment until an `ok` is received from the Tello
     private func repeatCommandForResponse(for command: String) {
-        responseWaiter = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
-            if !self.commandable, self.commandRepeatMax > 0 {
-                self.sendCommand(command)
-                self.commandRepeatMax -= 1
-            } else {
-                self.responseWaiter.invalidate()
-                self.commandRepeatMax = 4
-                // Now that the Tello is in command mode we can listen for State
-                self.stateClient?.setupListener()
-//                if TelloSettings.isCameraOn {
-//                    self.handleVideoDisplay()
-//                }
-            }
-        }
+//        responseWaiter = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
+//            if !self.commandable, self.commandRepeatMax > 0 {
+//                self.sendCommand(command)
+//                self.commandRepeatMax -= 1
+//            } else {
+//                self.responseWaiter.invalidate()
+//                self.commandRepeatMax = 4
+//                // Now that the Tello is in command mode we can listen for State
+//                self.stateClient?.setupListener()
+////                if TelloSettings.isCameraOn {
+////                    self.handleVideoDisplay()
+////                }
+//            }
+//        }
     }
 
     // MARK: - Tello Command Methods
@@ -97,18 +95,18 @@ class TelloController: TelloAVDelegate {
     
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func updateMovementTimer() {
-        if moveTimer.isValid { return }
-        moveTimer = Timer.scheduledTimer(withTimeInterval: commandDelay, repeats: true) { _ in
+//        if moveTimer.isValid { return }
+//        moveTimer = Timer.scheduledTimer(withTimeInterval: commandDelay, repeats: true) { _ in
             // Concatenate the 4 int values and compare to 0 using bitwise operator AND(&)
             if self.leftRight & self.forwardBack & self.upDown & self.yaw == 0 {
                 // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                 // Send an extra because UDP packets can be lost
                 self.sendCommand(self.moveCommand)
-                self.moveTimer.invalidate()
+//                self.moveTimer.invalidate()
             }
             // Send 2 because UDP packets can be lost
             self.sendCommand(self.moveCommand)
-        }
+//        }
     }
     
     func sendCommand(_ command: String) {
