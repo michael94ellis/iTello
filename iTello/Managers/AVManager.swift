@@ -7,11 +7,6 @@
 
 import Foundation
 import VideoToolbox
-//#if os(macOS)
-//import AppKit
-//typealias Image = NSImage
-//typealias ImageView = NSImageView
-//#elseif os(iOS)
 import UIKit
 
 class AVManager: VideoFrameDecoderDelegate {
@@ -25,8 +20,8 @@ class AVManager: VideoFrameDecoderDelegate {
     /// If the video stream is enabled a third thread will listen/receive the video stream
     init() {
         VideoFrameDecoder.delegate = self
-//        videoClient?.messageReceived = handleVideoStream(data:)
-//        videoClient?.setupListener()
+        videoClient?.messageReceived = handleVideoStream(data:)
+        videoClient?.setupListener()
     }
     
     func beginOrEndRecording() {
@@ -76,9 +71,9 @@ class AVManager: VideoFrameDecoderDelegate {
             print("Failed to decode a frame")
             return
         }
-        //        DispatchQueue.main.async {
+                DispatchQueue.main.async {
         //            // Update video image with new frame
-        //            self.videoView?.image = UIImage(cgImage: displayableImage)
+                    self.videoView?.image = UIImage(cgImage: displayableImage)
         //            //            let ciImage = CIImage(cgImage: displayableImage)
         //            //            self.findFaces(in: ciImage)
         //            // Record CMSampleBuffer with AVFoundation
@@ -88,7 +83,7 @@ class AVManager: VideoFrameDecoderDelegate {
         //                print(videoPixelBuffer.append(frame, withPresentationTime: CMTimeMake(value: self.videoDecoder.videoFrameCounter, timescale: self.videoDecoder.videoFPS)))
         //                self.videoDecoder.videoFrameCounter += 1
         //            }
-        //        }
+                }
     }
     
     // MARK: - Add image to Library

@@ -30,7 +30,7 @@ struct DroneController: View {
                         self.displaySettings.toggle()
                     }, label: {
                         Image(systemName: "gearshape")
-                        Text(WifiManager.shared.telloSSID)
+                        Text("Connection")
                             .font(.body)
                     })
                         .frame(height: parent.size.height / 20)
@@ -58,6 +58,7 @@ struct DroneController: View {
                 }
                 .padding(.bottom, 20)
             }
+            .frame(maxWidth: .infinity)
         }
     }
 }

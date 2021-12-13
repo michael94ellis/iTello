@@ -34,6 +34,7 @@ class TelloController: TelloAVDelegate, ObservableObject {
     
     // MARK: - Stream Data Vars
     
+    private var responseWaiter = Timer()
     /// Last known battery amount received from tello
     var battery = ""
     /// Last known Signal to Noise ratio for WiFi received from tello
@@ -45,34 +46,32 @@ class TelloController: TelloAVDelegate, ObservableObject {
     
     let avManager = AVManager()
     
+    static var shared: TelloController?
+    
     /// The TelloController will spawn 2 threads immediately, on each thread will be on of the two UDP objects above
     ///     A receiving/listener for both Drone State and Command Responsesf
     init() {
         self.avManager.avDelegate = self
-        commandClient?.messageReceived = handleCommandResponse(message:)
-        stateClient?.messageReceived = handleStateStream(data:)
-        commandClient?.setupConnection()
-        repeatCommandForResponse(for: CMD.on)
+        self.commandClient?.messageReceived = self.handleCommandResponse(message:)
+        self.stateClient?.messageReceived = self.handleStateStream(data:)
+        self.stateClient?.setupListener()
+        self.commandClient?.setupConnection()
+        self.repeatCommandForResponse()
     }
     
     /// This var will decrease as the initial command is sent multiple times
     private var commandRepeatMax = 4
     /// Repeats a comment until an `ok` is received from the Tello
-    private func repeatCommandForResponse(for command: String) {
-//        responseWaiter = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
-//            if !self.commandable, self.commandRepeatMax > 0 {
-//                self.sendCommand(command)
-//                self.commandRepeatMax -= 1
-//            } else {
-//                self.responseWaiter.invalidate()
-//                self.commandRepeatMax = 4
-//                // Now that the Tello is in command mode we can listen for State
-//                self.stateClient?.setupListener()
-////                if TelloSettings.isCameraOn {
-////                    self.handleVideoDisplay()
-////                }
-//            }
-//        }
+    private func repeatCommandForResponse() {
+        self.responseWaiter = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
+            if !self.commandable, self.commandRepeatMax > 0 {
+                self.sendCommand(CMD.on)
+                self.commandRepeatMax -= 1
+            } else {
+                self.responseWaiter.invalidate()
+                self.commandRepeatMax = 4
+            }
+        }
     }
 
     // MARK: - Tello Command Methods
@@ -82,7 +81,7 @@ class TelloController: TelloAVDelegate, ObservableObject {
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
-        repeatCommandForResponse(for: CMD.land)
+        sendCommand(CMD.land)
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {
@@ -111,7 +110,7 @@ class TelloController: TelloAVDelegate, ObservableObject {
     
     func sendCommand(_ command: String) {
         guard let data = command.data(using: .utf8),
-            let udpClient =  commandClient else {
+            let udpClient = commandClient else {
                 print("Error: cannot send command")
                 return
         }

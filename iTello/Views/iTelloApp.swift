@@ -7,33 +7,43 @@
 //
 
 import SwiftUI
+import Combine
 
 @main
 struct iTelloApp: App {
     
-    @UIApplicationDelegateAdaptor var appDelegate: AppDelegate
-    
-    @StateObject var tello = TelloController()
+    @State private var tello: TelloController?
     @State private var displayConnectionSetup: Bool = true
-    @AppStorage("displaySettings") var displaySettings: Bool = false
+    
+    var wifiConnectionListener: AnyCancellable?
+    
+    init() {
+        self.wifiConnectionListener = WifiManager.shared.$isConnectedToWiFi.sink(receiveValue: { [self] isConectedToWiFi in
+            print("WiFi Connection: \(isConectedToWiFi)")
+            if isConectedToWiFi {
+                self.tello = TelloController()
+            } else {
+                self.tello = nil
+                self.displayConnectionSetup = true
+            }
+        })
+    }
     
     var body: some Scene {
         WindowGroup {
-            ZStack(alignment: .center) {
-                if displayConnectionSetup {
-                    DroneConnectionSetup(isDisplayed: $displayConnectionSetup)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .zIndex(3)
+            GeometryReader { container in
+                ZStack(alignment: .center) {
+                    DroneController(displaySettings: $displayConnectionSetup)
+                    if displayConnectionSetup {
+                        DroneConnectionSetup(isDisplayed: $displayConnectionSetup)
+                            .frame(width: container.size.width, height: container.size.height)
+                            .background(Rectangle()
+                                            .fill(RadialGradient(colors: [.white, .gray, .darkStart, .darkEnd, .gray], center: .center, startRadius: 1, endRadius: 1600))
+                                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2))
+                    }
                 }
-                if displaySettings {
-                    ControllerSettings(isDisplayed: $displaySettings)
-                        .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-                        .zIndex(2)
-                }
-                DroneController(displaySettings: $displaySettings)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.white)
             }
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }

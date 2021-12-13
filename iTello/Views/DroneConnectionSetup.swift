@@ -13,31 +13,24 @@ struct DroneConnectionSetup: View {
     @Binding var isDisplayed: Bool
     private let screenCoverage: CGFloat = 0.9
     @FocusState var wifiTextFieldFocus: Bool
-
+    
     var body: some View {
-        GeometryReader { parent in
-            HStack {
-                Spacer()
-                VStack {
-                    Spacer()
-                    Text("Welcome to iTello!")
-                    WiFiAndSettingsHelp()
-                    WiFiManagement()
-                    Spacer()
-                    Button(action: {
-                        self.isDisplayed.toggle()
-                    }, label: {
-                        Text("Continue")
-                            .frame(width: 120, height: 40)
-                    })
-                    .contentShape(Rectangle())
-                    Spacer()
-                }
-                Spacer()
+        VStack(spacing: 25) {
+            Spacer(minLength: 30)
+            Text("iTello")
+                .foregroundColor(Color.black)
+                .fontWeight(.semibold)
+                .font(.largeTitle)
+            WiFiManagement(displayPopover: $isDisplayed)
+            HelpPopover()
+            Button(action: { self.isDisplayed.toggle() }) {
+                Text("Already Connected?")
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color(UIColor.label))
+                    .frame(width: 200, height: 40)
             }
-            .background(Rectangle()
-                            .fill(RadialGradient(colors: [.white, .gray], center: .center, startRadius: 1, endRadius: parent.size.width * 0.95))
-                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2))
+            .contentShape(Rectangle())
+            Spacer(minLength: 30)
         }
     }
 }
