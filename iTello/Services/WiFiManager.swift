@@ -47,7 +47,7 @@ final public class WifiManager: ObservableObject {
                     self.connectionProgress += 1
                     if let telloSSID = $0.first {
                         self.telloSSID = telloSSID
-                        sleep(1) // Attempt to fix a problem where it seems like the connection is set up and the UDP Clients are created too early
+                        sleep(2) // Attempt to fix a problem where it seems like the connection is set up and the UDP Clients are created too early
                         self.isConnectedToWiFi = true
                         completion(true, nil)
                     }

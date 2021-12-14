@@ -10,6 +10,7 @@ import SwiftUI
 
 struct DroneController: View {
     
+    @Binding var tello: TelloController?
     @Binding var displaySettings: Bool
     
     var body: some View {
@@ -30,6 +31,10 @@ struct DroneController: View {
                         self.displaySettings.toggle()
                     }, label: {
                         Image(systemName: "gearshape")
+                        Text("Connection")
+                            .font(.body)
+                        Text(self.tello?.battery ?? "")
+                            .font(.body)
                         Text("Connection")
                             .font(.body)
                     })

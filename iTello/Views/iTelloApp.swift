@@ -18,11 +18,12 @@ struct iTelloApp: App {
     var wifiConnectionListener: AnyCancellable?
     
     init() {
+        // Listen for announcement of WiFi connection
         self.wifiConnectionListener = WifiManager.shared.$isConnectedToWiFi.sink(receiveValue: { [self] isConectedToWiFi in
             print("WiFi Connection: \(isConectedToWiFi)")
-            if isConectedToWiFi {
+            if isConectedToWiFi, tello == nil {
                 self.tello = TelloController()
-            } else {
+            } else if !isConectedToWiFi {
                 self.tello = nil
                 self.displayConnectionSetup = true
             }
@@ -33,7 +34,7 @@ struct iTelloApp: App {
         WindowGroup {
             GeometryReader { container in
                 ZStack(alignment: .center) {
-                    DroneController(displaySettings: $displayConnectionSetup)
+                    DroneController(tello: self.$tello, displaySettings: $displayConnectionSetup)
                     if displayConnectionSetup {
                         DroneConnectionSetup(isDisplayed: $displayConnectionSetup)
                             .frame(width: container.size.width, height: container.size.height)

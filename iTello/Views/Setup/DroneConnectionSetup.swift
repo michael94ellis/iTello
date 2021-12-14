@@ -22,7 +22,7 @@ struct DroneConnectionSetup: View {
                 .fontWeight(.semibold)
                 .font(.largeTitle)
             WiFiManagement(displayPopover: $isDisplayed)
-            HelpPopover()
+            SetupInstructions()
             Button(action: { self.isDisplayed.toggle() }) {
                 Text("Already Connected?")
                     .fontWeight(.semibold)

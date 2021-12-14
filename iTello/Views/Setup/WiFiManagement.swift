@@ -1,5 +1,5 @@
 //
-//  WiFiManagementView.swift
+//  WiFiManagement.swift
 //  iTello
 //
 //  Created by Michael Ellis on 12/10/21.
