@@ -94,14 +94,6 @@
 			path = "Controller View";
 			sourceTree = "<group>";
 		};
-		2F78E5082767807E0003A788 /* Tello */ = {
-			isa = PBXGroup;
-			children = (
-				2F78E506276780770003A788 /* TelloController.swift */,
-			);
-			path = Tello;
-			sourceTree = "<group>";
-		};
 		2F8C8D6A24748F4E006D40EC = {
 			isa = PBXGroup;
 			children = (
@@ -126,12 +118,23 @@
 				2FDE4B742474902500B8C422 /* iTello.entitlements */,
 				2F8C8D8424748F51006D40EC /* Info.plist */,
 				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
+				2F78E506276780770003A788 /* TelloController.swift */,
 				2FDB56F0275EEFD400DF04DF /* Views */,
 				2F399CD42741FB8B0016BE8B /* Assets */,
 				2FDB56E8275E3A8F00DF04DF /* Extensions */,
-				2FDB56E9275E3AA100DF04DF /* Services */,
+				2FD0C74227696E51005DA615 /* Networking */,
+				2FDB56E9275E3AA100DF04DF /* VideoToolBox */,
 			);
 			path = iTello;
+			sourceTree = "<group>";
+		};
+		2FD0C74227696E51005DA615 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				2FB55D2C24854368000EF166 /* UDPClient.swift */,
+				2F399C9F2741F3B70016BE8B /* WiFiManager.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		2FDB56E8275E3A8F00DF04DF /* Extensions */ = {
@@ -143,22 +146,19 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		2FDB56E9275E3AA100DF04DF /* Services */ = {
+		2FDB56E9275E3AA100DF04DF /* VideoToolBox */ = {
 			isa = PBXGroup;
 			children = (
 				2F374E56274290DB0073E24A /* AVManager.swift */,
 				2FF52BFC2475F7CF00BB7DB5 /* VideoFrameDecoder.swift */,
-				2FB55D2C24854368000EF166 /* UDPClient.swift */,
-				2F399C9F2741F3B70016BE8B /* WiFiManager.swift */,
 			);
-			path = Services;
+			path = VideoToolBox;
 			sourceTree = "<group>";
 		};
 		2FDB56F0275EEFD400DF04DF /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				2F399CD52741FDA30016BE8B /* iTelloApp.swift */,
-				2F78E5082767807E0003A788 /* Tello */,
 				2F78E5042766F4F40003A788 /* Setup */,
 				2F78E5052766F6A90003A788 /* Controller View */,
 			);

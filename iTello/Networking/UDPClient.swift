@@ -15,8 +15,9 @@ class UDPClient: ObservableObject {
     var connection: NWConnection
     var address: NWEndpoint.Host
     var port: NWEndpoint.Port
-    @Published private(set) public var messagesReceived: [Data] = []
+    @Published private(set) public var messageReceived: Data?
     @Published private(set) public var isReady: Bool = false
+    @Published var isListening: Bool
     
     var resultHandler = NWConnection.SendCompletion.contentProcessed { NWError in
         guard NWError == nil else {
@@ -26,7 +27,8 @@ class UDPClient: ObservableObject {
         print("Data sent")
     }
     
-    init?(address newAddress: String, port newPort: Int32) {
+    init?(address newAddress: String, port newPort: Int32, isListener: Bool = false) {
+        self.isListening = isListener
         guard let codedAddress = IPv4Address(newAddress),
               let codedPort = NWEndpoint.Port(rawValue: NWEndpoint.Port.RawValue(newPort)) else {
                   print("Failed to create connection address")
@@ -44,7 +46,9 @@ class UDPClient: ObservableObject {
             print("Connection \(newState)")
             if newState == .ready {
                 self.isReady = true
-                self.sendData("command".data(using: .utf8)!)
+                if isListener {
+                    self.receive()
+                }
             }
         }
         connection.viabilityUpdateHandler = { [self] isViable in
@@ -53,12 +57,21 @@ class UDPClient: ObservableObject {
         connection.start(queue: .global())
     }
     
+    func cancel() {
+        self.isListening = false
+        self.connection.cancel()
+    }
+    
     deinit {
         connection.cancel()
     }
     
     func sendData(_ data: Data) {
         self.connection.send(content: data, completion: self.resultHandler)
+        self.receive()
+    }
+    
+    func receive() {
         self.connection.receiveMessage { data, context, isComplete, error in
             print("Receive isComplete: " + isComplete.description)
             guard let data = data else {
@@ -66,6 +79,10 @@ class UDPClient: ObservableObject {
                 return
             }
             print(String(data: data, encoding: .utf8) ?? "Sent Data")
+            self.messageReceived = data
+            if self.isListening {
+                self.receive()
+            }
         }
     }
 }

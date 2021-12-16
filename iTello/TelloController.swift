@@ -40,47 +40,34 @@ class TelloController: ObservableObject {
     private var moveCommand: String { "rc \(self.leftRight) \(self.forwardBack) \(self.upDown) \(self.yaw)" }
     
     // UDP Connections
-    var stateClient: UDPClient?
-    var stateListener: AnyCancellable?
     var commandClient: UDPClient?
-    var commandClientListener: UDPListener?
+    var commandClientListener: UDPClient?
+    var commandClientResponseHandler: AnyCancellable?
+    var stateClient: UDPClient?
+    var stateClientListener: UDPClient?
+    var stateClientResponseHandler: AnyCancellable?
     /// Used for broadcasting movement commands to the drone, uses `commandDelay`
-    var movementBroadcaster: AnyCancellable?
-    var initializer: AnyCancellable?
+    var commandBroadcaster: AnyCancellable?
     
     init() {
         self.commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
-        self.commandClientListener = UDPListener(address: Tello.IPAddress, port: Tello.CommandPort)
-        self.stateListener = self.commandClientListener?.$isReady.sink(receiveValue: { isReady in
-            if isReady {
-                sleep(2)
-                self.sendCommand(CMD.on)
-            }
+        self.commandClientListener = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort, isListener: true)
+        self.commandClientResponseHandler = self.commandClientListener?.$messageReceived.sink(receiveValue: { newMessage in
+            self.handleCommandResponse(for: newMessage)
         })
-//        self.commandClientListener = self.commandClient?.$isReady.sink(receiveValue: { isReady in
-//            self.sendCommand(CMD.on)
-//        })
-//        self.commandClientListener = self.commandClient?.messageReceived.publisher.sink(receiveValue: { messageReceived in
-//            self.handleCommandResponse(message: messageReceived)
-//        })
-//        self.repeatCommandForResponse()
-//        self.stateClient = UDPClient(address: Tello.ResponseIPAddress, port: Tello.StatePort)
-//        self.stateListener = self.stateClient?.messageReceived.publisher.sink(receiveValue: { state in
-//            self.handleStateStream(data: state)
-//        })
+        self.repeatCommandForResponse()
     }
     
     /// Repeats a comment until an `ok` is received from the Tello
     private func repeatCommandForResponse() {
-        self.initializer = Timer.publish(every: 6, on: .main, in: .default)
+        self.commandBroadcaster = Timer.publish(every: 2, on: .main, in: .default)
             .autoconnect()
-            .dropFirst()
-            .sink(receiveValue: { timer in
+            .sink(receiveValue: { _ in
                 guard self.commandable else {
                     self.sendCommand(CMD.on)
                     return
                 }
-                // Now commandable
+                self.commandBroadcaster?.cancel()
             })
     }
     
@@ -99,7 +86,7 @@ class TelloController: ObservableObject {
     
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func joystickMovementHandler() {
-        self.movementBroadcaster = Timer.publish(every: self.commandDelay, on: .main, in: .default)
+        self.commandBroadcaster = Timer.publish(every: self.commandDelay, on: .main, in: .default)
             .autoconnect()
             .sink(receiveValue: { timer in
                 // Concatenate the 4 int values and compare to 0 using bitwise operator AND(&)
@@ -116,7 +103,7 @@ class TelloController: ObservableObject {
     
     /// Prevents controller from losing control of the tello device
     func engageIdleState() {
-        self.movementBroadcaster = Timer.publish(every: 4, on: .main, in: .default)
+        self.commandBroadcaster = Timer.publish(every: 4, on: .main, in: .default)
             .autoconnect()
             .sink(receiveValue: { timer in
                 self.sendCommand(self.moveCommand)
@@ -140,17 +127,18 @@ class TelloController: ObservableObject {
     }
     
     /// Read data from the drone's response to a given command
-    private func handleCommandResponse(message: Data) {
-        guard let message = String(data: message, encoding: .utf8), message == "ok" else {
-            print("Error with command client response - \(message)")
+    private func handleCommandResponse(for messageData: Data?) {
+        guard let messageData = messageData,
+              let message = String(data: messageData, encoding: .utf8), message == "ok" else {
+                  print("Error with command client response - \(String(describing: messageData))")
             return
         }
-        print("Command: ok")
+        print("Command Response: \(message)")
         guard self.commandable else {
             self.commandable = true
+            print("Commandable Mode Engage")
             return
         }
-        print(message)
     }
     
     /// Read data from the ongoing STATE stream

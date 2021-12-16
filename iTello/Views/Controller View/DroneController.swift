@@ -10,7 +10,7 @@ import SwiftUI
 
 struct DroneController: View {
     
-    @Binding var tello: TelloController?
+    var tello: TelloController?
     @Binding var displaySettings: Bool
     
     var body: some View {
@@ -18,7 +18,7 @@ struct DroneController: View {
             VStack {
                 HStack {
                     Button(action: {
-                        
+                        self.tello?.takeOff()
                     }) {
                         Image(systemName: "play.fill").resizable()
                     }
@@ -41,7 +41,7 @@ struct DroneController: View {
                         .frame(height: parent.size.height / 20)
                     Spacer(minLength: parent.size.width / 6)
                     Button(action: {
-                        
+                        self.tello?.land()
                     }) {
                         Image(systemName: "pause.fill").resizable()
                     }
@@ -53,11 +53,11 @@ struct DroneController: View {
                 .padding(.top, 30)
                 Spacer()
                 HStack {
-                    Joystick(width: parent.size.width / 4)
+                    Joystick(tello: self.$tello, width: parent.size.width / 4, isLeft: true)
                         .padding(.leading, parent.size.width / 10)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                     Spacer()
-                    Joystick(width: parent.size.width / 4)
+                    Joystick(tello: self.$tello, width: parent.size.width / 4, isLeft: false)
                         .padding(.trailing, parent.size.width / 10)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                 }
