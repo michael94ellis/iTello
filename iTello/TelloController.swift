@@ -15,9 +15,13 @@ protocol TelloAVDelegate: AnyObject {
 
 class TelloController: ObservableObject {
     
-    // TODO: Timer to send a message(CMD.on) after every 4 second the user hasn't sent a command to keep the drone active
-    
+    /// Indicates whether or not this TelloController has it's UDP connections setup
+    /// If the TelloController is not connected then when the app detects the Tello WiFi connection it will establish the UDP connections
+    /// By UDP connection I mean Broadcasters and Receivers, it's not TCP after all
+    @Published public var connected = false
+    /// Indicates if the Tello is in its Command mode, where it responds to commands via WiFi/UDP
     @Published private(set) var commandable = false
+    /// Indicates if the Tello is sending Video Stream Data
     @Published private(set) var streaming = false
     /// Last known battery amount received from tello
     @Published var battery = ""
@@ -41,25 +45,31 @@ class TelloController: ObservableObject {
     
     // UDP Connections
     var commandClient: UDPClient?
-    var commandClientListener: UDPClient?
-    var commandClientResponseHandler: AnyCancellable?
-    var stateClient: UDPClient?
-    var stateClientListener: UDPClient?
-    var stateClientResponseHandler: AnyCancellable?
+    var commandClientResponseListener: AnyCancellable?
+    var stateClientListener: UDPListener?
+    var stateClientResponseListener: AnyCancellable?
     /// Used for broadcasting movement commands to the drone, uses `commandDelay`
     var commandBroadcaster: AnyCancellable?
     
-    init() {
+    func beginCommandMode() {
+        self.connected = true
         self.commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
-        self.commandClientListener = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort, isListener: true)
-        self.commandClientResponseHandler = self.commandClientListener?.$messageReceived.sink(receiveValue: { newMessage in
+        self.commandClientResponseListener = self.commandClient?.$messageReceived.sink(receiveValue: { newMessage in
             self.handleCommandResponse(for: newMessage)
         })
-        self.repeatCommandForResponse()
+        self.initializeCommandMode()
+    }
+    
+    func exitCommandMode() {
+        self.connected = false
+        self.commandClient?.cancel()
+        self.commandClient = nil
+        self.commandClientResponseListener?.cancel()
+        self.commandClientResponseListener = nil
     }
     
     /// Repeats a comment until an `ok` is received from the Tello
-    private func repeatCommandForResponse() {
+    private func initializeCommandMode() {
         self.commandBroadcaster = Timer.publish(every: 2, on: .main, in: .default)
             .autoconnect()
             .sink(receiveValue: { _ in
@@ -68,6 +78,11 @@ class TelloController: ObservableObject {
                     return
                 }
                 self.commandBroadcaster?.cancel()
+                
+                self.stateClientListener = UDPListener(on: Tello.StatePort)
+                self.stateClientResponseListener = self.stateClientListener?.$messageReceived.sink(receiveValue: { newStateData in
+                    self.handleStateStream(data: newStateData)
+                })
             })
     }
     
@@ -136,14 +151,15 @@ class TelloController: ObservableObject {
         print("Command Response: \(message)")
         guard self.commandable else {
             self.commandable = true
-            print("Commandable Mode Engage")
+            print("Commandable Mode Initiated")
             return
         }
     }
     
     /// Read data from the ongoing STATE stream
-    private func handleStateStream(data: Data) {
-        guard let message = String(data: data, encoding: .utf8) else {
+    private func handleStateStream(data: Data?) {
+        guard let data = data,
+              let message = String(data: data, encoding: .utf8) else {
                 print("Error with command client response")
                 return
         }

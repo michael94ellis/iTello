@@ -13,9 +13,24 @@ struct SetupInstructions: View {
     @State var displayPopover: Bool = false
     @State var errorMessage: String?
     
+    private let openButtonText: String = "Don't know what to do?"
+    private let title: String = "How To Connect Your Tello"
+    
+    private let appStoreUrl: String = "itms-apps://apple.com/app/id839686104"
+    
+    private let reviewButtonText: String = "Leave a review!"
+    private let dismissButtonText: String = "Go Back"
+
+    private let instructions: [String] = [
+        "1. Turn on your Tello and wait for a blinking yellow light.",
+        "2. Press the Connect button, the app will find your Tello!",
+        "3. When the controller is displayed you can begin flying",
+        "4. Leave a great review on the App Store!"
+    ]
+    
     var body: some View {
         Button(action: { self.displayPopover.toggle() }) {
-            Text("Don't know what to do?")
+            Text(self.openButtonText)
                 .fontWeight(.semibold)
                 .foregroundColor(Color(UIColor.label))
         }
@@ -26,41 +41,41 @@ struct SetupInstructions: View {
         .contentShape(Rectangle())
         .popover(isPresented: self.$displayPopover, content: {
             VStack(alignment: .center) {
-            Text("Connect to the Tello's WiFi or let the app do it for you")
+                Text(self.title)
+                    .font(.largeTitle)
                 Divider()
-                Group {
-                    Text("1. Turn on your Tello and wait for a blinking yellow light.")
-                    Text("2. Press the Connect button, the app will find your Tello")
-                    Text("3. When the controller is displayed you can begin flying!")
-                    Text("4. Provide feedback and feature requests by leaving a review on the App Store!")
-                }
-                Divider()
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        if let url = URL(string: "itms-apps://apple.com/app/id839686104") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        Text("Go to App Store")
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.mint)
+                VStack(alignment: .leading) {
+                    ForEach(self.instructions, id: \.self) {
+                        Text($0)
+                            .padding(.bottom, 5)
                     }
-                    .frame(width: 130, height: 40)
-                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray).shadow(color: Color(UIColor.label), radius: 4, x: 2, y: 2))
-                    .contentShape(Rectangle())
-                    Spacer()
                 }
+                .padding(.horizontal, 25)
+                .padding(.vertical, 20)
+                .background(RoundedRectangle(cornerRadius: 4).fill(Color(uiColor: .tertiarySystemBackground)))
                 Spacer()
                 HStack {
                     Spacer()
-                    Button(action: { self.displayPopover.toggle() }) {
-                        Text("Dismiss")
+                    Button(action: {
+                        if let url = URL(string: self.appStoreUrl) {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        Text(self.reviewButtonText)
                             .fontWeight(.semibold)
-                            .foregroundColor(Color.mint)
+                            .foregroundColor(Color(uiColor: .label))
                     }
-                    .frame(width: 130, height: 40)
-                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray).shadow(color: Color(UIColor.label), radius: 4, x: 2, y: 2))
+                    .frame(width: 150, height: 40)
+                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray).shadow(color: Color(uiColor: .lightGray), radius: 1, x: 0, y: 0))
+                    .contentShape(Rectangle())
+                    Spacer()
+                    Button(action: { self.displayPopover.toggle() }) {
+                        Text(self.dismissButtonText)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(uiColor: .label))
+                    }
+                    .frame(width: 150, height: 40)
+                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray))
                     .contentShape(Rectangle())
                     Spacer()
                 }

@@ -21,15 +21,20 @@ struct DroneConnectionSetup: View {
                 .foregroundColor(Color.black)
                 .fontWeight(.semibold)
                 .font(.largeTitle)
-            WiFiManagement(displayPopover: $isDisplayed)
-            SetupInstructions()
-            Button(action: { self.isDisplayed.toggle() }) {
-                Text("Already Connected?")
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color(UIColor.label))
-                    .frame(width: 200, height: 40)
+            VStack {
+                WiFiManagement(displayPopover: $isDisplayed)
+                    .padding(.bottom, 15)
+                SetupInstructions()
             }
-            .contentShape(Rectangle())
+            // TODO: Feature Idea - user can connect on their own
+//            Spacer()
+//            Button(action: { self.isDisplayed.toggle() }) {
+//                Text("Already Connected?")
+//                    .fontWeight(.semibold)
+//                    .foregroundColor(Color.darkEnd)
+//                    .frame(width: 200, height: 40)
+//            }
+//            .contentShape(Rectangle())
             Spacer(minLength: 30)
         }
     }

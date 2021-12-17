@@ -8,24 +8,25 @@
 
 import SwiftUI
 import Combine
+import Firebase
 
 @main
 struct iTelloApp: App {
     
-    @State private var tello: TelloController?
-    @State private var displayConnectionSetup: Bool = true
+    @State private var tello: TelloController = TelloController()
+    @State private var displayConnectionSetup: Bool = false
     
     var wifiConnectionListener: AnyCancellable?
     
     init() {
+        FirebaseApp.configure()
         // Listen for announcement of WiFi connection
         self.wifiConnectionListener = WifiManager.shared.$isConnectedToWiFi.sink(receiveValue: { [self] isConectedToWiFi in
             print("WiFi Connection: \(isConectedToWiFi)")
-            if isConectedToWiFi, tello == nil {
-                self.tello = TelloController()
-            } else if !isConectedToWiFi {
-                self.tello = nil
-                self.displayConnectionSetup = true
+            if isConectedToWiFi,
+               !self.tello.connected {
+                self.tello.beginCommandMode()
+                self.displayConnectionSetup = false
             }
         })
     }
@@ -34,7 +35,7 @@ struct iTelloApp: App {
         WindowGroup {
             GeometryReader { container in
                 ZStack(alignment: .center) {
-                    DroneController(tello: self.$tello, displaySettings: $displayConnectionSetup)
+                    DroneController(tello: self.tello, displaySettings: $displayConnectionSetup)
                     if displayConnectionSetup {
                         DroneConnectionSetup(isDisplayed: $displayConnectionSetup)
                             .frame(width: container.size.width, height: container.size.height)

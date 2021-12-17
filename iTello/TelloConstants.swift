@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Network
 
 /// Networking Information about the DJI Tello
 struct Tello {
@@ -15,11 +16,11 @@ struct Tello {
     /// IP Address the Tello sends UDP messages on
     static let ResponseIPAddress = "0.0.0.0"
     /// Port the Tello receives UDP messages on
-    static let CommandPort: Int32 = 8889
+    static let CommandPort: NWEndpoint.Port = 8889
     /// Port the Tello sends UDP messages on
-    static let StatePort: Int32 = 8890
+    static let StatePort: NWEndpoint.Port = 8890
     /// Port the Tello sends UDP Video Stream Data on
-    static let VideoStreamPort: Int32 = 11111
+    static let VideoStreamPort: NWEndpoint.Port = 11111
 }
 
 /// Networking Information about the DJI Tello

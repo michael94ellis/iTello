@@ -12,30 +12,17 @@ import SwiftUIJoystick
 
 struct Joystick: View {
     
-    var tello: TelloController?
     @State private var joystickMonitor: JoystickMonitor
     private var joyStickListener: AnyCancellable?
     private let dragDiameter: CGFloat
     private let radius: Int
     private let arrowOffset: CGFloat
     
-    init(tello: TelloController?, width: CGFloat, isLeft: Bool) {
-        self.tello = tello
+    init(width: CGFloat) {
         self.dragDiameter = width
         self.radius = Int(width) / 2
         self.arrowOffset = (width / 2) - (width / 10)
         self.joystickMonitor = JoystickMonitor(diameter: width)
-        if isLeft {
-            self.joyStickListener = self.joystickMonitor.$xyPoint.sink(receiveValue: { leftThumbPoint in
-                self.tello?.yaw = Int(leftThumbPoint.x) - radius
-                self.tello?.upDown = Int(leftThumbPoint.y) - radius
-            })
-        } else {
-            self.joyStickListener = self.joystickMonitor.$xyPoint.sink(receiveValue: { rightThumbPoint in
-                self.tello?.leftRight = Int(rightThumbPoint.x) - radius
-                self.tello?.forwardBack = Int(rightThumbPoint.y) - radius
-            })
-        }
     }
     
     var body: some View {

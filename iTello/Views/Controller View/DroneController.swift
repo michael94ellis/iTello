@@ -7,10 +7,12 @@
 //
 
 import SwiftUI
+import SwiftUIJoystick
+import Combine
 
 struct DroneController: View {
     
-    var tello: TelloController?
+    @ObservedObject var tello: TelloController
     @Binding var displaySettings: Bool
     
     var body: some View {
@@ -18,7 +20,7 @@ struct DroneController: View {
             VStack {
                 HStack {
                     Button(action: {
-                        self.tello?.takeOff()
+                        self.tello.takeOff()
                     }) {
                         Image(systemName: "play.fill").resizable()
                     }
@@ -33,15 +35,13 @@ struct DroneController: View {
                         Image(systemName: "gearshape")
                         Text("Connection")
                             .font(.body)
-                        Text(self.tello?.battery ?? "")
-                            .font(.body)
-                        Text("Connection")
+                        Text(self.tello.battery )
                             .font(.body)
                     })
                         .frame(height: parent.size.height / 20)
                     Spacer(minLength: parent.size.width / 6)
                     Button(action: {
-                        self.tello?.land()
+                        self.tello.land()
                     }) {
                         Image(systemName: "pause.fill").resizable()
                     }
@@ -53,11 +53,11 @@ struct DroneController: View {
                 .padding(.top, 30)
                 Spacer()
                 HStack {
-                    Joystick(tello: self.$tello, width: parent.size.width / 4, isLeft: true)
+                    Joystick(width: parent.size.width / 4)
                         .padding(.leading, parent.size.width / 10)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                     Spacer()
-                    Joystick(tello: self.$tello, width: parent.size.width / 4, isLeft: false)
+                    Joystick(width: parent.size.width / 4)
                         .padding(.trailing, parent.size.width / 10)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                 }

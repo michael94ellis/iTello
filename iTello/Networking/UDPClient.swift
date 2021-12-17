@@ -17,25 +17,22 @@ class UDPClient: ObservableObject {
     var port: NWEndpoint.Port
     @Published private(set) public var messageReceived: Data?
     @Published private(set) public var isReady: Bool = false
-    @Published var isListening: Bool
     
     var resultHandler = NWConnection.SendCompletion.contentProcessed { NWError in
         guard NWError == nil else {
-            print("ERROR! Error when data (Type: Data) sending. NWError: \n \(NWError!)")
+            print("ERROR! Error sending data. NWError: \n \(NWError!)")
             return
         }
         print("Data sent")
     }
     
-    init?(address newAddress: String, port newPort: Int32, isListener: Bool = false) {
-        self.isListening = isListener
-        guard let codedAddress = IPv4Address(newAddress),
-              let codedPort = NWEndpoint.Port(rawValue: NWEndpoint.Port.RawValue(newPort)) else {
-                  print("Failed to create connection address")
-                  return nil
-              }
+    init?(address newAddress: String, port newPort: NWEndpoint.Port) {
+        guard let codedAddress = IPv4Address(newAddress) else {
+            print("Failed to create connection address")
+            return nil
+        }
         address = .ipv4(codedAddress)
-        port = codedPort
+        port = newPort
         let localEndpoint = NWEndpoint.hostPort(host: address, port: port)
         let parameters = NWParameters.udp
         parameters.allowLocalEndpointReuse = true
@@ -46,9 +43,6 @@ class UDPClient: ObservableObject {
             print("Connection \(newState)")
             if newState == .ready {
                 self.isReady = true
-                if isListener {
-                    self.receive()
-                }
             }
         }
         connection.viabilityUpdateHandler = { [self] isViable in
@@ -58,12 +52,12 @@ class UDPClient: ObservableObject {
     }
     
     func cancel() {
-        self.isListening = false
+        self.isReady = false
         self.connection.cancel()
     }
     
     deinit {
-        connection.cancel()
+        self.cancel()
     }
     
     func sendData(_ data: Data) {
@@ -73,16 +67,14 @@ class UDPClient: ObservableObject {
     
     func receive() {
         self.connection.receiveMessage { data, context, isComplete, error in
-            print("Receive isComplete: " + isComplete.description)
+            print("Receive completed: " + isComplete.description)
             guard let data = data else {
                 print("Error: Received nil Data")
                 return
             }
-            print(String(data: data, encoding: .utf8) ?? "Sent Data")
+            print(String(data: data, encoding: .utf8) ?? "Error: Cannot parse response")
             self.messageReceived = data
-            if self.isListening {
-                self.receive()
-            }
+            self.receive()
         }
     }
 }

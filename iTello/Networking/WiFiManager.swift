@@ -94,4 +94,5 @@ final public class WifiManager: ObservableObject {
         }
         return "Unknown Error"
     }
+    
 }

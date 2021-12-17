@@ -34,7 +34,7 @@ struct WiFiManagement: View {
                     .onReceive(WifiManager.shared.$connectionProgress, perform: { progressValue in
                         self.progress = progressValue
                     })
-                    .frame(width: 220, height: 45)
+                    .frame(width: 220, height: 40)
             } else {
                 RoundedRectangle(cornerRadius: 4)
                     .fill(Color.white)
