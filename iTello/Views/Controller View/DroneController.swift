@@ -33,9 +33,7 @@ struct DroneController: View {
                         self.displaySettings.toggle()
                     }, label: {
                         Image(systemName: "gearshape")
-                        Text("Connection")
-                            .font(.body)
-                        Text(self.tello.battery )
+                        Text("Battery: \(self.tello.battery)%")
                             .font(.body)
                     })
                         .frame(height: parent.size.height / 20)

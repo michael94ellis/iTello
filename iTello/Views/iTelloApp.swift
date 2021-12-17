@@ -13,21 +13,25 @@ import Firebase
 @main
 struct iTelloApp: App {
     
-    @State private var tello: TelloController = TelloController()
-    @State private var displayConnectionSetup: Bool = false
+    @StateObject private var tello: TelloController = TelloController()
+    @State private var displayConnectionSetup: Bool = true
     
     var wifiConnectionListener: AnyCancellable?
+    var droneConnectionListener: AnyCancellable?
     
     init() {
         FirebaseApp.configure()
-        // Listen for announcement of WiFi connection
-        self.wifiConnectionListener = WifiManager.shared.$isConnectedToWiFi.sink(receiveValue: { [self] isConectedToWiFi in
+        // Listen for announcement of WiFi connection and then initiate command mode async
+        self.wifiConnectionListener = WifiManager.shared.$isConnected.sink(receiveValue: { [self] isConectedToWiFi in
             print("WiFi Connection: \(isConectedToWiFi)")
             if isConectedToWiFi,
                !self.tello.connected {
                 self.tello.beginCommandMode()
-                self.displayConnectionSetup = false
             }
+        })
+        // Listen for successful command mode initialization and then remove the setup popover
+        self.droneConnectionListener = self.tello.$commandable.sink(receiveValue: { [self] commandable in
+            self.displayConnectionSetup = commandable
         })
     }
     

@@ -36,7 +36,6 @@ class UDPListener: ObservableObject {
         self.listener?.newConnectionHandler = { connection in
             print("Listener receiving new message")
             self.createConnection(connection: connection)
-            self.listener?.cancel()
         }
         self.listener?.start(queue: self.queue)
     }
@@ -50,6 +49,7 @@ class UDPListener: ObservableObject {
                 self.receive()
             case .cancelled, .failed:
                 print("Listener failed to receive message - \(connection)")
+                self.listener?.cancel()
             default:
                 print("Listener waiting to receive message - \(connection)")
             }

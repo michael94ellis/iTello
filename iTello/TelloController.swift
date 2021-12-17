@@ -78,7 +78,7 @@ class TelloController: ObservableObject {
                     return
                 }
                 self.commandBroadcaster?.cancel()
-                
+                // Start listening for state updates
                 self.stateClientListener = UDPListener(on: Tello.StatePort)
                 self.stateClientResponseListener = self.stateClientListener?.$messageReceived.sink(receiveValue: { newStateData in
                     self.handleStateStream(data: newStateData)
@@ -86,7 +86,7 @@ class TelloController: ObservableObject {
             })
     }
     
-    func sendCommand(_ command: String) {
+    private func sendCommand(_ command: String) {
         guard let data = command.data(using: .utf8),
             let udpClient = commandClient else {
                 print("Error: cannot send command")
@@ -126,19 +126,19 @@ class TelloController: ObservableObject {
     }
     
     func takeOff() {
-        sendCommand(CMD.takeOff)
+        self.sendCommand(CMD.takeOff)
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
-        sendCommand(CMD.land)
+        self.sendCommand(CMD.land)
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {
-        sendCommand(CMD.off)
+        self.sendCommand(CMD.off)
     }
     /// See the FLIP enum for list of available flip directions
     func flip(_ direction: FLIP) {
-        sendCommand(direction.commandValue)
+        self.sendCommand(direction.commandValue)
     }
     
     /// Read data from the drone's response to a given command

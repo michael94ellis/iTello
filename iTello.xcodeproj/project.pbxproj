@@ -138,8 +138,8 @@
 		2FD0C74227696E51005DA615 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				2FB55D2C24854368000EF166 /* UDPClient.swift */,
 				2F3C36DD276CD09F005E4D57 /* Logger.swift */,
+				2FB55D2C24854368000EF166 /* UDPClient.swift */,
 				2F3C36D7276C3C16005E4D57 /* UDPListener.swift */,
 				2F399C9F2741F3B70016BE8B /* WiFiManager.swift */,
 			);

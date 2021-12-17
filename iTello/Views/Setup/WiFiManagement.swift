@@ -43,7 +43,7 @@ struct WiFiManagement: View {
                     .overlay(
                         HStack {
                             Image(systemName: "wifi")
-                            if WifiManager.shared.isConnectedToWiFi {
+                            if WifiManager.shared.isConnected {
                                 Text("Reconnect").foregroundColor(Color.darkEnd)
                             } else {
                                 Text("Connect").foregroundColor(Color.darkEnd)

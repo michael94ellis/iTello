@@ -13,12 +13,12 @@ import NetworkExtension
 
 final public class WifiManager: ObservableObject {
     
-    @Published public var isConnectedToWiFi: Bool = false
+    @Published public var isConnected: Bool = false
     @Published public var telloSSID: String?
     @Published public var connectionProgress: Double = 0
-    
+    /// Only one WiFi connection is permitted at a time so all access must be through the `static shared instance`
     static var shared = WifiManager()
-    
+    // Prevent anyone from instantiating their own `WifiManager`
     private init() { }
     
     deinit {
@@ -40,7 +40,7 @@ final public class WifiManager: ObservableObject {
             self.connectionProgress += 1
             if let errorString = self.handleConnectionError(error) {
                 self.connectionProgress = 0
-                self.isConnectedToWiFi = false
+                self.isConnected = false
                 completion(false, errorString)
             } else {
                 NEHotspotConfigurationManager.shared.getConfiguredSSIDs(completionHandler: {
@@ -48,7 +48,7 @@ final public class WifiManager: ObservableObject {
                     if let telloSSID = $0.first {
                         self.telloSSID = telloSSID
                         sleep(2) // Attempt to fix a problem where it seems like the connection is set up and the UDP Clients are created too early
-                        self.isConnectedToWiFi = true
+                        self.isConnected = true
                         completion(true, nil)
                     }
                 })
