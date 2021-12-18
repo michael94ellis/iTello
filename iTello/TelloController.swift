@@ -107,18 +107,26 @@ class TelloController: ObservableObject {
     }
     
     // MARK: - Tello Command Methods
-    
+    private var idleCounter = 0
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
-    func joystickMovementHandler() {
-        self.commandBroadcaster = Timer.publish(every: self.commandDelay, on: .main, in: .default)
+    func joystickMovementHandler() -> AnyCancellable? {
+        guard self.commandable else {
+            return nil
+        }
+        return Timer.publish(every: self.commandDelay, on: .main, in: .default)
             .autoconnect()
-            .sink(receiveValue: { timer in
-                // Concatenate the 4 int values and compare to 0 using bitwise operator AND(&)
-                if self.leftRight & self.forwardBack & self.upDown & self.yaw == 0 {
+            .sink(receiveValue: { _ in
+                if self.leftRight + self.forwardBack + self.upDown + self.yaw == 0 {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                     // Send an extra because UDP packets can be lost
                     self.sendCommand(self.moveCommand)
-                    self.engageIdleState()
+                    self.idleCounter += 1
+                    if self.idleCounter > 10 {
+                        self.engageIdleState()
+                        self.idleCounter = 0
+                    }
+                } else {
+                    self.idleCounter = 0
                 }
                 // Send 2 because UDP packets can be lost
                 self.sendCommand(self.moveCommand)
@@ -127,23 +135,31 @@ class TelloController: ObservableObject {
     
     /// Prevents controller from losing control of the tello device
     func engageIdleState() {
-        self.commandBroadcaster = Timer.publish(every: 4, on: .main, in: .default)
+        self.commandBroadcaster?.cancel()
+        self.commandBroadcaster = Timer.publish(every: 1, on: .main, in: .default)
             .autoconnect()
-            .sink(receiveValue: { timer in
+            .sink(receiveValue: { _ in
+                if self.leftRight + self.forwardBack + self.upDown + self.yaw != 0 {
+                    self.commandBroadcaster?.cancel()
+                    self.commandBroadcaster = self.joystickMovementHandler()
+                }
                 self.sendCommand(self.moveCommand)
             })
     }
     
     func takeOff() {
         self.sendCommand(CMD.takeOff)
+        self.commandBroadcaster = self.joystickMovementHandler()
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
         self.sendCommand(CMD.land)
+        self.commandBroadcaster?.cancel()
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {
         self.sendCommand(CMD.off)
+        self.commandBroadcaster?.cancel()
     }
     /// See the FLIP enum for list of available flip directions
     func flip(_ direction: FLIP) {
@@ -160,12 +176,8 @@ class TelloController: ObservableObject {
         print("Command Response: \(message)")
         guard self.commandable else {
             self.commandable = true
-            print("Commandable Mode Initiated")
-            return
-        }
-        guard self.streaming else {
             self.streaming = true
-            print("Video Stream Initiated")
+            print("Commandable Mode Initiated")
             return
         }
     }
@@ -180,5 +192,5 @@ class TelloController: ObservableObject {
         let stateValues = message.split(separator: ";")
         let batteryLevel = stateValues.first(where: { $0.hasPrefix("bat") })
         battery = batteryLevel?.split(separator: ":").last?.description ?? ""
-    }
+    }   
 }

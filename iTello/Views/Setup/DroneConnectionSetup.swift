@@ -27,14 +27,14 @@ struct DroneConnectionSetup: View {
                 SetupInstructions()
             }
             // TODO: Feature Idea - user can connect on their own
-//            Spacer()
-//            Button(action: { self.isDisplayed.toggle() }) {
-//                Text("Already Connected?")
-//                    .fontWeight(.semibold)
-//                    .foregroundColor(Color.darkEnd)
-//                    .frame(width: 200, height: 40)
-//            }
-//            .contentShape(Rectangle())
+            Spacer()
+            Button(action: { self.isDisplayed.toggle() }) {
+                Text("Already Connected?")
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color.darkEnd)
+                    .frame(width: 200, height: 40)
+            }
+            .contentShape(Rectangle())
             Spacer(minLength: 30)
         }
     }

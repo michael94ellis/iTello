@@ -14,13 +14,43 @@ struct DroneController: View {
     
     @ObservedObject var tello: TelloController
     @Binding var displaySettings: Bool
-    @StateObject var leftJoystick: JoystickMonitor = JoystickMonitor(width: 100)
-    @StateObject var rightJoystick: JoystickMonitor = JoystickMonitor(width: 100)
+    @StateObject var leftJoystick: JoystickMonitor = JoystickMonitor()
+    @StateObject var rightJoystick: JoystickMonitor = JoystickMonitor()
     @State var image: CGImage?
     
     var body: some View {
         GeometryReader { parent in
             ZStack {
+                // Joysticks
+                VStack {
+                    Spacer()
+                    HStack {
+                        Joystick(monitor: self.leftJoystick, width: 200)
+                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
+                            .onReceive(self.leftJoystick.$xyPoint, perform: { leftThumbPoint in
+                                self.tello.yaw = Int(leftThumbPoint.x)
+                                self.tello.upDown = Int(leftThumbPoint.y)
+                            })
+                        Spacer()
+                        Joystick(monitor: self.rightJoystick, width: 200)
+                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
+                            .onReceive(self.rightJoystick.$xyPoint, perform: { rightThumbPoint in
+                                self.tello.leftRight = Int(rightThumbPoint.x)
+                                self.tello.forwardBack = Int(rightThumbPoint.y)
+                            })
+                    }
+                    .padding(parent.size.width / 20)
+                    .edgesIgnoringSafeArea(.all)
+                }
+                VStack {
+                    if let image = image {
+                        Image(decorative: image, scale: 1.0, orientation: .up)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                }
+                .frame(width: parent.size.width * 0.65)
+                // Controls
                 VStack {
                     HStack {
                         Button(action: {
@@ -28,63 +58,41 @@ struct DroneController: View {
                         }) {
                             Image(systemName: "play.fill").resizable()
                         }
-                        .frame(width: parent.size.width / 15, height: parent.size.width / 15)
+                        .frame(width: 55, height: 55)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                         .contentShape(Rectangle())
-                        .padding(.leading,  parent.size.width / 20)
-                        Spacer(minLength: parent.size.width / 6)
+                        
+                        Spacer()
                         Button(action: {
                             self.displaySettings.toggle()
                         }, label: {
-                            Image(systemName: "gearshape")
-                            Text("Battery: \(self.tello.battery)%")
-                                .font(.body)
+                            HStack {
+                                Image(systemName: "gearshape")
+                                if self.tello.battery.isEmpty {
+                                    Text("Connection Settings")
+                                } else {
+                                    Text("Battery: \(self.tello.battery)%")
+                                        .font(.body)
+                                }
+                            }
+                            .padding(.horizontal, 8)
                         })
-                            .frame(height: parent.size.height / 20)
-                        Spacer(minLength: parent.size.width / 6)
+                            .frame(height: 35)
+                            .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray.opacity(0.1)))
+                        Spacer()
+                        
                         Button(action: {
                             self.tello.land()
                         }) {
                             Image(systemName: "pause.fill").resizable()
                         }
-                        .frame(width: parent.size.width / 15, height: parent.size.width / 15)
+                        .frame(width: 55, height: 55)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                         .contentShape(Rectangle())
-                        .padding(.trailing, parent.size.width / 20)
                     }
-                    .padding(.top, 30)
+                    .padding(30)
                     Spacer()
-                    HStack {
-                        Joystick(monitor: self.leftJoystick, width: parent.size.width / 4)
-                            .padding(.leading, parent.size.width / 10)
-                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-                            .onReceive(self.leftJoystick.$xyPoint, perform: { leftThumbPoint in
-                                self.tello.upDown = Int(leftThumbPoint.x) - Int(parent.size.width) / 2
-                                self.tello.yaw = Int(leftThumbPoint.y) - Int(parent.size.width) / 2
-                            })
-                        Spacer()
-                        Joystick(monitor: self.rightJoystick, width: parent.size.width / 4)
-                            .padding(.trailing, parent.size.width / 10)
-                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-                            .onReceive(self.rightJoystick.$xyPoint, perform: { rightThumbPoint in
-                                self.tello.leftRight = Int(rightThumbPoint.x) - Int(parent.size.width) / 2
-                                self.tello.forwardBack = Int(rightThumbPoint.y) - Int(parent.size.width) / 2
-                            })
-                    }
-                    .padding(.bottom, 20)
                 }
-                .frame(maxWidth: .infinity)
-                VStack {
-                    if let image = image {
-                        Image(decorative: image, scale: 1.0, orientation: .up)
-                            .frame(width: 300, height: 200)
-                            .border(Color.red)
-                    } else {
-                        Image(systemName: "plus")
-                            .frame(width: 300, height: 200)
-                    }
-                }
-                .border(Color.red)
             }
             .onReceive(self.tello.videoManager.$currentFrame.receive(on: DispatchQueue.main), perform: { newImage in
                 self.image = newImage

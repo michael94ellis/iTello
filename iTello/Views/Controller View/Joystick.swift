@@ -37,6 +37,7 @@ struct Joystick: View {
                             .fill(RadialGradient(colors: [.darkStart, .darkEnd], center: .center, startRadius: 1, endRadius: 115))
                             .overlay(Circle().stroke(Color.black)
                                         .shadow(color: Color.white, radius: 5))
+                            .opacity(0.1)
                         Image(systemName: "arrowtriangle.forward")
                             .offset(x: arrowOffset, y: 0)
                             .foregroundColor(.gray)
@@ -49,7 +50,6 @@ struct Joystick: View {
                         Image(systemName: "arrowtriangle.down")
                             .offset(x: 0, y: arrowOffset)
                             .foregroundColor(.gray)
-                        
                     }
                 },
                 foreground: {

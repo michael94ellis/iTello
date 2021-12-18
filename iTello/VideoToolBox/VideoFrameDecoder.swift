@@ -10,7 +10,8 @@ protocol VideoFrameDecoderDelegate {
 }
 
 class VideoFrameDecoder: ObservableObject {
-    // I hate this pattern but not as much as working in Obj-C
+    
+    // I dislike this pattern but not as much as working in Obj-C
     static var delegate: VideoFrameDecoderDelegate?
 
     private var formatDesc: CMVideoFormatDescription?

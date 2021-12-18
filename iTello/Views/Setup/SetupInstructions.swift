@@ -18,8 +18,8 @@ struct SetupInstructions: View {
     
     private let appStoreUrl: String = "itms-apps://apple.com/app/id839686104"
     
-    private let reviewButtonText: String = "Leave a review!"
-    private let dismissButtonText: String = "Go Back"
+    private let reviewButtonText: String = "Send Logs"
+    private let dismissButtonText: String = "Dismiss"
 
     private let instructions: [String] = [
         "1. Turn on your Tello and wait for a blinking yellow light.",
@@ -57,9 +57,10 @@ struct SetupInstructions: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        if let url = URL(string: self.appStoreUrl) {
-                            UIApplication.shared.open(url)
-                        }
+//                        if let url = URL(string: self.appStoreUrl) {
+//                            UIApplication.shared.open(url)
+//                        }
+//                        sendLogs()
                     }) {
                         Text(self.reviewButtonText)
                             .fontWeight(.semibold)
