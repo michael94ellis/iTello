@@ -5,9 +5,13 @@
 //  Created by Michael Ellis on 12/13/21.
 //  Copyright © 2021 Mellis. All rights reserved.
 //
+//  Tech Specs
+//  https://dl-cdn.ryzerobotics.com/downloads/Tello/Tello%20SDK%202.0%20User%20Guide.pdf
+
 
 import Combine
 import Foundation
+import SwiftUI
 
 protocol TelloAVDelegate: AnyObject {
     func sendCommand(_ command: String)
@@ -18,16 +22,16 @@ class TelloController: ObservableObject {
     /// Indicates whether or not this TelloController has it's UDP connections setup
     /// If the TelloController is not connected then when the app detects the Tello WiFi connection it will establish the UDP connections
     /// By UDP connection I mean Broadcasters and Receivers, it's not TCP after all
-    @Published public var connected = false
+    @Published private(set) public var connected = false
     /// Indicates if the Tello is in its Command mode, where it responds to commands via WiFi/UDP
-    @Published private(set) var commandable = false
+    @Published private(set) public var commandable = false
     /// Indicates if the Tello is sending Video Stream Data
-    @Published private(set) var streaming = false
+    @Published private(set) public var streaming = false
     /// Last known battery amount received from tello
-    @Published var battery = ""
+    @Published private(set) public var battery = ""
     /// Last known Signal to Noise ratio for WiFi received from tello
-    @Published var wifi = ""
-    
+    @Published private(set) public var wifi = ""
+
     /// This var will decrease as the initial command is sent multiple times
     private var commandRepeatMax = 4
     /// Prevents too many movement commands from being issued at once
@@ -44,17 +48,19 @@ class TelloController: ObservableObject {
     private var moveCommand: String { "rc \(self.leftRight) \(self.forwardBack) \(self.upDown) \(self.yaw)" }
     
     // UDP Connections
-    var commandClient: UDPClient?
-    var commandClientResponseListener: AnyCancellable?
-    var stateClientListener: UDPListener?
-    var stateClientResponseListener: AnyCancellable?
+    private var commandClient: UDPClient?
+    private var commandClientResponseListener: AnyCancellable?
+    private var stateListener: UDPListener?
+    private var stateResponseListener: AnyCancellable?
     /// Used for broadcasting movement commands to the drone, uses `commandDelay`
-    var commandBroadcaster: AnyCancellable?
+    private var commandBroadcaster: AnyCancellable?
+    
+    lazy var videoManager: VideoStreamManager = VideoStreamManager()
     
     func beginCommandMode() {
         self.connected = true
         self.commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
-        self.commandClientResponseListener = self.commandClient?.$messageReceived.sink(receiveValue: { newMessage in
+        self.commandClientResponseListener = self.commandClient?.$messageReceived.dropFirst().receive(on: DispatchQueue.main).sink(receiveValue: { newMessage in
             self.handleCommandResponse(for: newMessage)
         })
         self.initializeCommandMode()
@@ -73,16 +79,20 @@ class TelloController: ObservableObject {
         self.commandBroadcaster = Timer.publish(every: 2, on: .main, in: .default)
             .autoconnect()
             .sink(receiveValue: { _ in
-                guard self.commandable else {
+                guard self.commandable,
+                      self.streaming else {
                     self.sendCommand(CMD.on)
+                    self.sendCommand(CMD.streamOn)
                     return
                 }
                 self.commandBroadcaster?.cancel()
                 // Start listening for state updates
-                self.stateClientListener = UDPListener(on: Tello.StatePort)
-                self.stateClientResponseListener = self.stateClientListener?.$messageReceived.sink(receiveValue: { newStateData in
+                self.stateListener = UDPListener(on: Tello.StatePort)
+                self.stateResponseListener = self.stateListener?.$messageReceived.receive(on: DispatchQueue.main).sink(receiveValue: { newStateData in
                     self.handleStateStream(data: newStateData)
                 })
+                // Start video stream processing
+                self.videoManager.setup()
             })
     }
     
@@ -97,7 +107,6 @@ class TelloController: ObservableObject {
     }
     
     // MARK: - Tello Command Methods
-    
     
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func joystickMovementHandler() {
@@ -152,6 +161,11 @@ class TelloController: ObservableObject {
         guard self.commandable else {
             self.commandable = true
             print("Commandable Mode Initiated")
+            return
+        }
+        guard self.streaming else {
+            self.streaming = true
+            print("Video Stream Initiated")
             return
         }
     }

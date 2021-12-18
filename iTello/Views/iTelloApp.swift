@@ -21,18 +21,6 @@ struct iTelloApp: App {
     
     init() {
         FirebaseApp.configure()
-        // Listen for announcement of WiFi connection and then initiate command mode async
-        self.wifiConnectionListener = WifiManager.shared.$isConnected.sink(receiveValue: { [self] isConectedToWiFi in
-            print("WiFi Connection: \(isConectedToWiFi)")
-            if isConectedToWiFi,
-               !self.tello.connected {
-                self.tello.beginCommandMode()
-            }
-        })
-        // Listen for successful command mode initialization and then remove the setup popover
-        self.droneConnectionListener = self.tello.$commandable.sink(receiveValue: { [self] commandable in
-            self.displayConnectionSetup = commandable
-        })
     }
     
     var body: some Scene {
@@ -40,12 +28,24 @@ struct iTelloApp: App {
             GeometryReader { container in
                 ZStack(alignment: .center) {
                     DroneController(tello: self.tello, displaySettings: $displayConnectionSetup)
+                        .onReceive(WifiManager.shared.$isConnected, perform: { [self] isConectedToWiFi in
+                            print("WiFi Connection: \(isConectedToWiFi)")
+                            // Listen for announcement of WiFi connection and then initiate command mode async
+                            if isConectedToWiFi,
+                               !self.tello.connected {
+                                self.tello.beginCommandMode()
+                            }
+                        })
                     if displayConnectionSetup {
                         DroneConnectionSetup(isDisplayed: $displayConnectionSetup)
                             .frame(width: container.size.width, height: container.size.height)
                             .background(Rectangle()
                                             .fill(RadialGradient(colors: [.white, .gray, .darkStart, .darkEnd, .gray], center: .center, startRadius: 1, endRadius: 1600))
                                             .shadow(color: .darkEnd, radius: 3, x: 1, y: 2))
+                            .onReceive(self.tello.$commandable, perform: { [self] commandable in
+                                // Listen for successful command mode initialization and then remove the setup popover
+                                self.displayConnectionSetup = !commandable
+                            })
                     }
                 }
                 .background(.white)

@@ -14,12 +14,22 @@ class UDPListener: ObservableObject {
     
     var listener: NWListener?
     var connection: NWConnection?
-    var queue  = DispatchQueue.global(qos: .userInitiated)
+    var queue = DispatchQueue.global(qos: .userInitiated)
+    /// New data will be place in this variable to be received by observers
     @Published private(set) public var messageReceived: Data?
+    /// When there is an active listening NWConnection this will be `true`
     @Published private(set) public var isReady: Bool = false
+    /// Default value `true`, this will become false if the UDPListener ceases listening for any reason
+    @Published public var listening: Bool = true
     
+    /// A convenience init using Int instead of NWEndpoint.Port
+    convenience init(on port: Int) {
+        self.init(on: NWEndpoint.Port(integerLiteral: NWEndpoint.Port.IntegerLiteralType(port)))
+    }
+    /// Use this init or the one that takes an Int to start the listener
     init(on port: NWEndpoint.Port) {
         let params = NWParameters.udp
+        params.allowFastOpen = true
         self.listener = try? NWListener(using: params, on: port)
         self.listener?.stateUpdateHandler = { update in
             switch update {
@@ -27,6 +37,8 @@ class UDPListener: ObservableObject {
                 self.isReady = true
                 print("Listener connected to port \(port)")
             case .failed, .cancelled:
+                // Announce we are no longer able to listen
+                self.listening = false
                 self.isReady = false
                 print("Listener disconnected from port \(port)")
             default:
@@ -49,7 +61,10 @@ class UDPListener: ObservableObject {
                 self.receive()
             case .cancelled, .failed:
                 print("Listener failed to receive message - \(connection)")
+                // Cancel the listener, something went wrong
                 self.listener?.cancel()
+                // Announce we are no longer able to listen
+                self.listening = false
             default:
                 print("Listener waiting to receive message - \(connection)")
             }
@@ -59,7 +74,6 @@ class UDPListener: ObservableObject {
     
     func receive() {
         self.connection?.receiveMessage { data, context, isComplete, error in
-            print("Message Received: " + isComplete.description)
             if let unwrappedError = error {
                 print("Error: NWError received in \(#function) - \(unwrappedError)")
                 return
@@ -68,12 +82,15 @@ class UDPListener: ObservableObject {
                 print("Error: Received nil Data with context - \(String(describing: context))")
                 return
             }
-            print(String(data: data, encoding: .utf8) ?? "Sent Data")
             self.messageReceived = data
+            if self.listening {
+                self.receive()
+            }
         }
     }
     
-    func endConnection() {
+    func cancel() {
+        self.listening = false
         self.connection?.cancel()
     }
 }

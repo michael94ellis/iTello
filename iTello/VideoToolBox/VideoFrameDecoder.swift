@@ -9,16 +9,12 @@ protocol VideoFrameDecoderDelegate {
     func receivedDisplayableFrame(_ frame: CVPixelBuffer)
 }
 
-class VideoFrameDecoder {
-    
+class VideoFrameDecoder: ObservableObject {
+    // I hate this pattern but not as much as working in Obj-C
     static var delegate: VideoFrameDecoderDelegate?
-    
+
     private var formatDesc: CMVideoFormatDescription?
     private var decompressionSession: VTDecompressionSession?
-    
-    var isRecording: Bool = false {
-        didSet { isRecording ? beginRecording() : endRecording() }
-    }
     var outputURL: URL?
     var path = ""
     var videoFrameCounter: Int64 = 0
@@ -26,6 +22,10 @@ class VideoFrameDecoder {
     var videoWriter: AVAssetWriter?
     var videoWriterInput: AVAssetWriterInput?
     var videoWriterInputPixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+    
+    static let shared = VideoFrameDecoder()
+    
+    private init() { }
     
     func interpretRawFrameData(_ frameData: inout FrameData) {
         var naluType = frameData[4] & 0x1F
@@ -69,11 +69,11 @@ class VideoFrameDecoder {
             }
             
             guard let sps = sps,
-                let pps = pps,
-                createFormatDescription(sps: sps, pps: pps) else {
-                    print("===== ===== Failed to create formatDesc")
-                    return
-            }
+                  let pps = pps,
+                  createFormatDescription(sps: sps, pps: pps) else {
+                      print("===== ===== Failed to create formatDesc")
+                      return
+                  }
             guard createDecompressionSession() else {
                 print("===== ===== Failed to create decompressionSession")
                 return
@@ -121,7 +121,7 @@ class VideoFrameDecoder {
         
         // Return if there was an error
         if let buffer = sampleBuffer,
-            status == kCMBlockBufferNoErr {
+           status == kCMBlockBufferNoErr {
             let attachments: CFArray? = CMSampleBufferGetSampleAttachmentsArray(buffer, createIfNecessary: true)
             if let attachmentsArray = attachments {
                 let dic = unsafeBitCast(CFArrayGetValueAtIndex(attachmentsArray, 0), to: CFMutableDictionary.self)
@@ -199,116 +199,14 @@ class VideoFrameDecoder {
         presentationTimeStamp: CMTime,
         duration: CMTime) in
         guard let newImage = imageBuffer,
-            status == noErr else {
-                // -12909 is Bad Video Error, nothing too bad unless there's no feed
-                if status != -12909 {
-                    print("===== Failed to decompress. VT Error \(status)")
-                }
-                return
-        }
+              status == noErr else {
+                  // -12909 is Bad Video Error, nothing too bad unless there's no feed
+                  if status != -12909 {
+                      print("===== Failed to decompress. VT Error \(status)")
+                  }
+                  return
+              }
         // print("===== Image successfully decompressed")
-        delegate?.receivedDisplayableFrame(imageBuffer!)
-    }
-    
-    private func handlePhotoLibraryAuth() {
-        if PHPhotoLibrary.authorizationStatus() != .authorized {
-            PHPhotoLibrary.requestAuthorization { _ in }
-        }
-    }
-    
-    private func createFilePath() {
-        let fileManager = FileManager.default
-        let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
-        guard let documentDirectory: NSURL = urls.first as NSURL? else {
-            fatalError("documentDir Error")
-        }
-        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello-\(Date()).mp4") else {
-            return
-        }
-        outputURL = videoOutputURL
-        path = videoOutputURL.path
-        if FileManager.default.fileExists(atPath: path) {
-            do {
-                try FileManager.default.removeItem(atPath: path)
-            } catch {
-                print("Unable to delete file: \(error) : \(#function).")
-                return
-            }
-        }
-    }
-    
-    private func beginRecording() {
-        handlePhotoLibraryAuth()
-        createFilePath()
-        guard let videoOutputURL = outputURL,
-            let vidWriter = try? AVAssetWriter(outputURL: videoOutputURL, fileType: AVFileType.mp4),
-            formatDesc != nil else {
-            print("Warning: No Format For Video")
-            return
-        }
-        let vidInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: nil, sourceFormatHint: formatDesc)
-        guard vidWriter.canAdd(vidInput) else {
-            print("Error: Cant add video writer input")
-            return
-        }
-        
-        let sourcePixelBufferAttributes = [
-            kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_32ARGB),
-            kCVPixelBufferWidthKey as String: "1280",
-            kCVPixelBufferHeightKey as String: "720"] as [String : Any]
-        
-        videoWriterInputPixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(
-            assetWriterInput: vidInput,
-            sourcePixelBufferAttributes: sourcePixelBufferAttributes)
-        vidInput.expectsMediaDataInRealTime = true
-        vidWriter.add(vidInput)
-        guard vidWriter.startWriting() else {
-            print("Error: Cant write with vid writer")
-            return
-        }
-        vidWriter.startSession(atSourceTime: CMTimeMake(value: videoFrameCounter, timescale: videoFPS))
-        self.videoWriter = vidWriter
-        self.videoWriterInput = vidInput
-        print("Recording Video Stream")
-    }
-    
-    private func saveRecordingToPhotoLibrary() {
-        let fileManager = FileManager.default
-        guard fileManager.fileExists(atPath: self.path) else {
-            print("Error: The file: \(self.path) not exists, so cannot move this file camera roll")
-            return
-        }
-        print("The file: \(self.path) has been save into documents folder, and is ready to be moved to camera roll")
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: self.path))
-        }) { completed, error in
-            guard completed else {
-                print ("Error: Cannot move the video \(self.path) to camera roll, error: \(String(describing: error?.localizedDescription))")
-                return
-            }
-            print("Video \(self.path) has been moved to camera roll")
-        }
-    }
-    
-    private func endRecording() {
-        guard let vidInput = videoWriterInput, let vidWriter = videoWriter else {
-            print("Error, no video writer or video input")
-            return
-        }
-        vidInput.markAsFinished()
-        if !vidInput.isReadyForMoreMediaData {
-            vidWriter.finishWriting {
-                print("Finished Recording")
-                guard vidWriter.status == .completed else {
-                    print("Warning: The Video Writer status is not completed, status: \(vidWriter.status.rawValue)")
-                    print(vidWriter.error.debugDescription)
-                    return
-                }
-                print("VideoWriter status is completed")
-                self.saveRecordingToPhotoLibrary()
-                self.videoWriterInput = nil
-                self.videoWriter = nil
-            }
-        }
+        delegate?.receivedDisplayableFrame(newImage)
     }
 }

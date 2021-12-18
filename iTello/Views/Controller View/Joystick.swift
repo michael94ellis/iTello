@@ -12,17 +12,17 @@ import SwiftUIJoystick
 
 struct Joystick: View {
     
-    @State private var joystickMonitor: JoystickMonitor
+    @ObservedObject private var joystickMonitor: JoystickMonitor
     private var joyStickListener: AnyCancellable?
     private let dragDiameter: CGFloat
     private let radius: Int
     private let arrowOffset: CGFloat
     
-    init(width: CGFloat) {
+    init(monitor: JoystickMonitor, width: CGFloat) {
         self.dragDiameter = width
         self.radius = Int(width) / 2
         self.arrowOffset = (width / 2) - (width / 10)
-        self.joystickMonitor = JoystickMonitor(diameter: width)
+        self.joystickMonitor = monitor
     }
     
     var body: some View {

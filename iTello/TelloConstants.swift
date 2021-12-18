@@ -5,6 +5,8 @@
 //  Created by Michael Ellis on 5/21/20.
 //  Copyright © 2020 Mellis. All rights reserved.
 //
+//  Tech Specs
+//  https://dl-cdn.ryzerobotics.com/downloads/Tello/Tello%20SDK%202.0%20User%20Guide.pdf
 
 import Foundation
 import Network
