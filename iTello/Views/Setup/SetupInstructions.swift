@@ -60,7 +60,7 @@ struct SetupInstructions: View {
 //                        if let url = URL(string: self.appStoreUrl) {
 //                            UIApplication.shared.open(url)
 //                        }
-//                        sendLogs()
+                        sendLogs()
                     }) {
                         Text(self.reviewButtonText)
                             .fontWeight(.semibold)

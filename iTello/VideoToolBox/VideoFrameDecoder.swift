@@ -243,7 +243,12 @@ class VideoFrameDecoder: ObservableObject {
     
     private func handlePhotoLibraryAuth() {
         if PHPhotoLibrary.authorizationStatus() != .authorized {
-            PHPhotoLibrary.requestAuthorization { _ in }
+            PHPhotoLibrary.requestAuthorization { authStatus in
+                if authStatus != .authorized {
+                    print(authStatus)
+                    // TODO: Handle this error
+                }
+            }
         }
     }
     

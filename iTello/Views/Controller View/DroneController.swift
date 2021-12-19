@@ -54,8 +54,7 @@ struct DroneController: View {
                 VStack {
                     HStack {
                         Button(action: {
-//                            self.tello.takeOff()
-                            VideoFrameDecoder.shared.isRecording.toggle()
+                            self.tello.takeOff()
                         }) {
                             Image(systemName: "play.fill").resizable()
                         }
@@ -68,10 +67,8 @@ struct DroneController: View {
                         }) {
                             Image(systemName: "camera.fill").resizable()
                         }
-                        .frame(width: 30, height: 30)
-                        .shadow(color: .darkEnd, radius: 1, x: 1, y: 2)
+                        .frame(width: 30, height: 25)
                         .contentShape(Rectangle())
-                        
                         Spacer()
                         Button(action: {
                             self.displaySettings.toggle()
@@ -79,7 +76,7 @@ struct DroneController: View {
                             HStack {
                                 Image(systemName: "gearshape")
                                 if self.tello.battery.isEmpty {
-                                    Text("Connection Settings")
+                                    Text("Settings")
                                 } else {
                                     Text("Battery: \(self.tello.battery)%")
                                         .font(.body)
@@ -90,7 +87,14 @@ struct DroneController: View {
                             .frame(height: 35)
                             .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray.opacity(0.1)))
                         Spacer()
-                        
+                        Button(action: {
+                            VideoFrameDecoder.shared.isRecording.toggle()
+                        }) {
+                            Image(systemName: VideoFrameDecoder.shared.isRecording ? "video.slash.fill" : "video.fill").resizable()
+                        }
+                        .frame(width: 30, height: 25)
+                        .contentShape(Rectangle())
+                        Spacer()
                         Button(action: {
                             self.tello.land()
                         }) {

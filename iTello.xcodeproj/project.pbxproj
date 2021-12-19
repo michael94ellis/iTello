@@ -21,6 +21,8 @@
 		2F808039276E381600F78D5B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2F808038276E381600F78D5B /* FirebaseAnalytics */; };
 		2F80803B276E381600F78D5B /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2F80803A276E381600F78D5B /* FirebaseCrashlytics */; };
 		2F8C8D8024748F51006D40EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F8C8D7F24748F51006D40EC /* Assets.xcassets */; };
+		2FA58423276F81CC00DED90E /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2FA58422276F81CC00DED90E /* FirebaseFirestore */; };
+		2FA58425276F81D100DED90E /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 2FA58424276F81D100DED90E /* FirebaseDatabase */; };
 		2FB332A4276D526C002E9AF2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2FB332A3276D526C002E9AF2 /* README.md */; };
 		2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB55D2C24854368000EF166 /* UDPClient.swift */; };
 		2FDB56EB275E3B6B00DF04DF /* Color-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EA275E3B6B00DF04DF /* Color-Extension.swift */; };
@@ -65,9 +67,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FA58425276F81D100DED90E /* FirebaseDatabase in Frameworks */,
 				2F3C36D6276C380E005E4D57 /* SwiftUIJoystick in Frameworks */,
 				2F80803B276E381600F78D5B /* FirebaseCrashlytics in Frameworks */,
 				2FDE4B762474902B00B8C422 /* NetworkExtension.framework in Frameworks */,
+				2FA58423276F81CC00DED90E /* FirebaseFirestore in Frameworks */,
 				2F808039276E381600F78D5B /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -206,6 +210,8 @@
 				2F3C36D5276C380D005E4D57 /* SwiftUIJoystick */,
 				2F808038276E381600F78D5B /* FirebaseAnalytics */,
 				2F80803A276E381600F78D5B /* FirebaseCrashlytics */,
+				2FA58422276F81CC00DED90E /* FirebaseFirestore */,
+				2FA58424276F81D100DED90E /* FirebaseDatabase */,
 			);
 			productName = oTello;
 			productReference = 2F8C8D7324748F4E006D40EC /* iTello.app */;
@@ -533,6 +539,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F808037276E381600F78D5B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
+		};
+		2FA58422276F81CC00DED90E /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F808037276E381600F78D5B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		2FA58424276F81D100DED90E /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F808037276E381600F78D5B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
