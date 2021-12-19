@@ -22,7 +22,7 @@ struct SetupMenu: View {
                 .fontWeight(.semibold)
                 .font(.largeTitle)
             VStack {
-                WiFiManagement(displayPopover: $isDisplayed)
+                SetupWiFiButton(displayPopover: $isDisplayed)
                     .padding(.bottom, 15)
                 SetupInstructions()
             }
