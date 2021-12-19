@@ -1,5 +1,5 @@
 //
-//  WiFiManagement.swift
+//  SetupWiFiButton.swift
 //  iTello
 //
 //  Created by Michael Ellis on 12/10/21.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct WiFiManagement: View {
+struct SetupWiFiButton: View {
     
     @Binding var displayPopover: Bool
     @State var errorMessage: String?

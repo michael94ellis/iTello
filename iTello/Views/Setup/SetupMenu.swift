@@ -1,5 +1,5 @@
 //
-//  AppOnboarding.swift
+//  SetupMenu.swift
 //  iTello
 //
 //  Created by Michael Ellis on 12/7/21.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct DroneConnectionSetup: View {
+struct SetupMenu: View {
     
     @Binding var isDisplayed: Bool
     private let screenCoverage: CGFloat = 0.9

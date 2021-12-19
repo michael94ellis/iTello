@@ -54,12 +54,22 @@ struct DroneController: View {
                 VStack {
                     HStack {
                         Button(action: {
-                            self.tello.takeOff()
+//                            self.tello.takeOff()
+                            VideoFrameDecoder.shared.isRecording.toggle()
                         }) {
                             Image(systemName: "play.fill").resizable()
                         }
                         .frame(width: 55, height: 55)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
+                        .contentShape(Rectangle())
+                        Spacer()
+                        Button(action: {
+                            self.tello.videoManager.takePhoto(cgImage: self.image)
+                        }) {
+                            Image(systemName: "camera.fill").resizable()
+                        }
+                        .frame(width: 30, height: 30)
+                        .shadow(color: .darkEnd, radius: 1, x: 1, y: 2)
                         .contentShape(Rectangle())
                         
                         Spacer()
@@ -91,6 +101,10 @@ struct DroneController: View {
                         .contentShape(Rectangle())
                     }
                     .padding(30)
+                    HStack {
+                        
+                        Spacer()
+                    }
                     Spacer()
                 }
             }

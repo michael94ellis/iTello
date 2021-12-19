@@ -37,7 +37,7 @@ struct iTelloApp: App {
                             }
                         })
                     if displayConnectionSetup {
-                        DroneConnectionSetup(isDisplayed: $displayConnectionSetup)
+                        SetupMenu(isDisplayed: $displayConnectionSetup)
                             .frame(width: container.size.width, height: container.size.height)
                             .background(Rectangle()
                                             .fill(RadialGradient(colors: [.white, .gray, .darkStart, .darkEnd, .gray], center: .center, startRadius: 1, endRadius: 1600))

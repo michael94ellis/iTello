@@ -106,7 +106,8 @@ class TelloController: ObservableObject {
         udpClient.sendData(data)
     }
     
-    // MARK: - Tello Command Methods
+    // MARK: - Tello Commands
+    
     private var idleCounter = 0
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func joystickMovementHandler() -> AnyCancellable? {
@@ -166,6 +167,8 @@ class TelloController: ObservableObject {
         self.sendCommand(direction.commandValue)
     }
     
+    // MARK: - Handle Data Streams
+    
     /// Read data from the drone's response to a given command
     private func handleCommandResponse(for messageData: Data?) {
         guard let messageData = messageData,
@@ -192,5 +195,5 @@ class TelloController: ObservableObject {
         let stateValues = message.split(separator: ";")
         let batteryLevel = stateValues.first(where: { $0.hasPrefix("bat") })
         battery = batteryLevel?.split(separator: ":").last?.description ?? ""
-    }   
+    }
 }

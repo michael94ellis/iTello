@@ -8,8 +8,10 @@
 import Foundation
 import VideoToolbox
 import Combine
+import Photos
+import UIKit.UIImage
 
-class VideoStreamManager: VideoFrameDecoderDelegate, ObservableObject {
+class VideoStreamManager: NSObject, VideoFrameDecoderDelegate, ObservableObject {
     
     /// A reference to the image view where the video will be displayed
     private var videoListener: UDPListener?
@@ -19,7 +21,8 @@ class VideoStreamManager: VideoFrameDecoderDelegate, ObservableObject {
     @Published public var currentFrame: CGImage?
     
     /// If the video stream is enabled a third thread will listen/receive the video stream
-    init() {
+    override init() {
+        super.init()
         VideoFrameDecoder.delegate = self
     }
     
@@ -65,5 +68,24 @@ class VideoStreamManager: VideoFrameDecoderDelegate, ObservableObject {
             return
         }
         self.currentFrame = displayableImage
+    }
+    
+    
+    public func takePhoto(cgImage: CGImage?) {
+        guard let image = cgImage else {
+            print("Error: Can't take photo, no video frame is displayed")
+            return
+        }
+        let uiImage = UIImage(cgImage: image)
+        UIImageWriteToSavedPhotosAlbum(uiImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            print(error)
+        } else {
+            print("Your image has been saved to your photos.")
+        }
     }
 }

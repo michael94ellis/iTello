@@ -23,8 +23,41 @@ From then on all you need to do is turn on the drone and open the app to tap the
 
 Be careful, please do not fly over water, in windy conditions, or too close to your loved ones faces or you may lose your drone.
 
-### Watch a Demo
+### Watch a Demo on Youtube
 [![Demo of iTello](https://img.youtube.com/vi/eHCie0C5SJU/0.jpg)](https://www.youtube.com/watch?v=eHCie0C5SJU)
 
 ## Contribute
 If you're interested please reach out to know how to help or make a PR!
+
+
+
+# TODO:
+
+ * Design
+   - Better connection screen and "loading" animation for button
+   - Better looking joysticks
+   - Better controller screen
+     * Joysticks should be appropriate size for screen size
+     * What to do with Battery/State info? What about setting window popup buttons?
+     * Takeoff/land buttons need to be something other than play and pause 
+     * Add the flip buttons back
+       - Random Flip Button
+       - All 4 Flip Buttons
+ 
+ * Settings
+   - Add ability to toggle camera
+   - Adjutable joystick visibility
+   - Adjustable joystick origin point(fixed or where use taps first)
+   - Add ability to show flip buttons
+     * Random Flip Button
+     * All 4 Flip Buttons
+ 
+ * Videos/Pictures
+   - Figure out why Video asset won't save to camera roll
+   - Show the photos in a gallery in the app
+   - In App Purchase for the video saving feature
+ 
+ * Refactoring
+   - Cleanup Video Processing Code and make it testable
+   - Combine the UDP Listener and UDP Client
+   - (Low Priority) Cleanup SwiftUIJoystick Package

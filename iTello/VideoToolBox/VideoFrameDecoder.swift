@@ -16,6 +16,15 @@ class VideoFrameDecoder: ObservableObject {
 
     private var formatDesc: CMVideoFormatDescription?
     private var decompressionSession: VTDecompressionSession?
+    var isRecording: Bool = false {
+        didSet {
+            if self.isRecording {
+                self.beginRecording()
+            } else {
+                self.endRecording()
+            }
+        }
+    }
     var outputURL: URL?
     var path = ""
     var videoFrameCounter: Int64 = 0
@@ -209,5 +218,105 @@ class VideoFrameDecoder: ObservableObject {
               }
         // print("===== Image successfully decompressed")
         delegate?.receivedDisplayableFrame(newImage)
+    }    
+    
+    private func createFilePath() {
+        let fileManager = FileManager.default
+        let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
+        guard let documentDirectory: NSURL = urls.first as NSURL? else {
+            fatalError("documentDir Error")
+        }
+        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello-\(Date()).mov") else {
+            return
+        }
+        outputURL = videoOutputURL
+        path = videoOutputURL.path
+        if FileManager.default.fileExists(atPath: path) {
+            do {
+                try FileManager.default.removeItem(atPath: path)
+            } catch {
+                print("Unable to delete file: \(error) : \(#function).")
+                return
+            }
+        }
+    }
+    
+    private func handlePhotoLibraryAuth() {
+        if PHPhotoLibrary.authorizationStatus() != .authorized {
+            PHPhotoLibrary.requestAuthorization { _ in }
+        }
+    }
+    
+    private func beginRecording() {
+        self.handlePhotoLibraryAuth()
+        self.createFilePath()
+        guard let videoOutputURL = self.outputURL,
+              let vidWriter = try? AVAssetWriter(outputURL: videoOutputURL, fileType: AVFileType.mov),
+              self.formatDesc != nil else {
+                  print("Warning: No Format For Video")
+                  return
+              }
+        let vidInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: nil, sourceFormatHint: self.formatDesc)
+        guard vidWriter.canAdd(vidInput) else {
+            print("Error: Cant add video writer input")
+            return
+        }
+        
+        let sourcePixelBufferAttributes = [
+            kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_32ARGB),
+            kCVPixelBufferWidthKey as String: "1280",
+            kCVPixelBufferHeightKey as String: "720"] as [String : Any]
+        
+        self.videoWriterInputPixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(
+            assetWriterInput: vidInput,
+            sourcePixelBufferAttributes: sourcePixelBufferAttributes)
+        vidInput.expectsMediaDataInRealTime = true
+        vidWriter.add(vidInput)
+        guard vidWriter.startWriting() else {
+            print("Error: Cant write with vid writer")
+            return
+        }
+        vidWriter.startSession(atSourceTime: CMTimeMake(value: self.videoFrameCounter, timescale: self.videoFPS))
+        self.videoWriter = vidWriter
+        self.videoWriterInput = vidInput
+        print("Recording Video Stream")
+    }
+    
+    private func saveRecordingToPhotoLibrary() {
+        let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: self.path) else {
+            print("Error: The file: \(self.path) not exists, so cannot move this file camera roll")
+            return
+        }
+        print("The file: \(self.path) has been save into documents folder, and is ready to be moved to camera roll")
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: self.path))
+        }) { completed, error in
+            guard completed else {
+                print ("Error: Cannot move the video \(self.path) to camera roll, error: \(String(describing: error?.localizedDescription))")
+                return
+            }
+            print("Video \(self.path) has been moved to camera roll")
+        }
+    }
+    
+    private func endRecording() {
+        guard let vidInput = videoWriterInput, let vidWriter = videoWriter else {
+            print("Error, no video writer or video input")
+            return
+        }
+        vidInput.markAsFinished()
+        if !vidInput.isReadyForMoreMediaData {
+            vidWriter.finishWriting {
+                print("Finished Recording")
+                guard vidWriter.status == .completed else {
+                    print("Warning: The Video Writer status is not completed, status: \(vidWriter.status.rawValue)")
+                    print(vidWriter.error.debugDescription)
+                    return
+                }
+                print("VideoWriter status is completed")
+                self.saveRecordingToPhotoLibrary()
+            }
+        }
     }
 }
