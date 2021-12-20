@@ -73,6 +73,14 @@ struct DroneController: View {
                     .edgesIgnoringSafeArea(.all)
                 }
                 VStack {
+                    if let image = image {
+                        Image(decorative: image, scale: 1.0, orientation: .up)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                }
+                .frame(width: parent.size.width * 0.65)
+                VStack {
                     Spacer()
                     HStack {
                         Spacer()
@@ -87,14 +95,6 @@ struct DroneController: View {
                     }
                     .padding(.bottom, 20)
                 }
-                VStack {
-                    if let image = image {
-                        Image(decorative: image, scale: 1.0, orientation: .up)
-                            .resizable()
-                            .scaledToFit()
-                    }
-                }
-                .frame(width: parent.size.width * 0.65)
                 // Controls
                 VStack {
                     HStack {

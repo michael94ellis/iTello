@@ -21,20 +21,34 @@ struct AppSettings: View {
     @Binding var isDisplayed: Bool
     @Binding var setupConnectionDisplayed: Bool
     @State var alertDisplayed: Bool = false
-    
-    @State var randomFlips: Bool = false
-    @State var allFlips: Bool = false
+    @State var showCameraButton = true
+    @State var showRecordVideoButton = false
+    @State var showVideoStream = true
+    @State var showRandomFlipButton = true
+    @State var showAllFlipButtons = false
 
     var body: some View {
         VStack {
             Spacer()
             Section("Video") {
-                Toggle("Show Camera Button", isOn: TelloSettings.$showCameraButton)
+                Toggle("Show Camera Button", isOn: self.$showCameraButton)
                     .frame(width: 300, height: 30)
                     .foregroundColor(.white)
-                Toggle("Show Record Video Button", isOn: self.$alertDisplayed)
+                    .onChange(of: self.showCameraButton, perform: { newValue in
+                        TelloSettings.showCameraButton = newValue
+                    })
+                    .onAppear(perform: {
+                        self.showCameraButton = TelloSettings.showCameraButton
+                    })
+                Toggle("Show Record Video Button", isOn: self.$showRecordVideoButton)
                     .frame(width: 300, height: 30)
                     .foregroundColor(.white)
+                    .onChange(of: self.showRecordVideoButton, perform: { newValue in
+                        TelloSettings.showRecordVideoButton = newValue
+                    })
+                    .onAppear(perform: {
+                        self.showRecordVideoButton = TelloSettings.showRecordVideoButton
+                    })
                     .alert("Sorry, Feature Unavailable", isPresented: self.$alertDisplayed, actions: {
                         Button(action: {
                         }, label: {
@@ -46,29 +60,29 @@ struct AppSettings: View {
             }
             .foregroundColor(.white)
             Section("Flips") {
-                Toggle("Show Random Flip Button", isOn: self.$randomFlips)
+                Toggle("Show Random Flip Button", isOn: self.$showRandomFlipButton)
                     .foregroundColor(.white)
                     .frame(width: 300, height: 30)
-                    .onChange(of: self.randomFlips, perform: { displayRandomFlipsButton in
+                    .onChange(of: self.showRandomFlipButton, perform: { displayRandomFlipsButton in
                         TelloSettings.showRandomFlipButton = displayRandomFlipsButton
                         if TelloSettings.showAllFlipButtons && displayRandomFlipsButton {
-                            self.allFlips = false
+                            self.showAllFlipButtons = false
                         }
                     })
                     .onAppear(perform: {
-                        self.randomFlips = TelloSettings.showRandomFlipButton
+                        self.showRandomFlipButton = TelloSettings.showRandomFlipButton
                     })
-                Toggle("Show All Flip Buttons", isOn: self.$allFlips)
+                Toggle("Show All Flip Buttons", isOn: self.$showAllFlipButtons)
                     .foregroundColor(.white)
                     .frame(width: 300, height: 30)
-                    .onChange(of: self.allFlips, perform: { displayAllFlipButtons in
+                    .onChange(of: self.showAllFlipButtons, perform: { displayAllFlipButtons in
                         TelloSettings.showAllFlipButtons = displayAllFlipButtons
                         if TelloSettings.showRandomFlipButton && displayAllFlipButtons {
-                            self.randomFlips = false
+                            self.showRandomFlipButton = false
                         }
                     })
                     .onAppear(perform: {
-                        self.allFlips = TelloSettings.showAllFlipButtons
+                        self.showAllFlipButtons = TelloSettings.showAllFlipButtons
                     })
             }
             .foregroundColor(.white)

@@ -1,6 +1,4 @@
 # iTello, a Tello Drone Controller app for iOS
-## Written in SwiftUI
-Other Apple Frameworks Used: Network, NetworkExtension, Combine, VideoToolbox, and AVFoundation
 
 If you want to open your DJI Tello Drone controller app and get right to flying you found the right app.
 
@@ -40,17 +38,10 @@ If you're interested please reach out to know how to help or make a PR!
      * Joysticks should be appropriate size for screen size
      * What to do with Battery/State info? What about setting window popup buttons?
      * Takeoff/land buttons need to be something other than play and pause 
-     * Add the flip buttons back
-       - Random Flip Button
-       - All 4 Flip Buttons
  
  * Settings
-   - Add ability to toggle camera
-   - Adjutable joystick visibility
+   - Adjustable joystick visibility
    - Adjustable joystick origin point(fixed or where use taps first)
-   - Add ability to show flip buttons
-     * Random Flip Button
-     * All 4 Flip Buttons
  
  * Videos/Pictures
    - Figure out why Video asset won't save to camera roll

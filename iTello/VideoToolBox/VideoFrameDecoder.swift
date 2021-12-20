@@ -148,6 +148,15 @@ class VideoFrameDecoder: ObservableObject {
                     flags: [],
                     frameRefcon: &outputBuffer,
                     infoFlagsOut: &flagOut)
+                
+                
+                // Record CMSampleBuffer with AVFoundation
+                if isRecording,
+                    let vidInput = videoWriterInput,
+                    vidInput.isReadyForMoreMediaData {
+                    print("Appended: \(vidInput.append(buffer))")
+                    print(vidInput)
+                }
             }
         }
     }
@@ -240,7 +249,7 @@ class VideoFrameDecoder: ObservableObject {
             }
         }
     }
-    
+        
     private func handlePhotoLibraryAuth() {
         if PHPhotoLibrary.authorizationStatus() != .authorized {
             PHPhotoLibrary.requestAuthorization { authStatus in
@@ -261,7 +270,12 @@ class VideoFrameDecoder: ObservableObject {
                   print("Warning: No Format For Video")
                   return
               }
-        let vidInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: nil, sourceFormatHint: self.formatDesc)
+        
+        let videoSettings: [String: Any] = [
+            AVVideoCodecKey: AVVideoCodecType.h264,
+            AVVideoWidthKey: 1280,
+            AVVideoHeightKey: 720]
+        let vidInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoSettings, sourceFormatHint: self.formatDesc)
         guard vidWriter.canAdd(vidInput) else {
             print("Error: Cant add video writer input")
             return
@@ -320,6 +334,7 @@ class VideoFrameDecoder: ObservableObject {
                     return
                 }
                 print("VideoWriter status is completed")
+                print(vidInput)
                 self.saveRecordingToPhotoLibrary()
             }
         }

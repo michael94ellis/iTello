@@ -64,6 +64,13 @@ class TelloController: ObservableObject {
             self.handleCommandResponse(for: newMessage)
         })
         self.initializeCommandMode()
+        // Start listening for state updates
+        self.stateListener = UDPListener(on: Tello.StatePort)
+        self.stateResponseListener = self.stateListener?.$messageReceived.receive(on: DispatchQueue.main).sink(receiveValue: { newStateData in
+            self.handleStateStream(data: newStateData)
+        })
+        // Start video stream processing
+        self.videoManager.setup()
     }
     
     func exitCommandMode() {
@@ -86,13 +93,6 @@ class TelloController: ObservableObject {
                     return
                 }
                 self.commandBroadcaster?.cancel()
-                // Start listening for state updates
-                self.stateListener = UDPListener(on: Tello.StatePort)
-                self.stateResponseListener = self.stateListener?.$messageReceived.receive(on: DispatchQueue.main).sink(receiveValue: { newStateData in
-                    self.handleStateStream(data: newStateData)
-                })
-                // Start video stream processing
-                self.videoManager.setup()
             })
     }
     
