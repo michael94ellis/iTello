@@ -44,7 +44,11 @@ struct SetupWiFiButton: View {
                         HStack {
                             Image(systemName: "wifi")
                             if WifiManager.shared.isConnected {
-                                Text("Reconnect").foregroundColor(Color.darkEnd)
+                                if let ssid = WifiManager.shared.telloSSID {
+                                    Text(ssid).foregroundColor(Color.darkEnd)
+                                } else {
+                                    Text("Reconnect").foregroundColor(Color.darkEnd)
+                                }
                             } else {
                                 Text("Connect").foregroundColor(Color.darkEnd)
                             }

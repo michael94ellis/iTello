@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F2C4799276F83CF0080D616 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2C4798276F83CF0080D616 /* AppSettings.swift */; };
 		2F374E57274290DB0073E24A /* VideoStreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F374E56274290DB0073E24A /* VideoStreamManager.swift */; };
 		2F399CA22741F3B70016BE8B /* WiFiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399C9F2741F3B70016BE8B /* WiFiManager.swift */; };
 		2F399CD62741FDA30016BE8B /* iTelloApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399CD52741FDA30016BE8B /* iTelloApp.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2F2C4798276F83CF0080D616 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		2F374E56274290DB0073E24A /* VideoStreamManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoStreamManager.swift; sourceTree = "<group>"; };
 		2F399C9F2741F3B70016BE8B /* WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiManager.swift; sourceTree = "<group>"; };
 		2F399CD52741FDA30016BE8B /* iTelloApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iTelloApp.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				2F399CD52741FDA30016BE8B /* iTelloApp.swift */,
+				2F2C4798276F83CF0080D616 /* AppSettings.swift */,
 				2F78E5042766F4F40003A788 /* Setup */,
 				2F78E5052766F6A90003A788 /* Controller View */,
 			);
@@ -311,6 +314,7 @@
 				2FF52BFD2475F7CF00BB7DB5 /* VideoFrameDecoder.swift in Sources */,
 				2F78E507276780770003A788 /* TelloController.swift in Sources */,
 				2FE24F8D27638C6500CB0DE2 /* SetupInstructions.swift in Sources */,
+				2F2C4799276F83CF0080D616 /* AppSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

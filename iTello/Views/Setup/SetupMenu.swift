@@ -11,27 +11,41 @@ import SwiftUI
 struct SetupMenu: View {
     
     @Binding var isDisplayed: Bool
-    private let screenCoverage: CGFloat = 0.9
-    @FocusState var wifiTextFieldFocus: Bool
+    @Binding var displaySettings: Bool
     
     var body: some View {
         VStack(spacing: 25) {
             Spacer(minLength: 30)
             Text("iTello")
-                .foregroundColor(Color.black)
+                .foregroundColor(.white)
                 .fontWeight(.semibold)
                 .font(.largeTitle)
             VStack {
                 SetupWiFiButton(displayPopover: $isDisplayed)
                     .padding(.bottom, 15)
-                SetupInstructions()
+                HStack {
+                    SetupInstructions()
+                    Button(action: {
+                        self.isDisplayed.toggle()
+                        self.displaySettings.toggle()
+                    }, label: {
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.white)
+                            .shadow(color: .darkEnd, radius: 2, x: 1, y: 2)
+                            .frame(width: 200, height: 40)
+                            .overlay(
+                                HStack {
+                                    Image(systemName: "gear")
+                                    Text("Settings").foregroundColor(Color.darkEnd)
+                                })
+                    })
+                }
             }
             // TODO: Feature Idea - user can connect on their own
             Spacer()
             Button(action: { self.isDisplayed.toggle() }) {
                 Text("Already Connected?")
                     .fontWeight(.semibold)
-                    .foregroundColor(Color.darkEnd)
                     .frame(width: 200, height: 40)
             }
             .contentShape(Rectangle())

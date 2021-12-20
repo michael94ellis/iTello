@@ -15,6 +15,7 @@ struct iTelloApp: App {
     
     @StateObject private var tello: TelloController = TelloController()
     @State private var displayConnectionSetup: Bool = true
+    @State private var displayAppSettings: Bool = false
     
     var wifiConnectionListener: AnyCancellable?
     var droneConnectionListener: AnyCancellable?
@@ -25,30 +26,36 @@ struct iTelloApp: App {
     
     var body: some Scene {
         WindowGroup {
-            GeometryReader { container in
-                ZStack(alignment: .center) {
-                    DroneController(tello: self.tello, displaySettings: $displayConnectionSetup)
-                        .onReceive(WifiManager.shared.$isConnected, perform: { [self] isConectedToWiFi in
-                            print("WiFi Connection: \(isConectedToWiFi)")
-                            // Listen for announcement of WiFi connection and then initiate command mode async
-                            if isConectedToWiFi,
-                               !self.tello.connected {
-                                self.tello.beginCommandMode()
-                            }
+            ZStack(alignment: .center) {
+                DroneController(tello: self.tello, displaySettings: self.$displayAppSettings)
+                    .onReceive(WifiManager.shared.$isConnected, perform: { [self] isConectedToWiFi in
+                        print("WiFi Connection: \(isConectedToWiFi)")
+                        // Listen for announcement of WiFi connection and then initiate command mode async
+                        if isConectedToWiFi,
+                           !self.tello.connected {
+                            self.tello.beginCommandMode()
+                        }
+                    })
+                if displayConnectionSetup {
+                    SetupMenu(isDisplayed: self.$displayConnectionSetup, displaySettings: self.$displayAppSettings)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .edgesIgnoringSafeArea(.all)
+                        .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
+                        .onReceive(self.tello.$commandable, perform: { [self] commandable in
+                            // Listen for successful command mode initialization and then remove the setup popover
+                            self.displayConnectionSetup = !commandable
                         })
-                    if displayConnectionSetup {
-                        SetupMenu(isDisplayed: $displayConnectionSetup)
-                            .frame(width: container.size.width, height: container.size.height)
-                            .background(Rectangle()
-                                            .fill(RadialGradient(colors: [.white, .gray, .darkStart, .darkEnd, .gray], center: .center, startRadius: 1, endRadius: 1600))
-                                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2))
-                            .onReceive(self.tello.$commandable, perform: { [self] commandable in
-                                // Listen for successful command mode initialization and then remove the setup popover
-                                self.displayConnectionSetup = !commandable
-                            })
-                    }
                 }
-                .background(.white)
+                if displayAppSettings {
+                    AppSettings(isDisplayed: self.$displayAppSettings, setupConnectionDisplayed: self.$displayConnectionSetup)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .edgesIgnoringSafeArea(.all)
+                        .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
+                        .onReceive(self.tello.$commandable, perform: { [self] commandable in
+                            // Listen for successful command mode initialization and then remove the setup popover
+                            self.displayConnectionSetup = !commandable
+                        })
+                }
             }
         }
     }

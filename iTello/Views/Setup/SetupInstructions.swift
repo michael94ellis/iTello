@@ -56,26 +56,12 @@ struct SetupInstructions: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Button(action: {
-//                        if let url = URL(string: self.appStoreUrl) {
-//                            UIApplication.shared.open(url)
-//                        }
-                        sendLogs()
-                    }) {
-                        Text(self.reviewButtonText)
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(uiColor: .label))
-                    }
-                    .frame(width: 150, height: 40)
-                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray).shadow(color: Color(uiColor: .lightGray), radius: 1, x: 0, y: 0))
-                    .contentShape(Rectangle())
-                    Spacer()
                     Button(action: { self.displayPopover.toggle() }) {
                         Text(self.dismissButtonText)
                             .fontWeight(.semibold)
                             .foregroundColor(Color(uiColor: .label))
+                            .frame(width: 150, height: 40)
                     }
-                    .frame(width: 150, height: 40)
                     .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray))
                     .contentShape(Rectangle())
                     Spacer()

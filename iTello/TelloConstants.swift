@@ -25,34 +25,6 @@ struct Tello {
     static let VideoStreamPort: NWEndpoint.Port = 11111
 }
 
-/// Networking Information about the DJI Tello
-struct TelloSettings {
-    static private let isCameraOnKey = "CameraKey"
-    static var isCameraOn: Bool {
-        get { UserDefaults.standard.bool(forKey: isCameraOnKey) }
-        set { UserDefaults.standard.set(newValue, forKey: isCameraOnKey) }
-    }
-    static private let showCameraAndVideoButtons = "ShowCameraVideoKey"
-    static var isShowingRecordingButtons: Bool {
-        get { UserDefaults.standard.bool(forKey: showCameraAndVideoButtons) }
-        set { UserDefaults.standard.set(newValue, forKey: showCameraAndVideoButtons) }
-    }
-    static private let speedBoostKey = "SpeedBoostKey"
-    static var speedBoost: Int {
-        get { UserDefaults.standard.integer(forKey: speedBoostKey) }
-        set { UserDefaults.standard.set(newValue, forKey: speedBoostKey) }
-    }
-    static private let showFlipsKey = "ShowFlipsKey"
-    static var showFlips: Bool {
-        get { UserDefaults.standard.bool(forKey: showFlipsKey) }
-        set { UserDefaults.standard.set(newValue, forKey: showFlipsKey) }
-    }
-    static private let invertJoySticksKey = "InvertJoySticks"
-    static var invertedJoySticks: Bool {
-        get { UserDefaults.standard.bool(forKey: invertJoySticksKey) }
-        set { UserDefaults.standard.set(newValue, forKey: invertJoySticksKey) }
-    }
-}
 struct CMD {
     /// Tells the drone to enter Commandable Mode, where it will listen to these commands
     static let on = "command"

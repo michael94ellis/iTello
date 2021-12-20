@@ -14,6 +14,7 @@ struct DroneController: View {
     
     @ObservedObject var tello: TelloController
     @Binding var displaySettings: Bool
+    @State var alertDisplayed: Bool = false
     @StateObject var leftJoystick: JoystickMonitor = JoystickMonitor()
     @StateObject var rightJoystick: JoystickMonitor = JoystickMonitor()
     @State var image: CGImage?
@@ -53,6 +54,7 @@ struct DroneController: View {
                 // Controls
                 VStack {
                     HStack {
+                        // Take Off Button
                         Button(action: {
                             self.tello.takeOff()
                         }) {
@@ -62,14 +64,18 @@ struct DroneController: View {
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                         .contentShape(Rectangle())
                         Spacer()
-                        Button(action: {
-                            self.tello.videoManager.takePhoto(cgImage: self.image)
-                        }) {
-                            Image(systemName: "camera.fill").resizable()
+                        // Take Photo Button
+                        if TelloSettings.showCameraButton {
+                            Button(action: {
+                                self.tello.videoManager.takePhoto(cgImage: self.image)
+                            }) {
+                                Image(systemName: "camera.fill").resizable()
+                            }
+                            .frame(width: 30, height: 25)
+                            .contentShape(Rectangle())
+                            Spacer()
                         }
-                        .frame(width: 30, height: 25)
-                        .contentShape(Rectangle())
-                        Spacer()
+                        // Settings Button
                         Button(action: {
                             self.displaySettings.toggle()
                         }, label: {
@@ -87,14 +93,18 @@ struct DroneController: View {
                             .frame(height: 35)
                             .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray.opacity(0.1)))
                         Spacer()
-                        Button(action: {
-                            VideoFrameDecoder.shared.isRecording.toggle()
-                        }) {
-                            Image(systemName: VideoFrameDecoder.shared.isRecording ? "video.slash.fill" : "video.fill").resizable()
+                        // Record Video Button
+                        if TelloSettings.showRecordVideoButton {
+                            Button(action: {
+                                VideoFrameDecoder.shared.isRecording.toggle()
+                            }) {
+                                Image(systemName: VideoFrameDecoder.shared.isRecording ? "video.slash.fill" : "video.fill").resizable()
+                            }
+                            .frame(width: 30, height: 25)
+                            .contentShape(Rectangle())
+                            Spacer()
                         }
-                        .frame(width: 30, height: 25)
-                        .contentShape(Rectangle())
-                        Spacer()
+                        // Land Button
                         Button(action: {
                             self.tello.land()
                         }) {
@@ -105,10 +115,6 @@ struct DroneController: View {
                         .contentShape(Rectangle())
                     }
                     .padding(30)
-                    HStack {
-                        
-                        Spacer()
-                    }
                     Spacer()
                 }
             }
