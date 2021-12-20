@@ -55,6 +55,9 @@ struct AppSettings: View {
                             self.allFlips = false
                         }
                     })
+                    .onAppear(perform: {
+                        self.randomFlips = TelloSettings.showRandomFlipButton
+                    })
                 Toggle("Show All Flip Buttons", isOn: self.$allFlips)
                     .foregroundColor(.white)
                     .frame(width: 300, height: 30)
@@ -63,6 +66,9 @@ struct AppSettings: View {
                         if TelloSettings.showRandomFlipButton && displayAllFlipButtons {
                             self.randomFlips = false
                         }
+                    })
+                    .onAppear(perform: {
+                        self.allFlips = TelloSettings.showAllFlipButtons
                     })
             }
             .foregroundColor(.white)

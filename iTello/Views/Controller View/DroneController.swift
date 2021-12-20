@@ -19,6 +19,35 @@ struct DroneController: View {
     @StateObject var rightJoystick: JoystickMonitor = JoystickMonitor()
     @State var image: CGImage?
     
+    let flips = [FLIP.f, FLIP.l, FLIP.r, FLIP.b]
+    let flipImageNames = ["arrow.uturn.forward",
+                          "arrow.uturn.up",
+                          "arrow.uturn.down",
+                          "arrow.uturn.backward"]
+    @State var randomFlipImage: String = "arrow.uturn.forward"
+    
+    @ViewBuilder func flipButton(for flip: FLIP, imageName: String) -> some View {
+        Button(action: {
+            self.tello.flip(flip)
+        }) {
+            Image(systemName: imageName).resizable()
+                .frame(width: 30, height: 30, alignment: .bottom)
+        }
+        .contentShape(Rectangle())
+    }
+    
+    @ViewBuilder func randomFlipButton() -> some View {
+        Button(action: {
+            let newIndex = Int.random(in: 0...3)
+            self.randomFlipImage = self.flipImageNames[newIndex]
+            self.tello.flip(flips[newIndex])
+        }) {
+            Image(systemName: self.randomFlipImage).resizable()
+                .frame(width: 30, height: 30, alignment: .bottom)
+        }
+        .contentShape(Rectangle())
+    }
+    
     var body: some View {
         GeometryReader { parent in
             ZStack {
@@ -42,6 +71,22 @@ struct DroneController: View {
                     }
                     .padding(parent.size.width / 20)
                     .edgesIgnoringSafeArea(.all)
+                }
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        if TelloSettings.showAllFlipButtons {
+                            self.flipButton(for: self.flips[0], imageName: self.flipImageNames[0])
+                            self.flipButton(for: self.flips[1], imageName: self.flipImageNames[1])
+                            self.flipButton(for: self.flips[2], imageName: self.flipImageNames[2])
+                            self.flipButton(for: self.flips[3], imageName: self.flipImageNames[3])
+                        } else if TelloSettings.showRandomFlipButton {
+                            self.randomFlipButton()
+                        }
+                        Spacer()
+                    } 
+                    .padding(.bottom, 20)
                 }
                 VStack {
                     if let image = image {
