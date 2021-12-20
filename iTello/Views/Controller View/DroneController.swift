@@ -77,15 +77,14 @@ struct DroneController: View {
                     HStack {
                         Spacer()
                         if TelloSettings.showAllFlipButtons {
-                            self.flipButton(for: self.flips[0], imageName: self.flipImageNames[0])
-                            self.flipButton(for: self.flips[1], imageName: self.flipImageNames[1])
-                            self.flipButton(for: self.flips[2], imageName: self.flipImageNames[2])
-                            self.flipButton(for: self.flips[3], imageName: self.flipImageNames[3])
+                            ForEach(0...3, id: \.self) { index in
+                                self.flipButton(for: self.flips[index], imageName: self.flipImageNames[index])
+                            }
                         } else if TelloSettings.showRandomFlipButton {
                             self.randomFlipButton()
                         }
                         Spacer()
-                    } 
+                    }
                     .padding(.bottom, 20)
                 }
                 VStack {
