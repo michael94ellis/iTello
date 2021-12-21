@@ -17,7 +17,8 @@ class VideoFrameDecoder: ObservableObject {
     private var formatDesc: CMVideoFormatDescription?
     private var decompressionSession: VTDecompressionSession?
     private(set) var isRecording: Bool = false
-    private(set) public var recorder = VideoRecorder()
+    private var assetWriter: AVAssetWriter?
+    private var assetWriterVideoInput: AVAssetWriterInput?
     private var outputURL: URL?
     private var path = ""
     
@@ -27,9 +28,9 @@ class VideoFrameDecoder: ObservableObject {
     
     public func toggleRecordingStatus() {
         if self.isRecording {
-            self.recorder.stopRecordingVideo(completion: {
-                self.isRecording = false
+            self.stopRecording(completion: {
                 print($0)
+                self.isRecording = false
                 self.saveRecordingToPhotoLibrary()
             })
         } else {
@@ -37,7 +38,7 @@ class VideoFrameDecoder: ObservableObject {
         }
     }
     
-    // Video Recording Initializers
+    // MARK: - Video Recording
     
     private func createFilePath() {
         let fileManager = FileManager.default
@@ -45,7 +46,7 @@ class VideoFrameDecoder: ObservableObject {
         guard let documentDirectory: NSURL = urls.first as NSURL? else {
             fatalError("documentDir Error")
         }
-        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello-\(Date()).mov") else {
+        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello-\(Date()).mp4") else {
             return
         }
         outputURL = videoOutputURL
@@ -74,7 +75,7 @@ class VideoFrameDecoder: ObservableObject {
     private func saveRecordingToPhotoLibrary() {
         let fileManager = FileManager.default
         guard fileManager.fileExists(atPath: self.path) else {
-            print("Error: The file: \(self.path) not exists, so cannot move this file camera roll")
+            print("Error: The file: \(self.path) doesn't exist, so cannot move this file camera roll")
             return
         }
         print("The file: \(self.path) has been save into documents folder, and is ready to be moved to camera roll")
@@ -92,12 +93,12 @@ class VideoFrameDecoder: ObservableObject {
     private func beginRecording() {
         guard !self.isRecording else {
             print("Warning: Attempted to record video while already recording")
-                  return
+            return
         }
         self.handlePhotoLibraryAuth()
         self.createFilePath()
         guard let videoOutputURL = self.outputURL,
-              let vidWriter = try? AVAssetWriter(outputURL: videoOutputURL, fileType: AVFileType.mov),
+              let vidWriter = try? AVAssetWriter(outputURL: videoOutputURL, fileType: AVFileType.mp4),
               self.formatDesc != nil else {
                   print("Warning: No Format For Video")
                   return
@@ -107,24 +108,50 @@ class VideoFrameDecoder: ObservableObject {
             AVVideoWidthKey: 1280,
             AVVideoHeightKey: 720]
         
-        let sourcePixelBufferAttributes = [
-            kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_32ARGB),
-            kCVPixelBufferWidthKey as String: "1280",
-            kCVPixelBufferHeightKey as String: "720"] as [String : Any]
-        let vidInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoSettings, sourceFormatHint: self.formatDesc)
+        let vidInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: nil, sourceFormatHint: self.formatDesc)
         guard vidWriter.canAdd(vidInput) else {
             print("Error: Cant add video writer input")
             return
         }
         
-        let videoWriterInputPixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(
-            assetWriterInput: vidInput,
-            sourcePixelBufferAttributes: sourcePixelBufferAttributes)
         vidInput.expectsMediaDataInRealTime = true
         vidWriter.add(vidInput)
+        self.assetWriter = vidWriter
+        self.assetWriterVideoInput = vidInput
         print("Recording Video Stream")
         self.isRecording = true
-        self.recorder.startRecordingVideo(assetWriter: vidWriter, pixelBufferAdaptor: videoWriterInputPixelBufferAdaptor)
+    }
+    
+    
+    func recordVideo(sampleBuffer: CMSampleBuffer) {
+        guard isRecording,
+              let assetWriter = self.assetWriter else {
+                  return
+              }
+        
+        if assetWriter.status == .unknown {
+            assetWriter.startWriting()
+            assetWriter.startSession(atSourceTime: .zero)
+        } else if assetWriter.status == .writing {
+            if let input = assetWriterVideoInput,
+               input.isReadyForMoreMediaData {
+                print("Append: \(input.append(sampleBuffer))")
+            }
+        }
+    }
+    
+    func stopRecording(completion: @escaping (URL) -> Void) {
+        defer {
+            self.isRecording = false
+            self.assetWriter = nil
+        }
+        guard let assetWriter = self.assetWriter else {
+            print("Error: Cant stop recording no AVAssetWriter")
+            return
+        }
+        assetWriter.finishWriting {
+            completion(assetWriter.outputURL)
+        }
     }
     
     // MARK: - Video Decoding
@@ -243,7 +270,7 @@ class VideoFrameDecoder: ObservableObject {
                 
                 // Record CMSampleBuffer with `VideoRecorder`
                 if self.isRecording {
-                    self.recorder.processVideoSampleBuffer(buffer)
+                    self.recordVideo(sampleBuffer: buffer)
                 }
             }
         }
