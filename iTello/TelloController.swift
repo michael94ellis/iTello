@@ -50,8 +50,10 @@ class TelloController: ObservableObject {
     // UDP Connections
     private var commandClient: UDPClient?
     private var commandClientResponseListener: AnyCancellable?
+    private let commandQueue: DispatchQueue = DispatchQueue(label: "CommandStream", qos: .userInitiated)
     private var stateListener: UDPListener?
     private var stateResponseListener: AnyCancellable?
+    private let stateQueue: DispatchQueue = DispatchQueue(label: "StateStream", qos: .userInteractive)
     /// Used for broadcasting movement commands to the drone, uses `commandDelay`
     private var commandBroadcaster: AnyCancellable?
     
@@ -60,15 +62,22 @@ class TelloController: ObservableObject {
     func beginCommandMode() {
         self.connected = true
         self.commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
-        self.commandClientResponseListener = self.commandClient?.$messageReceived.dropFirst().receive(on: DispatchQueue.main).sink(receiveValue: { newMessage in
-            self.handleCommandResponse(for: newMessage)
-        })
+        self.commandClientResponseListener = self.commandClient?
+            .$messageReceived
+            .dropFirst()
+            .receive(on: self.commandQueue)
+            .sink(receiveValue: { newMessage in
+                self.handleCommandResponse(for: newMessage)
+            })
         self.initializeCommandMode()
         // Start listening for state updates
         self.stateListener = UDPListener(on: Tello.StatePort)
-        self.stateResponseListener = self.stateListener?.$messageReceived.receive(on: DispatchQueue.main).sink(receiveValue: { newStateData in
-            self.handleStateStream(data: newStateData)
-        })
+        self.stateResponseListener = self.stateListener?
+            .$messageReceived
+            .receive(on: self.stateQueue)
+            .sink(receiveValue: { newStateData in
+                self.handleStateStream(data: newStateData)
+            })
         // Start video stream processing
         self.videoManager.setup()
     }
@@ -85,6 +94,8 @@ class TelloController: ObservableObject {
     private func initializeCommandMode() {
         self.commandBroadcaster = Timer.publish(every: 2, on: .main, in: .default)
             .autoconnect()
+            // Because this is setting up the drone's commandable state we use the main thread
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: { _ in
                 guard self.commandable,
                       self.streaming else {
@@ -92,6 +103,7 @@ class TelloController: ObservableObject {
                     self.sendCommand(CMD.streamOn)
                     return
                 }
+                // Because this is using the main thread we cancel when we are done
                 self.commandBroadcaster?.cancel()
             })
     }
@@ -116,6 +128,7 @@ class TelloController: ObservableObject {
         }
         return Timer.publish(every: self.commandDelay, on: .main, in: .default)
             .autoconnect()
+            .receive(on: self.commandQueue)
             .sink(receiveValue: { _ in
                 if self.leftRight + self.forwardBack + self.upDown + self.yaw == 0 {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
@@ -178,8 +191,10 @@ class TelloController: ObservableObject {
         }
         print("Command Response: \(message)")
         guard self.commandable else {
-            self.commandable = true
-            self.streaming = true
+            DispatchQueue.main.async {
+                self.commandable = true
+                self.streaming = true
+            }
             print("Commandable Mode Initiated")
             return
         }
@@ -194,6 +209,8 @@ class TelloController: ObservableObject {
         }
         let stateValues = message.split(separator: ";")
         let batteryLevel = stateValues.first(where: { $0.hasPrefix("bat") })
-        battery = batteryLevel?.split(separator: ":").last?.description ?? ""
+        DispatchQueue.main.async {
+            self.battery = batteryLevel?.split(separator: ":").last?.description ?? ""
+        }
     }
 }

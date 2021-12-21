@@ -11,7 +11,6 @@ import SwiftUI
 class TelloSettings: ObservableObject {
     @AppStorage("showCameraButton") public static var showCameraButton: Bool = true
     @AppStorage("showRecordVideoButton") public static var showRecordVideoButton: Bool = false
-    @AppStorage("showVideoStream") public static var showVideoStream: Bool = true
     @AppStorage("showRandomFlipButton") public static var showRandomFlipButton: Bool = true
     @AppStorage("showAllFlipButtons") public static var showAllFlipButtons: Bool = false
 }
@@ -55,8 +54,6 @@ struct AppSettings: View {
                             Text("OK")
                         })
                     })
-//                Toggle("Show Video Stream", isOn: TelloSettings.$showVideoStream)
-//                    .frame(width: 300, height: 30)
             }
             .foregroundColor(.white)
             Section("Flips") {

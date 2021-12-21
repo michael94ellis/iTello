@@ -15,7 +15,7 @@ fileprivate var UserLogs: [String] = []
 fileprivate var firestore = Firestore.firestore()
 
 public func print(_ items: Any..., separator: String = " ", terminator: String = "\n") {
-    let output = items.map { "*\($0)" }.joined(separator: separator)
+    let output = items.map { "\($0)" }.joined(separator: separator)
     Swift.print(output, terminator: terminator)
     DispatchQueue.global(qos: .background).async {
         UserLogs.append(output)

@@ -41,7 +41,7 @@ struct iTelloApp: App {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .edgesIgnoringSafeArea(.all)
                         .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
-                        .onReceive(self.tello.$commandable, perform: { [self] commandable in
+                        .onReceive(self.tello.$commandable.receive(on: DispatchQueue.main), perform: { [self] commandable in
                             // Listen for successful command mode initialization and then remove the setup popover
                             self.displayConnectionSetup = !commandable
                         })
@@ -51,7 +51,7 @@ struct iTelloApp: App {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .edgesIgnoringSafeArea(.all)
                         .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
-                        .onReceive(self.tello.$commandable, perform: { [self] commandable in
+                        .onReceive(self.tello.$commandable.receive(on: DispatchQueue.main), perform: { [self] commandable in
                             // Listen for successful command mode initialization and then remove the setup popover
                             self.displayConnectionSetup = !commandable
                         })

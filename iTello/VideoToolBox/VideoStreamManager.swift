@@ -18,6 +18,7 @@ class VideoStreamManager: NSObject, VideoFrameDecoderDelegate, ObservableObject 
     private var videoResponseListener: AnyCancellable?
     /// Video data is stored and processed in this variable as it is received
     private var videoFrameBuffer: FrameData = []
+    private var videoQueue: DispatchQueue = DispatchQueue(label: "VideoStreamManagerQueue", qos: .userInteractive)
     @Published public var currentFrame: CGImage?
     
     /// If the video stream is enabled a third thread will listen/receive the video stream
@@ -35,7 +36,10 @@ class VideoStreamManager: NSObject, VideoFrameDecoderDelegate, ObservableObject 
     func setup() {
         // Start listening for video stream frames
         self.videoListener = UDPListener(on: Tello.VideoStreamPort)
-        self.videoResponseListener = self.videoListener?.$messageReceived.sink(receiveValue: { streamData in
+        self.videoResponseListener = self.videoListener?
+            .$messageReceived
+            .receive(on: self.videoQueue)
+            .sink(receiveValue: { streamData in
             // No frame is a full image, they must be received separately and assembled
             self.handleVideoStream(data: streamData)
         })

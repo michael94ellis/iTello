@@ -41,15 +41,21 @@ final public class WifiManager: ObservableObject {
             if let errorString = self.handleConnectionError(error) {
                 self.connectionProgress = 0
                 self.isConnected = false
-                completion(false, errorString)
+                DispatchQueue.main.async {
+                    completion(false, errorString)
+                }
             } else {
                 NEHotspotConfigurationManager.shared.getConfiguredSSIDs(completionHandler: {
                     self.connectionProgress += 1
                     if let telloSSID = $0.first {
+                        // Bugfix Attempt: seems like UDP Clients are created too early
+                        sleep(1)
+                        DispatchQueue.main.async {
                         self.telloSSID = telloSSID
-                        sleep(2) // Attempt to fix a problem where it seems like the connection is set up and the UDP Clients are created too early
-                        self.isConnected = true
-                        completion(true, nil)
+                            // Tells UDP Clients they can now communicate via wifi
+                            self.isConnected = true
+                            completion(true, nil)
+                        }
                     }
                 })
             }
