@@ -133,8 +133,6 @@ class VideoFrameDecoder: ObservableObject {
                     flags: [],
                     frameRefcon: &outputBuffer,
                     infoFlagsOut: &flagOut)
-                
-                self.videoRecorder.appendFrame(buffer)
             }
         }
     }
@@ -205,5 +203,19 @@ class VideoFrameDecoder: ObservableObject {
               }
         // print("===== Image successfully decompressed")
         delegate?.receivedDisplayableFrame(newImage)
+    }
+    
+    func startStop() {
+        if self.videoRecorder.isRecording {
+            self.videoRecorder.stopRecording() { successfulCompletion in
+                print("Stopped Recording: \(successfulCompletion)")
+            
+            }
+        } else if !self.videoRecorder.isRecording,
+                  let formatDesc = self.formatDesc {
+            self.videoRecorder.startRecording(using: formatDesc)
+        } else {
+            print("ERROR DURING RECORDING STATE CHANGE")
+        }
     }
 }
