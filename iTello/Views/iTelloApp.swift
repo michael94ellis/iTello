@@ -27,29 +27,35 @@ struct iTelloApp: App {
     
     init() {
         FirebaseApp.configure()
-        
-        PHPhotoLibrary.requestAuthorization { authStatus in
-            if authStatus != .authorized {
-                print(authStatus)
-                // TODO: Handle this error
-            }
-            
-            
-            let fileManager = FileManager.default
-            
-            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        Task {
             do {
-                let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
-                fileURLs.forEach {
-//                    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum($0.path)) {
-//                        UISaveVideoAtPathToSavedPhotosAlbum($0.path, nil, nil, nil)
-//                    }
-                    theurl = $0
-                }
+                try await TelloStoreViewModel.shared.fetchProducts()
             } catch {
-                print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+                print("Store Error")
             }
         }
+//        PHPhotoLibrary.requestAuthorization { authStatus in
+//            if authStatus != .authorized {
+//                print(authStatus)
+//                // TODO: Handle this error
+//            }
+//
+//
+//            let fileManager = FileManager.default
+//
+//            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//            do {
+//                let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+//                fileURLs.forEach {
+////                    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum($0.path)) {
+////                        UISaveVideoAtPathToSavedPhotosAlbum($0.path, nil, nil, nil)
+////                    }
+//                    theurl = $0
+//                }
+//            } catch {
+//                print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+//            }
+//        }
     }
     
     var body: some Scene {

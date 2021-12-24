@@ -67,6 +67,8 @@ struct AppSettings: View {
                             })
                             Button(action: {
                                 self.alertDisplayed = false
+                                print("Purchase Video Recording Begin")
+                                TelloStoreViewModel.shared.purchaseVideoRecording()
                             }, label: {
                                 Text("OK")
                             })
