@@ -140,9 +140,9 @@ struct DroneController: View {
                         // Record Video Button
                         if TelloSettings.showRecordVideoButton {
                             Button(action: {
-                                VideoFrameDecoder.shared.toggleRecordingStatus()
+                                VideoFrameDecoder.shared.videoRecorder.startStop()
                             }) {
-                                Image(systemName: VideoFrameDecoder.shared.isRecording ? "video.slash.fill" : "video.fill").resizable()
+                                Image(systemName: VideoFrameDecoder.shared.videoRecorder.isRecording ? "video.slash.fill" : "video.fill").resizable()
                             }
                             .frame(width: 30, height: 25)
                             .contentShape(Rectangle())

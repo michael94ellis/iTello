@@ -16,146 +16,12 @@ class VideoFrameDecoder: ObservableObject {
     
     private var formatDesc: CMVideoFormatDescription?
     private var decompressionSession: VTDecompressionSession?
-    private(set) var isRecording: Bool = false
-    private var assetWriter: AVAssetWriter?
-    private var assetWriterVideoInput: AVAssetWriterInput?
-    private var outputURL: URL?
-    private var path = ""
-    
+    private(set) public var videoRecorder: VideoRecorder = VideoRecorder()
+
     static let shared = VideoFrameDecoder()
     
     private init() { }
-    
-    public func toggleRecordingStatus() {
-        if self.isRecording {
-            self.stopRecording(completion: {
-                print($0)
-                self.isRecording = false
-                self.saveRecordingToPhotoLibrary()
-            })
-        } else {
-            self.beginRecording()
-        }
-    }
-    
-    // MARK: - Video Recording
-    
-    private func createFilePath() {
-        let fileManager = FileManager.default
-        let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
-        guard let documentDirectory: NSURL = urls.first as NSURL? else {
-            fatalError("documentDir Error")
-        }
-        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello-\(Date()).mp4") else {
-            return
-        }
-        outputURL = videoOutputURL
-        path = videoOutputURL.path
-        if FileManager.default.fileExists(atPath: path) {
-            do {
-                try FileManager.default.removeItem(atPath: path)
-            } catch {
-                print("Unable to delete file: \(error) : \(#function).")
-                return
-            }
-        }
-    }
-    
-    private func handlePhotoLibraryAuth() {
-        if PHPhotoLibrary.authorizationStatus() != .authorized {
-            PHPhotoLibrary.requestAuthorization { authStatus in
-                if authStatus != .authorized {
-                    print(authStatus)
-                    // TODO: Handle this error
-                }
-            }
-        }
-    }
-    
-    private func saveRecordingToPhotoLibrary() {
-        let fileManager = FileManager.default
-        guard fileManager.fileExists(atPath: self.path) else {
-            print("Error: The file: \(self.path) doesn't exist, so cannot move this file camera roll")
-            return
-        }
-        print("The file: \(self.path) has been save into documents folder, and is ready to be moved to camera roll")
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: self.path))
-        }) { completed, error in
-            guard completed else {
-                print ("Error: Cannot move the video \(self.path) to camera roll, error: \(String(describing: error?.localizedDescription))")
-                return
-            }
-            print("Video \(self.path) has been moved to camera roll")
-        }
-    }
-    
-    private func beginRecording() {
-        guard !self.isRecording else {
-            print("Warning: Attempted to record video while already recording")
-            return
-        }
-        self.handlePhotoLibraryAuth()
-        self.createFilePath()
-        guard let videoOutputURL = self.outputURL,
-              let vidWriter = try? AVAssetWriter(outputURL: videoOutputURL, fileType: AVFileType.mp4),
-              self.formatDesc != nil else {
-                  print("Warning: No Format For Video")
-                  return
-              }
-        let videoSettings: [String: Any] = [
-            AVVideoCodecKey: AVVideoCodecType.h264,
-            AVVideoWidthKey: 1280,
-            AVVideoHeightKey: 720]
         
-        let vidInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: nil, sourceFormatHint: self.formatDesc)
-        guard vidWriter.canAdd(vidInput) else {
-            print("Error: Cant add video writer input")
-            return
-        }
-        
-        vidInput.expectsMediaDataInRealTime = true
-        vidWriter.add(vidInput)
-        self.assetWriter = vidWriter
-        self.assetWriterVideoInput = vidInput
-        print("Recording Video Stream")
-        self.isRecording = true
-    }
-    
-    
-    func recordVideo(sampleBuffer: CMSampleBuffer) {
-        guard isRecording,
-              let assetWriter = self.assetWriter else {
-                  return
-              }
-        
-        if assetWriter.status == .unknown {
-            assetWriter.startWriting()
-            assetWriter.startSession(atSourceTime: .zero)
-        } else if assetWriter.status == .writing {
-            if let input = assetWriterVideoInput,
-               input.isReadyForMoreMediaData {
-                print("Append: \(input.append(sampleBuffer))")
-            }
-        }
-    }
-    
-    func stopRecording(completion: @escaping (URL) -> Void) {
-        defer {
-            self.isRecording = false
-            self.assetWriter = nil
-        }
-        guard let assetWriter = self.assetWriter else {
-            print("Error: Cant stop recording no AVAssetWriter")
-            return
-        }
-        assetWriter.finishWriting {
-            completion(assetWriter.outputURL)
-        }
-    }
-    
-    // MARK: - Video Decoding
-    
     public func interpretRawFrameData(_ frameData: inout FrameData) {
         var naluType = frameData[4] & 0x1F
         if naluType != 7 && formatDesc == nil { return }
@@ -268,10 +134,7 @@ class VideoFrameDecoder: ObservableObject {
                     frameRefcon: &outputBuffer,
                     infoFlagsOut: &flagOut)
                 
-                // Record CMSampleBuffer with `VideoRecorder`
-                if self.isRecording {
-                    self.recordVideo(sampleBuffer: buffer)
-                }
+                self.videoRecorder.appendFrame(buffer)
             }
         }
     }

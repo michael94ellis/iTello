@@ -100,6 +100,7 @@ class TelloController: ObservableObject {
                 guard self.commandable,
                       self.streaming else {
                     self.sendCommand(CMD.on)
+                    sleep(1)
                     self.sendCommand(CMD.streamOn)
                     return
                 }
