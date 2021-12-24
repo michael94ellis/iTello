@@ -18,10 +18,9 @@ class VideoRecorder: NSObject {
     
     var isRecording: Bool = false
     var frameDuration: CMTime = CMTimeMake(value: 0, timescale: 0)
-    var frameCounter = 0
+    var nextPTS: CMTime = CMTimeMake(value: 0, timescale: 0)
     var assetWriter: AVAssetWriter?
     var assetWriterInput: AVAssetWriterInput?
-    var videoAdaptor: AVAssetWriterInputPixelBufferAdaptor?
     private var path = ""
     private var outputURL: URL?
     
@@ -42,12 +41,21 @@ class VideoRecorder: NSObject {
         guard let documentDirectory: NSURL = urls.first as NSURL? else {
             fatalError("documentDir Error")
         }
-        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello-\(Date()).mp4") else {
+        let date = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello-\(month)-\(day)-\(year)_\(hour):\(minutes).mp4") else {
             print("Error: Cannot create Video Output file path URL")
             return
         }
         self.outputURL = videoOutputURL
         self.path = videoOutputURL.path
+        print("iTello Path: iTello-\(month)-\(day)-\(year)_\(hour):\(minutes).mp4")
+        print(self.path)
         if FileManager.default.fileExists(atPath: path) {
             do {
                 try FileManager.default.removeItem(atPath: path)
@@ -75,38 +83,69 @@ class VideoRecorder: NSObject {
         }
     }
     
-    func startRecording(using formatDescription: CMFormatDescription) {
+    func startStop() {
+        if !self.isRecording {
+            self.startRecording()
+        } else {
+            self.stopRecording() { successfulCompletion in
+                print("Stopped Recording: \(successfulCompletion)")
+            
+            }
+        }
+    }
+    
+    func startRecording() {
         guard !self.isRecording else {
             print("Warning: Cannot start recording because \(Self.self) is already recording")
             return
         }
         // 30 fps - 30 pictures will equal 1 second of video
-        self.frameDuration = CMTime(seconds: 1.0/30.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        self.frameDuration = CMTime(value: 1, timescale: 30)
         self.handlePhotoLibraryAuth()
         self.createFilePath()
-        
-        // set up the AVAssetWriter using the format description from the first sample buffer captured
-        guard self.setupAssetWriter(format: formatDescription) else {
-            print("Error: Failed to set up asset writer")
-            return
-        }
-        
         self.isRecording = true
+        print("Started Recording")
     }
     
-    func appendFrame(_ sampleBuffer: CVPixelBuffer) {
-        let currentPresentationTime = CMTime(value: CMTimeValue(frameCounter), timescale: 30)
-        frameCounter += 1
+    func appendFrame(_ sampleBuffer: CMSampleBuffer) {
+        // set up the AVAssetWriter using the format description from the first sample buffer captured
+        if self.assetWriter == nil {
+            let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
+            guard self.setupAssetWriter(format: formatDescription) else {
+                print("Error: Failed to set up asset writer")
+                return
+            }
+        }
+        guard self.assetWriter != nil else {
+            print("Error: Attempting to append frame when AVAssetWriter is nil")
+            return
+        }
+        // re-time the sample buffer - in this sample frameDuration is set to 30 fps
+        var timingInfo = CMSampleTimingInfo.invalid // a way to get an instance without providing 3 CMTime objects
+        timingInfo.duration = self.frameDuration
+        timingInfo.presentationTimeStamp = self.nextPTS
+        var sbufWithNewTiming: CMSampleBuffer? = nil
+        guard CMSampleBufferCreateCopyWithNewTiming(allocator: kCFAllocatorDefault,
+                                                    sampleBuffer: sampleBuffer,
+                                                    sampleTimingEntryCount: 1, // numSampleTimingEntries
+                                                    sampleTimingArray: &timingInfo,
+                                                    sampleBufferOut: &sbufWithNewTiming) == 0 else {
+            print("Error: Failed to set up CMSampleBufferCreateCopyWithNewTiming")
+            return
+        }
         
         // append the sample buffer if we can and increment presentation time
         guard let writeInput = self.assetWriterInput, writeInput.isReadyForMoreMediaData else {
             print("Error: AVAssetWriterInput not ready for more media")
             return
         }
+        guard let sbufWithNewTiming = sbufWithNewTiming else {
+            print("Error: sbufWithNewTiming is nil")
+            return
+        }
         
-        if let videoAdaptor = videoAdaptor,
-            videoAdaptor.append(sampleBuffer, withPresentationTime: currentPresentationTime) {
-            print("Added frame")
+        if writeInput.append(sbufWithNewTiming) {
+            self.nextPTS = CMTimeAdd(self.frameDuration, self.nextPTS)
         } else {
             let error = self.assetWriter!.error
             NSLog("Error: Failed to append sample buffer: \(error!)")
@@ -121,20 +160,10 @@ class VideoRecorder: NSObject {
                   print("Error: No Format For Video to create AVAssetWriter")
                   return false
               }
-        self.assetWriter = videoWriter
         // initialize a new input for video to receive sample buffers for writing
         // passing nil for outputSettings instructs the input to pass through appended samples, doing no processing before they are written
         let videoInput = AVAssetWriterInput(mediaType: .video, outputSettings: nil, sourceFormatHint: formatDescription)
         videoInput.expectsMediaDataInRealTime = true
-        
-        let pixelBufferAttributes = [
-            kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
-            kCVPixelBufferWidthKey: "1280",
-            kCVPixelBufferHeightKey: "720"] as [String: Any]
-        self.videoAdaptor = AVAssetWriterInputPixelBufferAdaptor(
-            assetWriterInput: videoInput,
-            sourcePixelBufferAttributes: pixelBufferAttributes)
-        
         guard videoWriter.canAdd(videoInput) else {
             print("Error: Cannot add Video Input to AVAssetWriter")
             return false

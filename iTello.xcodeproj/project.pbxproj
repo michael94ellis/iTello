@@ -26,7 +26,6 @@
 		2FA58425276F81D100DED90E /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 2FA58424276F81D100DED90E /* FirebaseDatabase */; };
 		2FB332A4276D526C002E9AF2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2FB332A3276D526C002E9AF2 /* README.md */; };
 		2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB55D2C24854368000EF166 /* UDPClient.swift */; };
-		2FD676A02773992600324A01 /* StopnGo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6769F2773992600324A01 /* StopnGo.swift */; };
 		2FDB56EB275E3B6B00DF04DF /* Color-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EA275E3B6B00DF04DF /* Color-Extension.swift */; };
 		2FDB56ED275E3B9C00DF04DF /* LinearGradient-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */; };
 		2FDB56EF275EDF9200DF04DF /* Joystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EE275EDF9200DF04DF /* Joystick.swift */; };
@@ -56,7 +55,6 @@
 		2F8C8D8424748F51006D40EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FB332A3276D526C002E9AF2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2FB55D2C24854368000EF166 /* UDPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPClient.swift; sourceTree = "<group>"; };
-		2FD6769F2773992600324A01 /* StopnGo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopnGo.swift; sourceTree = "<group>"; };
 		2FDB56EA275E3B6B00DF04DF /* Color-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color-Extension.swift"; sourceTree = "<group>"; };
 		2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LinearGradient-Extension.swift"; sourceTree = "<group>"; };
 		2FDB56EE275EDF9200DF04DF /* Joystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Joystick.swift; sourceTree = "<group>"; };
@@ -115,7 +113,6 @@
 		2F8C8D6A24748F4E006D40EC = {
 			isa = PBXGroup;
 			children = (
-				2FD6769F2773992600324A01 /* StopnGo.swift */,
 				2FB332A3276D526C002E9AF2 /* README.md */,
 				2F8C8D7524748F4E006D40EC /* iTello */,
 				2F8C8D7424748F4E006D40EC /* Products */,
@@ -322,7 +319,6 @@
 				2FE24F8D27638C6500CB0DE2 /* SetupInstructions.swift in Sources */,
 				2F2C4799276F83CF0080D616 /* AppSettings.swift in Sources */,
 				2FEAA554277248A600C25388 /* VideoRecorder.swift in Sources */,
-				2FD676A02773992600324A01 /* StopnGo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
