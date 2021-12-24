@@ -23,7 +23,7 @@
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>iTello uses the Tello to take photos</string>
+	<string>iTello will save Photos and Videos to the photo gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>iTello saves Photos and Videos to your photo library</string>
 	<key>UIFileSharingEnabled</key>

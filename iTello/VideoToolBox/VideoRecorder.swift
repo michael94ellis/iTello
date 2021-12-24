@@ -185,6 +185,7 @@ class VideoRecorder: NSObject {
             completion(false)
             return
         }
+        self.isRecording = false
         guard assetWriter != nil else {
             print("Error: AssetWriter is nil")
             completion(false)
@@ -193,9 +194,8 @@ class VideoRecorder: NSObject {
         assetWriterInput!.markAsFinished()
         assetWriter?.finishWriting() {
             self.assetWriterInput = nil
-            self.saveRecordingToPhotoLibrary()
             self.assetWriter = nil
-            self.isRecording = false
+            self.saveRecordingToPhotoLibrary()
             completion(true)
         }
     }

@@ -9,6 +9,7 @@
 import SwiftUI
 import SwiftUIJoystick
 import Combine
+import AVKit
 
 struct DroneController: View {
     
@@ -77,6 +78,9 @@ struct DroneController: View {
                         Image(decorative: image, scale: 1.0, orientation: .up)
                             .resizable()
                             .scaledToFit()
+                    } else if let theurl = theurl {
+                        VideoPlayer(player: AVPlayer(url: theurl))
+                            .frame(height: 100)
                     }
                 }
                 .frame(width: parent.size.width * 0.65)
@@ -104,7 +108,7 @@ struct DroneController: View {
                         }) {
                             Image(systemName: "play.fill").resizable()
                         }
-                        .frame(width: 55, height: 55)
+                        .frame(width: 45, height: 45)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                         .contentShape(Rectangle())
                         Spacer()
@@ -115,7 +119,7 @@ struct DroneController: View {
                             }) {
                                 Image(systemName: "camera.fill").resizable()
                             }
-                            .frame(width: 30, height: 25)
+                            .frame(width: 40, height: 30)
                             .contentShape(Rectangle())
                             Spacer()
                         }
@@ -134,8 +138,8 @@ struct DroneController: View {
                             }
                             .padding(.horizontal, 8)
                         })
-                            .frame(height: 35)
-                            .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray.opacity(0.1)))
+                            .frame(height: 45)
+                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.1)))
                         Spacer()
                         // Record Video Button
                         if TelloSettings.showRecordVideoButton {
@@ -144,7 +148,7 @@ struct DroneController: View {
                             }) {
                                 Image(systemName: VideoFrameDecoder.shared.videoRecorder.isRecording ? "video.slash.fill" : "video.fill").resizable()
                             }
-                            .frame(width: 30, height: 25)
+                            .frame(width: 40, height: 30)
                             .contentShape(Rectangle())
                             Spacer()
                         }
@@ -154,7 +158,7 @@ struct DroneController: View {
                         }) {
                             Image(systemName: "pause.fill").resizable()
                         }
-                        .frame(width: 55, height: 55)
+                        .frame(width: 45, height: 45)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                         .contentShape(Rectangle())
                     }

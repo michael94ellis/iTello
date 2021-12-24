@@ -17,6 +17,7 @@ protocol TelloAVDelegate: AnyObject {
     func sendCommand(_ command: String)
 }
 
+@MainActor
 class TelloController: ObservableObject {
     
     /// Indicates whether or not this TelloController has it's UDP connections setup
@@ -185,17 +186,15 @@ class TelloController: ObservableObject {
     
     /// Read data from the drone's response to a given command
     private func handleCommandResponse(for messageData: Data?) {
-        guard let messageData = messageData,
-              let message = String(data: messageData, encoding: .utf8), message == "ok" else {
-                  print("Error with command client response - \(String(describing: messageData))")
+        guard let messageData = messageData, let message = String(data: messageData, encoding: .utf8), message == "ok" else {
+            print("Error with command client response - \(String(describing: messageData))")
             return
         }
         print("Command Response: \(message)")
         guard self.commandable else {
-            DispatchQueue.main.async {
-                self.commandable = true
-                self.streaming = true
-            }
+            self.commandable = true
+            usleep(500000) //will sleep for 0.5 seconds
+            self.streaming = true
             print("Commandable Mode Initiated")
             return
         }

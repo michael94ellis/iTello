@@ -13,7 +13,7 @@ struct SetupInstructions: View {
     @State var displayPopover: Bool = false
     @State var errorMessage: String?
     
-    private let openButtonText: String = "Don't know what to do?"
+    private let openButtonText: String = "Need Help?"
     private let title: String = "How To Connect Your Tello"
     
     private let appStoreUrl: String = "itms-apps://apple.com/app/id839686104"
@@ -32,12 +32,10 @@ struct SetupInstructions: View {
         Button(action: { self.displayPopover.toggle() }) {
             Text(self.openButtonText)
                 .fontWeight(.semibold)
-                .foregroundColor(Color(UIColor.label))
+                .foregroundColor(Color.white)
+                .frame(width: 300, height: 80)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
         }
-        .frame(width: 200, height: 40)
-        .background(RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(UIColor.lightGray))
-                        .shadow(color: Color.darkStart, radius: 2, x: 1, y: 2))
         .contentShape(Rectangle())
         .popover(isPresented: self.$displayPopover, content: {
             VStack(alignment: .center) {
@@ -52,17 +50,28 @@ struct SetupInstructions: View {
                 }
                 .padding(.horizontal, 25)
                 .padding(.vertical, 20)
-                .background(RoundedRectangle(cornerRadius: 4).fill(Color(uiColor: .tertiarySystemBackground)))
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color(uiColor: .tertiarySystemBackground)))
                 Spacer()
                 HStack {
+                    Spacer()
+                    Button(action: {
+                        sendLogs()
+                    }) {
+                        Text("Problems? Tap To Send Logs")
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.white)
+                            .frame(width: 200, height: 60)
+                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
+                    }
+                    .contentShape(Rectangle())
                     Spacer()
                     Button(action: { self.displayPopover.toggle() }) {
                         Text(self.dismissButtonText)
                             .fontWeight(.semibold)
                             .foregroundColor(Color(uiColor: .label))
-                            .frame(width: 150, height: 40)
+                            .frame(width: 200, height: 60)
                     }
-                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.gray))
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
                     .contentShape(Rectangle())
                     Spacer()
                 }
