@@ -9,6 +9,7 @@
 import Foundation
 import FirebaseFirestore
 import Firebase
+import SwiftUI
 
 // No one likes globals but this is a hobby project so logging isn't a strong requirement
 fileprivate var UserLogs: [String] = []
@@ -30,5 +31,20 @@ public func sendLogs() {
         } else {
             print("User Logs Submitted Successfully")
         }
+    }
+}
+
+struct SendLogsButton: View {
+    var body: some View {
+        Button(action: {
+            sendLogs()
+        }) {
+            Text("Problems? Tap To Send Logs")
+                .fontWeight(.semibold)
+                .foregroundColor(Color.white)
+                .frame(width: 200, height: 60)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
+        }
+        .contentShape(Rectangle())
     }
 }

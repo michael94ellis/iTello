@@ -59,7 +59,12 @@ struct AppSettings: View {
                         .onAppear(perform: {
                             self.showRecordVideoButton = TelloSettings.showRecordVideoButton
                         })
-                        .alert("$orry", isPresented: self.$alertDisplayed, actions: {
+                        .alert("Purchase Video Recording?", isPresented: self.$alertDisplayed, actions: {
+                            Button(action: {
+                                self.alertDisplayed = false
+                            }, label: {
+                                Text("Maybe Later")
+                            })
                             Button(action: {
                                 self.alertDisplayed = false
                             }, label: {
@@ -102,14 +107,14 @@ struct AppSettings: View {
                 .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
                 VStack {
                     SetupInstructions()
-                    Divider().frame(width: 300).padding(.horizontal)
                     Button(action: {
                         self.isDisplayed = false
                     }) {
                         Text("Done")
                             .fontWeight(.semibold)
                             .foregroundColor(Color.white)
-                            .frame(width: 300, height: 80)
+                            .frame(width: 300)
+                            .frame(maxHeight: .infinity)
                             .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
                     }
                     .contentShape(Rectangle())

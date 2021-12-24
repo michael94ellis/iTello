@@ -25,7 +25,8 @@ struct SetupInstructions: View {
         "1. Turn on your Tello and wait for a blinking yellow light.",
         "2. Press the Connect button, the app will find your Tello!",
         "3. When the controller is displayed you can begin flying",
-        "4. Leave a great review on the App Store!"
+        "4. Photos will save to your photo gallery",
+        "5. Leave a great review on the App Store!"
     ]
     
     var body: some View {
@@ -54,16 +55,7 @@ struct SetupInstructions: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Button(action: {
-                        sendLogs()
-                    }) {
-                        Text("Problems? Tap To Send Logs")
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.white)
-                            .frame(width: 200, height: 60)
-                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
-                    }
-                    .contentShape(Rectangle())
+                    SendLogsButton()
                     Spacer()
                     Button(action: { self.displayPopover.toggle() }) {
                         Text(self.dismissButtonText)

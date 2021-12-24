@@ -33,6 +33,7 @@ struct DroneController: View {
         }) {
             Image(systemName: imageName).resizable()
                 .frame(width: 30, height: 30, alignment: .bottom)
+                .foregroundColor(.telloBlue)
         }
         .contentShape(Rectangle())
     }
@@ -45,6 +46,7 @@ struct DroneController: View {
         }) {
             Image(systemName: self.randomFlipImage).resizable()
                 .frame(width: 30, height: 30, alignment: .bottom)
+                .foregroundColor(.telloBlue)
         }
         .contentShape(Rectangle())
     }
@@ -107,6 +109,7 @@ struct DroneController: View {
                             self.tello.takeOff()
                         }) {
                             Image(systemName: "play.fill").resizable()
+                                .foregroundColor(.telloBlue)
                         }
                         .frame(width: 45, height: 45)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
@@ -118,6 +121,7 @@ struct DroneController: View {
                                 self.tello.videoManager.takePhoto(cgImage: self.image)
                             }) {
                                 Image(systemName: "camera.fill").resizable()
+                                    .foregroundColor(.telloBlue)
                             }
                             .frame(width: 40, height: 30)
                             .contentShape(Rectangle())
@@ -125,15 +129,18 @@ struct DroneController: View {
                         }
                         // Settings Button
                         Button(action: {
-                            self.displaySettings.toggle()
+                            self.displaySettings = true
                         }, label: {
                             HStack {
                                 Image(systemName: "gearshape")
+                                    .foregroundColor(.telloBlue)
                                 if self.tello.battery.isEmpty {
                                     Text("Settings")
+                                        .foregroundColor(.telloBlue)
                                 } else {
                                     Text("Battery: \(self.tello.battery)%")
                                         .font(.body)
+                                        .foregroundColor(.telloBlue)
                                 }
                             }
                             .padding(.horizontal, 8)
@@ -147,6 +154,7 @@ struct DroneController: View {
                                 VideoFrameDecoder.shared.videoRecorder.startStop()
                             }) {
                                 Image(systemName: VideoFrameDecoder.shared.videoRecorder.isRecording ? "video.slash.fill" : "video.fill").resizable()
+                                    .foregroundColor(.telloBlue)
                             }
                             .frame(width: 40, height: 30)
                             .contentShape(Rectangle())
@@ -157,6 +165,7 @@ struct DroneController: View {
                             self.tello.land()
                         }) {
                             Image(systemName: "pause.fill").resizable()
+                                .foregroundColor(.telloBlue)
                         }
                         .frame(width: 45, height: 45)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)

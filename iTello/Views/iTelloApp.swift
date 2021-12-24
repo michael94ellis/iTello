@@ -18,7 +18,7 @@ public var theurl: URL?
 struct iTelloApp: App {
     
     @StateObject private var tello: TelloController = TelloController()
-    @State private var displayAppSettings: Bool = true
+    @State private var displayAppSettings: Bool = false
     
     var wifiConnectionListener: AnyCancellable?
     var droneConnectionListener: AnyCancellable?
