@@ -36,7 +36,7 @@ class TelloController: ObservableObject {
     /// This var will decrease as the initial command is sent multiple times
     private var commandRepeatMax = 4
     /// Prevents too many movement commands from being issued at once
-    private let commandDelay = 0.1
+    private var commandDelay = 0.1
     /// Speed of Up/Down movement
     var upDown = 0
     /// Speed of Left/Right movement
@@ -122,7 +122,6 @@ class TelloController: ObservableObject {
     
     // MARK: - Tello Commands
     
-    private var idleCounter = 0
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func joystickMovementHandler() -> AnyCancellable? {
         guard self.commandable else {
@@ -136,29 +135,9 @@ class TelloController: ObservableObject {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                     // Send an extra because UDP packets can be lost
                     self.sendCommand(self.moveCommand)
-                    self.idleCounter += 1
-                    if self.idleCounter > 10 {
-                        self.engageIdleState()
-                        self.idleCounter = 0
-                    }
-                } else {
-                    self.idleCounter = 0
+                    self.commandDelay = 1
                 }
-                // Send 2 because UDP packets can be lost
-                self.sendCommand(self.moveCommand)
-            })
-    }
-    
-    /// Prevents controller from losing control of the tello device
-    func engageIdleState() {
-        self.commandBroadcaster?.cancel()
-        self.commandBroadcaster = Timer.publish(every: 1, on: .main, in: .default)
-            .autoconnect()
-            .sink(receiveValue: { _ in
-                if self.leftRight + self.forwardBack + self.upDown + self.yaw != 0 {
-                    self.commandBroadcaster?.cancel()
-                    self.commandBroadcaster = self.joystickMovementHandler()
-                }
+                self.commandDelay = 0.1
                 self.sendCommand(self.moveCommand)
             })
     }

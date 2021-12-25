@@ -103,7 +103,6 @@ class VideoRecorder: NSObject {
         self.frameDuration = CMTime(value: 1, timescale: 30)
         self.handlePhotoLibraryAuth()
         self.createFilePath()
-        self.isRecording = true
         print("Started Recording")
     }
     
@@ -113,8 +112,10 @@ class VideoRecorder: NSObject {
             let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
             guard self.setupAssetWriter(format: formatDescription) else {
                 print("Error: Failed to set up asset writer")
+                self.assetWriter = nil
                 return
             }
+            self.isRecording = true
         }
         guard self.assetWriter != nil else {
             print("Error: Attempting to append frame when AVAssetWriter is nil")

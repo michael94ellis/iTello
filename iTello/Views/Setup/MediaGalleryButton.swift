@@ -21,6 +21,9 @@ struct MediaGalleryButton: View {
                 .frame(height: 25)
             Spacer()
             Button(action: {
+                if TelloStoreViewModel.shared.hasPurchasedRecording {
+                    
+                }
                 self.displayUnavailableMessage.toggle()
                 self.alertDisplayed = true
             }, label: {
@@ -30,13 +33,20 @@ struct MediaGalleryButton: View {
                     .frame(width: 300, height: 100)
                     .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
             })
-            .alert("$orry", isPresented: self.$alertDisplayed, actions: {
-                Button(action: {
-                    self.alertDisplayed = false
-                }, label: {
-                    Text("OK")
+                .alert("Purchase Video Recording?", isPresented: self.$alertDisplayed, actions: {
+                    Button(action: {
+                        self.alertDisplayed = false
+                    }, label: {
+                        Text("Maybe Later")
+                    })
+                    Button(action: {
+                        self.alertDisplayed = false
+                        print("Purchase Video Recording Begin")
+                        TelloStoreViewModel.shared.purchaseVideoRecording()
+                    }, label: {
+                        Text("OK")
+                    })
                 })
-            })
             Spacer()
         }
     }

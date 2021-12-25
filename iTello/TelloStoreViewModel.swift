@@ -7,15 +7,39 @@
 //
 
 import StoreKit
+import SwiftUI
+import Combine
 
-class TelloStoreViewModel {
+/// Currently only supports video recording IAP
+class TelloStoreViewModel: ObservableObject {
     
+    @Published private(set) public var hasPurchasedRecording: Bool = false
     private var products: [Product] = []
-    private var transactions: [Transaction] = []
+    
+    private let videoRecordingProductId = "videorecording1"
+    private var purchaseUpdateListener: Task<Void, Never>?
+
     
     static let shared = TelloStoreViewModel()
     
-    private init() { }
+    private init() {
+        self.updatePurchases()
+        self.purchaseUpdateListener = Task {
+            await self.listenForTransactions()
+        }
+    }
+    
+    func updatePurchases() {
+        Task {
+            for await result in Transaction.currentEntitlements {
+                guard case .verified(let transaction) = result else { continue }
+                if transaction.productID == videoRecordingProductId {
+                    print("Purchased Video Recording!")
+                    Self.shared.hasPurchasedRecording = transaction.revocationDate == nil
+                }
+            }
+        }
+    }
     
     func fetchProducts() async throws {
         self.products = try await Product.products(for: ["videorecording1"])
@@ -23,11 +47,11 @@ class TelloStoreViewModel {
     
     func purchaseVideoRecording() {
         Task {
-            self.transactions.append(try await self.purchase(self.products.first!))
+            try await self.purchase(self.products.first!)
         }
     }
     
-    func purchase(_ product: Product) async throws -> Transaction {
+    func purchase(_ product: Product) async throws {
         let result = try await product.purchase()
         
         switch result {
@@ -37,18 +61,33 @@ class TelloStoreViewModel {
                 print("Verifying")
                 await transaction.finish()
                 print("Verified")
-                return transaction
+                Self.shared.hasPurchasedRecording = transaction.revocationDate == nil
             case .unverified(_, _):
                 print("Unverified")
             }
         case .userCancelled:
-            throw Product.PurchaseError.purchaseNotAllowed
             print("User Cancelled Purchase")
+            throw Product.PurchaseError.purchaseNotAllowed
         case .pending:
             print("Purchase Pending Try Again")
         @unknown default:
             assertionFailure("Unexpected result")
         }
         throw Product.PurchaseError.productUnavailable
+    }
+    
+    deinit {
+        // Cancel the update handling task when you deinitialize the class.
+        self.purchaseUpdateListener?.cancel()
+    }
+
+    private func listenForTransactions() async {
+        for await verificationResult in Transaction.updates {
+            guard case .verified(let transaction) = verificationResult else {
+                // Ignore unverified transactions.
+                continue
+            }
+            Self.shared.hasPurchasedRecording = transaction.revocationDate == nil
+        }
     }
 }

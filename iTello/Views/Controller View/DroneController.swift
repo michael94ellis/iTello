@@ -13,6 +13,11 @@ import AVKit
 
 struct DroneController: View {
     
+    @AppStorage("showRandomFlipButton") public var showRandomFlipButton: Bool = true
+    @AppStorage("showAllFlipButtons") public var showAllFlipButtons: Bool = false
+    @AppStorage("showCameraButton") public var showCameraButton: Bool = true
+    @AppStorage("showRecordVideoButton") public var showRecordVideoButton: Bool = false
+    
     @ObservedObject var tello: TelloController
     @Binding var displaySettings: Bool
     @State var alertDisplayed: Bool = false
@@ -90,11 +95,11 @@ struct DroneController: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        if TelloSettings.showAllFlipButtons {
+                        if self.showAllFlipButtons {
                             ForEach(0...3, id: \.self) { index in
                                 self.flipButton(for: self.flips[index], imageName: self.flipImageNames[index])
                             }
-                        } else if TelloSettings.showRandomFlipButton {
+                        } else if self.showRandomFlipButton {
                             self.randomFlipButton()
                         }
                         Spacer()
@@ -116,7 +121,7 @@ struct DroneController: View {
                         .contentShape(Rectangle())
                         Spacer()
                         // Take Photo Button
-                        if TelloSettings.showCameraButton {
+                        if self.showCameraButton {
                             Button(action: {
                                 self.tello.videoManager.takePhoto(cgImage: self.image)
                             }) {
@@ -149,7 +154,7 @@ struct DroneController: View {
                             .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.1)))
                         Spacer()
                         // Record Video Button
-                        if TelloSettings.showRecordVideoButton {
+                        if self.showRecordVideoButton {
                             Button(action: {
                                 VideoFrameDecoder.shared.videoRecorder.startStop()
                             }) {
