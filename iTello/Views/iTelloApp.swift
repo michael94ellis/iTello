@@ -41,14 +41,10 @@ struct iTelloApp: App {
                         }
                     })
                 if displayAppSettings {
-                    AppSettings(telloStore: self.telloStore, isDisplayed: self.$displayAppSettings)
+                    AppSettings(telloStore: self.telloStore, tello: self.tello, isDisplayed: self.$displayAppSettings)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .edgesIgnoringSafeArea(.all)
                         .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
-                        .onReceive(self.tello.$commandable.receive(on: DispatchQueue.main), perform: { [self] commandable in
-                            // Listen for successful command mode initialization and then remove the setup popover
-                            self.displayAppSettings = !commandable
-                        })
                 }
             }
             .environmentObject(telloStore)

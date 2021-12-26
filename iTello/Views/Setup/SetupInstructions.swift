@@ -58,10 +58,10 @@ struct SetupInstructions: View {
                     Button(action: { self.displayPopover.toggle() }) {
                         Text(self.dismissButtonText)
                             .fontWeight(.semibold)
-                            .foregroundColor(Color(uiColor: .label))
+                            .foregroundColor(Color.white)
                             .frame(width: 200, height: 60)
                     }
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(uiColor: .gray)))
                     .contentShape(Rectangle())
                     Spacer()
                 }

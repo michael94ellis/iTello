@@ -39,7 +39,8 @@ class VideoRecorder: NSObject {
         let fileManager = FileManager.default
         let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
         guard let documentDirectory: NSURL = urls.first as NSURL? else {
-            fatalError("documentDir Error")
+            print("Error: documentDir Error")
+            return
         }
         let date = Date()
         let calendar = Calendar.current
@@ -147,20 +148,28 @@ class VideoRecorder: NSObject {
         
         if writeInput.append(sbufWithNewTiming) {
             self.nextPTS = CMTimeAdd(self.frameDuration, self.nextPTS)
+        } else if let error = self.assetWriter?.error {
+            logError(error)
+            print("Error: Failed to append sample buffer: \(error)")
         } else {
-            let error = self.assetWriter!.error
-            NSLog("Error: Failed to append sample buffer: \(error!)")
+            print("Error: Something went horribly wrong with appending sample buffer")
         }
         // release the copy of the sample buffer we made
     }
     
     private func setupAssetWriter(format formatDescription: CMFormatDescription?) -> Bool {
         // allocate the writer object with our output file URL
-        guard let videoWriter = try? AVAssetWriter(outputURL: URL(fileURLWithPath: self.path), fileType: AVFileType.mp4),
-              formatDescription != nil else {
-                  print("Error: No Format For Video to create AVAssetWriter")
-                  return false
-              }
+        let videoWriter: AVAssetWriter
+        do {
+            videoWriter = try AVAssetWriter(outputURL: URL(fileURLWithPath: self.path), fileType: AVFileType.mp4)
+        } catch {
+            logError(error)
+            return false
+        }
+        guard formatDescription != nil else {
+            print("Error: No Format For Video to create AVAssetWriter")
+            return false
+        }
         // initialize a new input for video to receive sample buffers for writing
         // passing nil for outputSettings instructs the input to pass through appended samples, doing no processing before they are written
         let videoInput = AVAssetWriterInput(mediaType: .video, outputSettings: nil, sourceFormatHint: formatDescription)

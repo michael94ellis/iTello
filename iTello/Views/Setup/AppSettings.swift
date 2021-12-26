@@ -15,6 +15,7 @@ struct AppSettings: View {
     @AppStorage("showRecordVideoButton") public var showRecordVideoButton: Bool = false
     
     // Free Features
+    @ObservedObject var tello: TelloController
     @Binding var isDisplayed: Bool
     @State var alertDisplayed: Bool = false
     @AppStorage("showCameraButton") public var cameraButton: Bool = true
@@ -40,11 +41,6 @@ struct AppSettings: View {
                 .frame(height: 30)
                 .foregroundColor(.white)
                 .padding(.horizontal)
-                .onReceive(self.telloStore.$hasPurchasedRecording, perform: { newValue in
-                    print(self.telloStore.hasPurchasedRecording)
-                    self.showRecordVideoButton = self.telloStore.hasPurchasedRecording
-                    print(self.showRecordVideoButton)
-                })
                 .alert("Purchase Video Recording?", isPresented: self.$alertDisplayed, actions: {
                     Button(action: {
                         self.alertDisplayed = false
@@ -68,6 +64,10 @@ struct AppSettings: View {
                 MediaGalleryButton()
                 SetupWiFiButton(displayPopover: self.$isDisplayed)
                     .frame(width: 300)
+                    .onReceive(self.tello.$commandable.receive(on: DispatchQueue.main), perform: { [self] commandable in
+                        // Listen for successful command mode initialization and then remove the setup popover
+                        self.isDisplayed = !commandable
+                    })
             }
             .frame(width: 600, height: 125)
             HStack {
@@ -118,7 +118,7 @@ struct AppSettings: View {
                 }
                 .foregroundColor(.white)
                 .frame(width: 300, height: 178)
-                .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.telloBlue))
                 VStack {
                     SetupInstructions()
                     Button(action: {

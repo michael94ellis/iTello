@@ -33,26 +33,33 @@ struct SetupWiFiButton: View {
             }, label: {
                 if WifiManager.shared.connectionProgress != 0 {
                     ProgressView("Connecting...", value: self.progress, total: 4)
+                        .progressViewStyle(CircularProgressViewStyle(tint: .telloBlue))
                         .onReceive(WifiManager.shared.$connectionProgress, perform: { progressValue in
                             self.progress = progressValue
                         })
                         .frame(width: 220, height: 40)
                 } else {
                     HStack {
-                        Image(systemName: "wifi")
+                        Image(systemName: "wifi").foregroundColor(Color.telloDark)
                         if WifiManager.shared.isConnected {
                             if let ssid = WifiManager.shared.telloSSID {
-                                Text(ssid).foregroundColor(Color.darkEnd)
+                                Text(ssid)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color.telloDark)
                             } else {
-                                Text("Reconnect").foregroundColor(Color.white)
+                                Text("Reconnect")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color.telloDark)
                             }
                         } else {
-                            Text("Connect").foregroundColor(Color.white)
+                            Text("Connect")
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.telloDark)
                         }
                     }
                     .foregroundColor(Color.white)
                     .frame(width: 300, height: 100)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.telloSilver))
                 }
             })
             Spacer()

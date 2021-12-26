@@ -30,9 +30,9 @@ struct MediaGalleryButton: View {
             }, label: {
                 Text("Videos")
                     .fontWeight(.semibold)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(Color.telloDark)
                     .frame(width: 300, height: 100)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.telloSilver))
             })
                 .alert("Purchase Video Recording?", isPresented: self.$alertDisplayed, actions: {
                     Button(action: {

@@ -28,11 +28,9 @@ class TelloController: ObservableObject {
     @Published private(set) public var battery = ""
     /// Last known Signal to Noise ratio for WiFi received from tello
     @Published private(set) public var wifi = ""
-
-    /// This var will decrease as the initial command is sent multiple times
-    private var commandRepeatMax = 4
+    
     /// Prevents too many movement commands from being issued at once
-    private var commandDelay = 0.1
+    private let commandDelay = 0.1
     /// Speed of Up/Down movement
     var upDown: Int = 0
     /// Speed of Left/Right movement
@@ -96,7 +94,7 @@ class TelloController: ObservableObject {
             .sink(receiveValue: { _ in
                 guard self.commandable, self.streaming else {
                     self.sendCommand(CMD.on)
-                    usleep(500000) // will sleep for 0.5 seconds
+                    usleep(200000) // will sleep for 0.2 seconds
                     self.sendCommand(CMD.streamOn)
                     return
                 }
@@ -107,10 +105,10 @@ class TelloController: ObservableObject {
     
     private func sendCommand(_ command: String) {
         guard let data = command.data(using: .utf8),
-            let udpClient = commandClient else {
-                print("Error: cannot send command")
-                return
-        }
+              let udpClient = commandClient else {
+                  print("Error: cannot send command")
+                  return
+              }
         udpClient.sendData(data)
     }
     
@@ -118,9 +116,9 @@ class TelloController: ObservableObject {
     
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func joystickMovementHandler() -> AnyCancellable? {
-        guard self.commandable else {
-            return nil
-        }
+        //        guard self.commandable else {
+        //            return nil
+        //        }
         return Timer.publish(every: self.commandDelay, on: .main, in: .default)
             .autoconnect()
             .receive(on: self.commandQueue)
@@ -129,9 +127,7 @@ class TelloController: ObservableObject {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                     // Send an extra because UDP packets can be lost
                     self.sendCommand(self.moveCommand)
-                    self.commandDelay = 4
                 }
-                self.commandDelay = 0.1
                 self.sendCommand(self.moveCommand)
             })
     }
@@ -158,28 +154,31 @@ class TelloController: ObservableObject {
     // MARK: - Handle Data Streams
     
     /// Read data from the drone's response to a given command
-    @MainActor private func handleCommandResponse(for messageData: Data?) {
-        guard let messageData = messageData, let message = String(data: messageData, encoding: .utf8), message == "ok" else {
-            print("Error with command client response - \(String(describing: messageData))")
-            return
-        }
+    private func handleCommandResponse(for messageData: Data?) {
+        guard let messageData = messageData,
+              let message = String(data: messageData, encoding: .utf8) else {
+                  print("Error with command client response - Data: \(String(describing: messageData)))")
+                  return
+              }
         print("Command Response: \(message)")
-        guard self.commandable else {
-            self.commandable = true
-            usleep(500000) // will sleep for 0.5 seconds
-            self.streaming = true
-            print("Commandable Mode Initiated")
-            return
-        }
+        guard message == "ok",
+              self.commandable else {
+                  DispatchQueue.main.async {
+                      self.commandable = true
+                      self.streaming = true
+                  }
+                  print("Commandable Mode Initiated")
+                  return
+              }
     }
     
     /// Read data from the ongoing STATE stream
     private func handleStateStream(data: Data?) {
         guard let data = data,
               let message = String(data: data, encoding: .utf8) else {
-                print("Error with command client response")
-                return
-        }
+                  print("Error with command client response")
+                  return
+              }
         let stateValues = message.split(separator: ";")
         let batteryLevel = stateValues.first(where: { $0.hasPrefix("bat") })
         DispatchQueue.main.async {

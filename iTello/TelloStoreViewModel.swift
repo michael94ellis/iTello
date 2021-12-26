@@ -27,8 +27,9 @@ class TelloStoreViewModel: ObservableObject {
         Task {
             do {
                 try self.fetchProducts()
-            } catch {
-                print("Store Error: fetchProducts failed")
+            } catch let fetchProductsError {
+                logError(fetchProductsError)
+                print("Store Error: fetchProducts failed - \(fetchProductsError)")
             }
         }
     }
@@ -38,10 +39,7 @@ class TelloStoreViewModel: ObservableObject {
             for await result in Transaction.currentEntitlements {
                 guard case .verified(let transaction) = result else { continue }
                 if transaction.productID == videoRecordingProductId {
-                    print("Purchased Video Recording!")
-                    print("\(transaction.revocationDate == nil) ----")
                     self.hasPurchasedRecording = transaction.revocationDate == nil
-                    print("\(self.hasPurchasedRecording) ----")
                 }
             }
         }
@@ -66,12 +64,10 @@ class TelloStoreViewModel: ObservableObject {
         case .success(let verification):
             switch verification {
             case .verified(let transaction):
-                print("Verifying")
                 await transaction.finish()
-                print("Verified")
                 self.hasPurchasedRecording = transaction.revocationDate == nil
             case .unverified(_, _):
-                print("Unverified")
+                print("Unverified Purchase")
             }
         case .userCancelled:
             print("User Cancelled Purchase")
@@ -79,7 +75,7 @@ class TelloStoreViewModel: ObservableObject {
         case .pending:
             print("Purchase Pending Try Again")
         @unknown default:
-            assertionFailure("Unexpected result")
+            print("Unexpected Result from: \(Self.self) ---- \(#function)")
         }
         throw Product.PurchaseError.productUnavailable
     }

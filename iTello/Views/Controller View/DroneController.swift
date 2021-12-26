@@ -68,7 +68,6 @@ struct DroneController: View {
                             .onReceive(self.leftJoystick.$xyPoint, perform: { leftThumbPoint in
                                 self.tello.yaw = Int(leftThumbPoint.x / 2)
                                 self.tello.upDown = Int(leftThumbPoint.y / 2) * -1
-                                print(tello.moveCommand)
                             })
                         Spacer()
                         Joystick(monitor: self.rightJoystick, width: 200)
@@ -76,7 +75,6 @@ struct DroneController: View {
                             .onReceive(self.rightJoystick.$xyPoint, perform: { rightThumbPoint in
                                 self.tello.leftRight = Int(rightThumbPoint.x / 2)
                                 self.tello.forwardBack = Int(rightThumbPoint.y / 2) * -1
-                                print(tello.moveCommand)
                             })
                     }
                     .padding(parent.size.width / 20)

@@ -49,9 +49,9 @@ final public class WifiManager: ObservableObject {
                     self.connectionProgress += 1
                     if let telloSSID = $0.first {
                         // Bugfix Attempt: seems like UDP Clients are created too early
-                        sleep(1)
                         DispatchQueue.main.async {
-                        self.telloSSID = telloSSID
+                            usleep(250000) // will sleep for 0.25 seconds
+                            self.telloSSID = telloSSID
                             // Tells UDP Clients they can now communicate via wifi
                             self.isConnected = true
                             completion(true, nil)
