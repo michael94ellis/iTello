@@ -10,21 +10,21 @@ import SwiftUI
 
 struct AppSettings: View {
     
-    @AppStorage("showRandomFlipButton") public var randomFlipButton: Bool = true
-    @AppStorage("showAllFlipButtons") public var allFlipButtons: Bool = false
-    @AppStorage("showCameraButton") public var cameraButton: Bool = true
-    @AppStorage("showRecordVideoButton") public var recordVideoButton: Bool = false
+    // Paid Feature
+    @ObservedObject var telloStore: TelloStoreViewModel
+    @AppStorage("showRecordVideoButton") public var showRecordVideoButton: Bool = false
     
+    // Free Features
     @Binding var isDisplayed: Bool
     @State var alertDisplayed: Bool = false
-    @State var showRecordVideoButton = true
-    @State var showRandomFlipButton = true
-    @State var showAllFlipButtons = false
+    @AppStorage("showCameraButton") public var cameraButton: Bool = true
+    @AppStorage("showRandomFlipButton") public var showRandomFlipButton: Bool = true
+    @AppStorage("showAllFlipButtons") public var showAllFlipButtons: Bool = false
     
     @ViewBuilder
     var showRecordingButtonToggle: some View {
-        if TelloStoreViewModel.shared.hasPurchasedRecording {
-            Toggle("Show Record Button", isOn: self.$recordVideoButton)
+        if self.telloStore.hasPurchasedRecording {
+            Toggle("Show Record Button", isOn: self.$showRecordVideoButton)
                 .frame(height: 30)
                 .foregroundColor(.white)
                 .padding(.horizontal)
@@ -40,12 +40,10 @@ struct AppSettings: View {
                 .frame(height: 30)
                 .foregroundColor(.white)
                 .padding(.horizontal)
-                .onChange(of: self.showRecordVideoButton, perform: { newValue in
-                    self.alertDisplayed = true
-                    print("Toggle Unpurchased Record Button")
-                })
-                .onAppear(perform: {
-                    self.showRecordVideoButton = self.showRecordVideoButton
+                .onReceive(self.telloStore.$hasPurchasedRecording, perform: { newValue in
+                    print(self.telloStore.hasPurchasedRecording)
+                    self.showRecordVideoButton = self.telloStore.hasPurchasedRecording
+                    print(self.showRecordVideoButton)
                 })
                 .alert("Purchase Video Recording?", isPresented: self.$alertDisplayed, actions: {
                     Button(action: {
@@ -56,7 +54,7 @@ struct AppSettings: View {
                     Button(action: {
                         self.alertDisplayed = false
                         print("Purchase Video Recording Begin")
-                        TelloStoreViewModel.shared.purchaseVideoRecording()
+                        self.telloStore.purchaseVideoRecording()
                     }, label: {
                         Text("OK")
                     })

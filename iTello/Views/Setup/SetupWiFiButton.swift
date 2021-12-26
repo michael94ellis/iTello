@@ -44,10 +44,10 @@ struct SetupWiFiButton: View {
                             if let ssid = WifiManager.shared.telloSSID {
                                 Text(ssid).foregroundColor(Color.darkEnd)
                             } else {
-                                Text("Reconnect").foregroundColor(Color.darkEnd)
+                                Text("Reconnect").foregroundColor(Color.white)
                             }
                         } else {
-                            Text("Connect").foregroundColor(Color.darkEnd)
+                            Text("Connect").foregroundColor(Color.white)
                         }
                     }
                     .foregroundColor(Color.white)

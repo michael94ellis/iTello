@@ -66,15 +66,17 @@ struct DroneController: View {
                         Joystick(monitor: self.leftJoystick, width: 200)
                             .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                             .onReceive(self.leftJoystick.$xyPoint, perform: { leftThumbPoint in
-                                self.tello.yaw = Int(leftThumbPoint.x)
-                                self.tello.upDown = Int(leftThumbPoint.y)
+                                self.tello.yaw = Int(leftThumbPoint.x / 2)
+                                self.tello.upDown = Int(leftThumbPoint.y / 2) * -1
+                                print(tello.moveCommand)
                             })
                         Spacer()
                         Joystick(monitor: self.rightJoystick, width: 200)
                             .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                             .onReceive(self.rightJoystick.$xyPoint, perform: { rightThumbPoint in
-                                self.tello.leftRight = Int(rightThumbPoint.x)
-                                self.tello.forwardBack = Int(rightThumbPoint.y)
+                                self.tello.leftRight = Int(rightThumbPoint.x / 2)
+                                self.tello.forwardBack = Int(rightThumbPoint.y / 2) * -1
+                                print(tello.moveCommand)
                             })
                     }
                     .padding(parent.size.width / 20)
@@ -85,9 +87,6 @@ struct DroneController: View {
                         Image(decorative: image, scale: 1.0, orientation: .up)
                             .resizable()
                             .scaledToFit()
-                    } else if let theurl = theurl {
-                        VideoPlayer(player: AVPlayer(url: theurl))
-                            .frame(height: 100)
                     }
                 }
                 .frame(width: parent.size.width * 0.65)

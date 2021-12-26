@@ -30,11 +30,11 @@ struct Joystick: View {
             JoystickBuilder(
                 monitor: joystickMonitor,
                 width: dragDiameter,
-                shape: .circle,
+                shape: .rect,
                 background: {
                     ZStack {
                         Circle()
-                            .fill(RadialGradient(colors: [.darkStart, .darkEnd], center: .center, startRadius: 1, endRadius: 115))
+                            .fill(RadialGradient(colors: [.darkStart, .darkEnd], center: .center, startRadius: 1, endRadius: self.dragDiameter))
                             .overlay(Circle().stroke(Color(uiColor: .label))
                                         .shadow(color: Color.white, radius: 5))
                             .opacity(0.05)

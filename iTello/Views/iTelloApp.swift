@@ -12,13 +12,12 @@ import Firebase
 
 import Photos
 
-public var theurl: URL?
-
 @main
 struct iTelloApp: App {
     
+    @StateObject private var telloStore: TelloStoreViewModel = TelloStoreViewModel()
     @StateObject private var tello: TelloController = TelloController()
-    @State private var displayAppSettings: Bool = false
+    @State private var displayAppSettings: Bool = true
     
     var wifiConnectionListener: AnyCancellable?
     var droneConnectionListener: AnyCancellable?
@@ -27,35 +26,6 @@ struct iTelloApp: App {
     
     init() {
         FirebaseApp.configure()
-        Task {
-            do {
-                try await TelloStoreViewModel.shared.fetchProducts()
-            } catch {
-                print("Store Error")
-            }
-        }
-//        PHPhotoLibrary.requestAuthorization { authStatus in
-//            if authStatus != .authorized {
-//                print(authStatus)
-//                // TODO: Handle this error
-//            }
-//
-//
-//            let fileManager = FileManager.default
-//
-//            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//            do {
-//                let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
-//                fileURLs.forEach {
-////                    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum($0.path)) {
-////                        UISaveVideoAtPathToSavedPhotosAlbum($0.path, nil, nil, nil)
-////                    }
-//                    theurl = $0
-//                }
-//            } catch {
-//                print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
-//            }
-//        }
     }
     
     var body: some Scene {
@@ -71,7 +41,7 @@ struct iTelloApp: App {
                         }
                     })
                 if displayAppSettings {
-                    AppSettings(isDisplayed: self.$displayAppSettings)
+                    AppSettings(telloStore: self.telloStore, isDisplayed: self.$displayAppSettings)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .edgesIgnoringSafeArea(.all)
                         .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
@@ -81,6 +51,7 @@ struct iTelloApp: App {
                         })
                 }
             }
+            .environmentObject(telloStore)
         }
     }
 }

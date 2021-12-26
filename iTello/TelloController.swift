@@ -13,10 +13,6 @@ import Combine
 import Foundation
 import SwiftUI
 
-protocol TelloAVDelegate: AnyObject {
-    func sendCommand(_ command: String)
-}
-
 @MainActor
 class TelloController: ObservableObject {
     
@@ -38,15 +34,15 @@ class TelloController: ObservableObject {
     /// Prevents too many movement commands from being issued at once
     private var commandDelay = 0.1
     /// Speed of Up/Down movement
-    var upDown = 0
+    var upDown: Int = 0
     /// Speed of Left/Right movement
-    var leftRight = 0
+    var leftRight: Int = 0
     /// Speed of Forward/Back movement
-    var forwardBack = 0
+    var forwardBack: Int = 0
     /// Speed of movement Clockwise or CounterClockwise
-    var yaw = 0
+    var yaw: Int = 0
     /// rc l/r f/b u/d yaw
-    private var moveCommand: String { "rc \(self.leftRight) \(self.forwardBack) \(self.upDown) \(self.yaw)" }
+    public var moveCommand: String { "rc \(self.leftRight) \(self.forwardBack) \(self.upDown) \(self.yaw)" }
     
     // UDP Connections
     private var commandClient: UDPClient?
@@ -95,13 +91,12 @@ class TelloController: ObservableObject {
     private func initializeCommandMode() {
         self.commandBroadcaster = Timer.publish(every: 2, on: .main, in: .default)
             .autoconnect()
-            // Because this is setting up the drone's commandable state we use the main thread
+        // Because this is setting up the drone's commandable state we use the main thread
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { _ in
-                guard self.commandable,
-                      self.streaming else {
+                guard self.commandable, self.streaming else {
                     self.sendCommand(CMD.on)
-                    sleep(1)
+                    usleep(500000) // will sleep for 0.5 seconds
                     self.sendCommand(CMD.streamOn)
                     return
                 }
@@ -116,7 +111,6 @@ class TelloController: ObservableObject {
                 print("Error: cannot send command")
                 return
         }
-        print("Sending Command: \(command)")
         udpClient.sendData(data)
     }
     
@@ -135,7 +129,7 @@ class TelloController: ObservableObject {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                     // Send an extra because UDP packets can be lost
                     self.sendCommand(self.moveCommand)
-                    self.commandDelay = 1
+                    self.commandDelay = 4
                 }
                 self.commandDelay = 0.1
                 self.sendCommand(self.moveCommand)
@@ -164,7 +158,7 @@ class TelloController: ObservableObject {
     // MARK: - Handle Data Streams
     
     /// Read data from the drone's response to a given command
-    private func handleCommandResponse(for messageData: Data?) {
+    @MainActor private func handleCommandResponse(for messageData: Data?) {
         guard let messageData = messageData, let message = String(data: messageData, encoding: .utf8), message == "ok" else {
             print("Error with command client response - \(String(describing: messageData))")
             return
@@ -172,7 +166,7 @@ class TelloController: ObservableObject {
         print("Command Response: \(message)")
         guard self.commandable else {
             self.commandable = true
-            usleep(500000) //will sleep for 0.5 seconds
+            usleep(500000) // will sleep for 0.5 seconds
             self.streaming = true
             print("Commandable Mode Initiated")
             return

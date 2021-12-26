@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MediaGalleryButton: View {
     
+    @EnvironmentObject var telloStore: TelloStoreViewModel
     @State var displayUnavailableMessage: Bool = false
     @State var alertDisplayed: Bool = false
     
@@ -21,7 +22,7 @@ struct MediaGalleryButton: View {
                 .frame(height: 25)
             Spacer()
             Button(action: {
-                if TelloStoreViewModel.shared.hasPurchasedRecording {
+                if self.telloStore.hasPurchasedRecording {
                     
                 }
                 self.displayUnavailableMessage.toggle()
@@ -42,7 +43,7 @@ struct MediaGalleryButton: View {
                     Button(action: {
                         self.alertDisplayed = false
                         print("Purchase Video Recording Begin")
-                        TelloStoreViewModel.shared.purchaseVideoRecording()
+                        self.telloStore.purchaseVideoRecording()
                     }, label: {
                         Text("OK")
                     })

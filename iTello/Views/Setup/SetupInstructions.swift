@@ -55,8 +55,6 @@ struct SetupInstructions: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    SendLogsButton()
-                    Spacer()
                     Button(action: { self.displayPopover.toggle() }) {
                         Text(self.dismissButtonText)
                             .fontWeight(.semibold)

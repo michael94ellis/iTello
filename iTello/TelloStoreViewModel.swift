@@ -18,31 +18,39 @@ class TelloStoreViewModel: ObservableObject {
     
     private let videoRecordingProductId = "videorecording1"
     private var purchaseUpdateListener: Task<Void, Never>?
-
     
-    static let shared = TelloStoreViewModel()
-    
-    private init() {
+    @MainActor init() {
         self.updatePurchases()
         self.purchaseUpdateListener = Task {
             await self.listenForTransactions()
         }
+        Task {
+            do {
+                try self.fetchProducts()
+            } catch {
+                print("Store Error: fetchProducts failed")
+            }
+        }
     }
     
-    func updatePurchases() {
+    @MainActor func updatePurchases() {
         Task {
             for await result in Transaction.currentEntitlements {
                 guard case .verified(let transaction) = result else { continue }
                 if transaction.productID == videoRecordingProductId {
                     print("Purchased Video Recording!")
-                    Self.shared.hasPurchasedRecording = transaction.revocationDate == nil
+                    print("\(transaction.revocationDate == nil) ----")
+                    self.hasPurchasedRecording = transaction.revocationDate == nil
+                    print("\(self.hasPurchasedRecording) ----")
                 }
             }
         }
     }
     
-    func fetchProducts() async throws {
-        self.products = try await Product.products(for: ["videorecording1"])
+    func fetchProducts() throws {
+        Task {
+            self.products = try await Product.products(for: ["videorecording1"])
+        }
     }
     
     func purchaseVideoRecording() {
@@ -51,7 +59,7 @@ class TelloStoreViewModel: ObservableObject {
         }
     }
     
-    func purchase(_ product: Product) async throws {
+    @MainActor func purchase(_ product: Product) async throws {
         let result = try await product.purchase()
         
         switch result {
@@ -61,7 +69,7 @@ class TelloStoreViewModel: ObservableObject {
                 print("Verifying")
                 await transaction.finish()
                 print("Verified")
-                Self.shared.hasPurchasedRecording = transaction.revocationDate == nil
+                self.hasPurchasedRecording = transaction.revocationDate == nil
             case .unverified(_, _):
                 print("Unverified")
             }
@@ -87,7 +95,7 @@ class TelloStoreViewModel: ObservableObject {
                 // Ignore unverified transactions.
                 continue
             }
-            Self.shared.hasPurchasedRecording = transaction.revocationDate == nil
+            self.hasPurchasedRecording = transaction.revocationDate == nil
         }
     }
 }
