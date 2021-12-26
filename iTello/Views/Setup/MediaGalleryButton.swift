@@ -13,6 +13,7 @@ struct MediaGalleryButton: View {
     @EnvironmentObject var telloStore: TelloStoreViewModel
     @State var displayUnavailableMessage: Bool = false
     @State var alertDisplayed: Bool = false
+    @Binding var displayMediaGallery: Bool
     
     var body: some View {
         VStack {
@@ -22,11 +23,7 @@ struct MediaGalleryButton: View {
                 .frame(height: 25)
             Spacer()
             Button(action: {
-                if self.telloStore.hasPurchasedRecording {
-                    
-                }
-                self.displayUnavailableMessage.toggle()
-                self.alertDisplayed = true
+                self.displayMediaGallery.toggle()
             }, label: {
                 Text("Videos")
                     .fontWeight(.semibold)

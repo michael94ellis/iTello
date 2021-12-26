@@ -9,7 +9,6 @@
 import SwiftUI
 import Combine
 import Firebase
-
 import Photos
 
 @main
@@ -17,7 +16,8 @@ struct iTelloApp: App {
     
     @StateObject private var telloStore: TelloStoreViewModel = TelloStoreViewModel()
     @StateObject private var tello: TelloController = TelloController()
-    @State private var displayAppSettings: Bool = true
+    @State private var displayAppSettings: Bool = false
+    @State private var displayMediaGallery: Bool = false
     
     var wifiConnectionListener: AnyCancellable?
     var droneConnectionListener: AnyCancellable?
@@ -41,7 +41,13 @@ struct iTelloApp: App {
                         }
                     })
                 if displayAppSettings {
-                    AppSettings(telloStore: self.telloStore, tello: self.tello, isDisplayed: self.$displayAppSettings)
+                    AppSettings(telloStore: self.telloStore, tello: self.tello, isDisplayed: self.$displayAppSettings, mediaGalleryDisplayed: self.$displayMediaGallery)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .edgesIgnoringSafeArea(.all)
+                        .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
+                }
+                if displayMediaGallery {
+                    MediaGallery(displayMediaGallery: self.$displayMediaGallery)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .edgesIgnoringSafeArea(.all)
                         .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))

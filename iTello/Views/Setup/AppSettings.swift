@@ -17,6 +17,7 @@ struct AppSettings: View {
     // Free Features
     @ObservedObject var tello: TelloController
     @Binding var isDisplayed: Bool
+    @Binding var mediaGalleryDisplayed: Bool
     @State var alertDisplayed: Bool = false
     @AppStorage("showCameraButton") public var cameraButton: Bool = true
     @AppStorage("showRandomFlipButton") public var showRandomFlipButton: Bool = true
@@ -61,7 +62,7 @@ struct AppSettings: View {
         VStack {
             Spacer()
             HStack {
-                MediaGalleryButton()
+                MediaGalleryButton(displayMediaGallery: self.$mediaGalleryDisplayed)
                 SetupWiFiButton(displayPopover: self.$isDisplayed)
                     .frame(width: 300)
                     .onReceive(self.tello.$commandable.receive(on: DispatchQueue.main), perform: { [self] commandable in
