@@ -13,7 +13,6 @@ import Combine
 import Foundation
 import SwiftUI
 
-@MainActor
 class TelloController: ObservableObject {
     
     /// Indicates whether or not this TelloController has it's UDP connections setup
