@@ -42,28 +42,53 @@ struct MediaGallery: View {
                         }
                         .padding(.vertical, 8)
                         .padding(.trailing, 4)
-//                        .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
-//                        .shadow(radius: 4)
                     }
                     .contentShape(Rectangle())
                     Spacer()
-//                    if !self.telloStore.hasPurchasedRecording {
-//                        Button(action: {
-//                            self.telloStore.purchaseVideoRecording()
-//                        }) {
-//                            HStack {
-//                                Text("Upgrade iTello")
-//                                    .foregroundColor(Color.telloLight)
-//                            }
-//                            .padding(8)
-//                            .padding(.trailing, 4)
-//                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.telloBlue))
-//                            .shadow(radius: 4)
-//                        }
-//                    }
+                    if !self.telloStore.hasPurchasedRecording {
+                        Button(action: {
+                            self.telloStore.purchaseVideoRecording()
+                        }) {
+                            HStack {
+                                Text("Upgrade iTello")
+                                    .foregroundColor(Color.telloLight)
+                            }
+                            .padding(8)
+                            .padding(.trailing, 4)
+                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.telloBlue))
+                            .shadow(radius: 4)
+                        }
+                    } else {
+                        Button(action: {
+                            let fileManager = FileManager.default
+                            let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
+                            guard let documentDirectoryURL: URL = urls.first as URL?,
+                                  var documentDirComponents = URLComponents(url: documentDirectoryURL, resolvingAgainstBaseURL: true) else {
+                                print("Error: Could Not Open Files App to s Directory")
+                                return
+                            }
+                            documentDirComponents.scheme = "shareddocuments"
+                            if let docURL = documentDirComponents.url {
+                                UIApplication.shared.open(docURL)
+                            }
+                        }) {
+                            HStack {
+                                Image(systemName: "doc.circle")
+                                    .foregroundColor(Color.telloDark)
+                                Text("See Files")
+                                    .foregroundColor(Color.telloDark)
+                            }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 16)
+                            .background(RoundedRectangle(cornerRadius: 4).fill(Color.telloSilver))
+                        }
+                        .contentShape(Rectangle())
+                    }
                 }
                 .padding(.top, 20)
+                .padding(.bottom, 10)
                 Text("Videos")
+                    .font(.headline)
                 ForEach(self.viewModel.videoURLs, id: \.self) { videoURL in
                     HStack {
                         Button(action: {

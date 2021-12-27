@@ -149,7 +149,10 @@ class TelloController: ObservableObject {
     func flip(_ direction: FLIP) {
         self.commandBroadcaster?.cancel()
         self.sendCommand(direction.commandValue)
-        self.commandBroadcaster = joystickMovementHandler().publisher.debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+        self.commandBroadcaster = Timer.publish(every: self.commandDelay, on: .main, in: .default)
+            .autoconnect()
+            .debounce(for: .seconds(0.5), scheduler: self.commandQueue)
+            .receive(on: self.commandQueue)
             .sink(receiveValue: { _ in
                 if self.leftRight + self.forwardBack + self.upDown + self.yaw == 0 {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
