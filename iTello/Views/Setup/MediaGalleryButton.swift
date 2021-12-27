@@ -17,7 +17,7 @@ struct MediaGalleryButton: View {
     
     var body: some View {
         VStack {
-            Text(self.displayUnavailableMessage ? "Camera Button will save to photo gallery" : "")
+            Text("")
                 .font(.callout)
                 .foregroundColor(Color.white)
                 .frame(height: 25)

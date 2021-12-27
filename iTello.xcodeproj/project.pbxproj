@@ -107,6 +107,7 @@
 			children = (
 				2F2C4798276F83CF0080D616 /* AppSettings.swift */,
 				2FE24F8A27638BCC00CB0DE2 /* SetupWiFiButton.swift */,
+				2F2AA3102778D442000D59EF /* MediaGallery.swift */,
 				2F65C7C027762D0100811593 /* MediaGalleryButton.swift */,
 				2FE24F8C27638C6500CB0DE2 /* SetupInstructions.swift */,
 			);
@@ -194,7 +195,6 @@
 			isa = PBXGroup;
 			children = (
 				2F399CD52741FDA30016BE8B /* iTelloApp.swift */,
-				2F2AA3102778D442000D59EF /* MediaGallery.swift */,
 				2F78E5042766F4F40003A788 /* Setup */,
 				2F78E5052766F6A90003A788 /* Controller View */,
 			);

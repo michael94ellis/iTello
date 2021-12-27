@@ -11,7 +11,6 @@ import Foundation
 
 import UIKit
 import AVFoundation
-import Photos
 import AssetsLibrary
 
 class VideoRecorder: NSObject {
@@ -24,17 +23,6 @@ class VideoRecorder: NSObject {
     private var path = ""
     private var outputURL: URL?
     
-    private func handlePhotoLibraryAuth() {
-        if PHPhotoLibrary.authorizationStatus() != .authorized {
-            PHPhotoLibrary.requestAuthorization { authStatus in
-                if authStatus != .authorized {
-                    print(authStatus)
-                    // TODO: Handle this error
-                }
-            }
-        }
-    }
-    
     private func createFilePath() {
         let fileManager = FileManager.default
         let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
@@ -44,18 +32,17 @@ class VideoRecorder: NSObject {
         }
         let date = Date()
         let calendar = Calendar.current
-        let year = calendar.component(.year, from: date)
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
         let hour = calendar.component(.hour, from: date)
-        let minutes = calendar.component(.minute, from: date)
-        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello-\(month)-\(day)-\(year)_\(hour):\(minutes).mp4") else {
+        let minute = calendar.component(.minute, from: date)
+        let second = calendar.component(.second, from: date)
+        guard let videoOutputURL = documentDirectory.appendingPathComponent("iTello_\(month)-\(day)_\(hour)-\(minute)-\(second).mp4") else {
             print("Error: Cannot create Video Output file path URL")
             return
         }
         self.outputURL = videoOutputURL
         self.path = videoOutputURL.path
-        print("iTello Path: iTello-\(month)-\(day)-\(year)_\(hour):\(minutes).mp4")
         print(self.path)
         if FileManager.default.fileExists(atPath: path) {
             do {
@@ -64,23 +51,6 @@ class VideoRecorder: NSObject {
                 print("Unable to delete file: \(error) : \(#function).")
                 return
             }
-        }
-    }
-    
-    private func saveRecordingToPhotoLibrary() {
-        guard FileManager.default.fileExists(atPath: self.path) else {
-            print("Error: The file: \(self.path) doesn't exist, cannot move file to camera roll")
-            return
-        }
-        print("The file: \(self.path) has been save into documents folder, and is ready to be moved to camera roll")
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: self.path))
-        }) { completed, error in
-            guard completed else {
-                print ("Error: Cannot move the video \(self.path) to camera roll, error: \(String(describing: error?.localizedDescription))")
-                return
-            }
-            print("Video \(self.path) has been moved to camera roll")
         }
     }
     
@@ -102,9 +72,9 @@ class VideoRecorder: NSObject {
         }
         // 30 fps - 30 pictures will equal 1 second of video
         self.frameDuration = CMTime(value: 1, timescale: 30)
-        self.handlePhotoLibraryAuth()
         self.createFilePath()
         print("Started Recording")
+        self.isRecording = true
     }
     
     func appendFrame(_ sampleBuffer: CMSampleBuffer) {
@@ -116,7 +86,6 @@ class VideoRecorder: NSObject {
                 self.assetWriter = nil
                 return
             }
-            self.isRecording = true
         }
         guard self.assetWriter != nil else {
             print("Error: Attempting to append frame when AVAssetWriter is nil")
@@ -203,9 +172,11 @@ class VideoRecorder: NSObject {
         }
         assetWriterInput!.markAsFinished()
         assetWriter?.finishWriting() {
-            self.assetWriterInput = nil
+            self.nextPTS = CMTimeMake(value: 0, timescale: 0)
             self.assetWriter = nil
-            self.saveRecordingToPhotoLibrary()
+            self.assetWriterInput = nil
+            self.path = ""
+            self.outputURL = nil
             completion(true)
         }
     }

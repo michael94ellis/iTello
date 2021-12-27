@@ -147,7 +147,17 @@ class TelloController: ObservableObject {
     }
     /// See the FLIP enum for list of available flip directions
     func flip(_ direction: FLIP) {
+        self.commandBroadcaster?.cancel()
         self.sendCommand(direction.commandValue)
+        self.commandBroadcaster = joystickMovementHandler().publisher.debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .sink(receiveValue: { _ in
+                if self.leftRight + self.forwardBack + self.upDown + self.yaw == 0 {
+                    // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
+                    // Send an extra because UDP packets can be lost
+                    self.sendCommand(self.moveCommand)
+                }
+                self.sendCommand(self.moveCommand)
+            })
     }
     
     // MARK: - Handle Data Streams

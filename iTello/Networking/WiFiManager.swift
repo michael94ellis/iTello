@@ -54,6 +54,7 @@ final public class WifiManager: ObservableObject {
                             self.telloSSID = telloSSID
                             // Tells UDP Clients they can now communicate via wifi
                             self.isConnected = true
+                            self.connectionProgress = 0
                             completion(true, nil)
                         }
                     }
@@ -64,6 +65,8 @@ final public class WifiManager: ObservableObject {
     
     /// Return Human Readable String that explains what went wrong
     private func handleConnectionError(_ error: Error?) -> String? {
+        self.connectionProgress = 0
+        self.isConnected = false
         guard let error = error else {
             return nil
         }

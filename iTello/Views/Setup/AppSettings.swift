@@ -65,7 +65,7 @@ struct AppSettings: View {
                 MediaGalleryButton(displayMediaGallery: self.$mediaGalleryDisplayed)
                 SetupWiFiButton(displayPopover: self.$isDisplayed)
                     .frame(width: 300)
-                    .onReceive(self.tello.$commandable.receive(on: DispatchQueue.main), perform: { [self] commandable in
+                    .onReceive(self.tello.$commandable.dropFirst().receive(on: DispatchQueue.main), perform: { [self] commandable in
                         // Listen for successful command mode initialization and then remove the setup popover
                         self.isDisplayed = !commandable
                     })

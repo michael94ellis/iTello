@@ -17,7 +17,7 @@ struct iTelloApp: App {
     @StateObject private var telloStore: TelloStoreViewModel = TelloStoreViewModel()
     @StateObject private var tello: TelloController = TelloController()
     @State private var displayAppSettings: Bool = false
-    @State private var displayMediaGallery: Bool = false
+    @State private var displayMediaGallery: Bool = true
     
     var wifiConnectionListener: AnyCancellable?
     var droneConnectionListener: AnyCancellable?
@@ -47,9 +47,8 @@ struct iTelloApp: App {
                         .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
                 }
                 if displayMediaGallery {
-                    MediaGallery(displayMediaGallery: self.$displayMediaGallery)
+                    MediaGallery(telloStore: self.telloStore, displayMediaGallery: self.$displayMediaGallery)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .edgesIgnoringSafeArea(.all)
                         .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
                 }
             }

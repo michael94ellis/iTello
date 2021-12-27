@@ -33,7 +33,7 @@ struct SetupWiFiButton: View {
             }, label: {
                 if WifiManager.shared.connectionProgress != 0 {
                     ProgressView("Connecting...", value: self.progress, total: 4)
-                        .progressViewStyle(CircularProgressViewStyle(tint: .telloBlue))
+                        .progressViewStyle(CircularProgressViewStyle(tint: .telloSilver))
                         .onReceive(WifiManager.shared.$connectionProgress, perform: { progressValue in
                             self.progress = progressValue
                         })
