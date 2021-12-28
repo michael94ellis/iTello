@@ -15,10 +15,6 @@ import SwiftUI
 
 class TelloController: ObservableObject {
     
-    /// Indicates whether or not this TelloController has it's UDP connections setup
-    /// If the TelloController is not connected then when the app detects the Tello WiFi connection it will establish the UDP connections
-    /// By UDP connection I mean Broadcasters and Receivers, it's not TCP after all
-    @Published private(set) public var connected = false
     /// Indicates if the Tello is in its Command mode, where it responds to commands via WiFi/UDP
     @Published private(set) public var commandable = false
     /// Indicates if the Tello is sending Video Stream Data
@@ -54,7 +50,6 @@ class TelloController: ObservableObject {
     lazy var videoManager: VideoStreamManager = VideoStreamManager()
     
     func beginCommandMode() {
-        self.connected = true
         self.commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
         self.commandClientResponseListener = self.commandClient?
             .$messageReceived
@@ -63,7 +58,6 @@ class TelloController: ObservableObject {
             .sink(receiveValue: { newMessage in
                 self.handleCommandResponse(for: newMessage)
             })
-        self.initializeCommandMode()
         // Start listening for state updates
         self.stateListener = UDPListener(on: Tello.StatePort)
         self.stateResponseListener = self.stateListener?
@@ -73,15 +67,23 @@ class TelloController: ObservableObject {
                 self.handleStateStream(data: newStateData)
             })
         // Start video stream processing
+        self.videoManager = VideoStreamManager()
         self.videoManager.setup()
+        self.initializeCommandMode()
     }
     
     func exitCommandMode() {
-        self.connected = false
         self.commandClient?.cancel()
         self.commandClient = nil
         self.commandClientResponseListener?.cancel()
         self.commandClientResponseListener = nil
+        self.commandBroadcaster?.cancel()
+        self.commandBroadcaster = nil
+        self.stateListener?.cancel()
+        self.stateListener = nil
+        self.stateResponseListener?.cancel()
+        self.stateResponseListener = nil
+        self.videoManager.cancel()
     }
     
     /// Repeats a comment until an `ok` is received from the Tello
@@ -91,10 +93,11 @@ class TelloController: ObservableObject {
         // Because this is setting up the drone's commandable state we use the main thread
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { _ in
+                print("BEGIN CMD and STREAM")
+                self.sendCommand(CMD.on)
+                usleep(200000) // will sleep for 0.2 seconds
+                self.sendCommand(CMD.streamOn)
                 guard self.commandable, self.streaming else {
-                    self.sendCommand(CMD.on)
-                    usleep(200000) // will sleep for 0.2 seconds
-                    self.sendCommand(CMD.streamOn)
                     return
                 }
                 // Because this is using the main thread we cancel when we are done
@@ -105,7 +108,7 @@ class TelloController: ObservableObject {
     private func sendCommand(_ command: String) {
         guard let data = command.data(using: .utf8),
               let udpClient = commandClient else {
-                  print("Error: cannot send command")
+                  print("Error: cannot send command - \(command)")
                   return
               }
         udpClient.sendData(data)
@@ -114,9 +117,11 @@ class TelloController: ObservableObject {
     // MARK: - Tello Commands
     
     func beginMovementBroadcast() {
-        if self.commandBroadcaster == nil {
-            self.commandBroadcaster = self.joystickMovementHandler()
+        guard self.commandable,
+              self.commandBroadcaster == nil else {
+            return
         }
+        self.commandBroadcaster = self.joystickMovementHandler()
     }
     
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
@@ -141,37 +146,39 @@ class TelloController: ObservableObject {
     }
     
     func takeOff() {
+        guard self.commandable else {
+            return
+        }
+        self.commandBroadcaster?.cancel()
+        self.commandBroadcaster = nil
         self.sendCommand(CMD.takeOff)
-        self.commandBroadcaster = self.joystickMovementHandler()
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
+        guard self.commandable else {
+            return
+        }
         self.commandBroadcaster?.cancel()
+        self.commandBroadcaster = nil
         self.sendCommand(CMD.land)
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {
-        self.sendCommand(CMD.off)
+        guard self.commandable else {
+            return
+        }
         self.commandBroadcaster?.cancel()
+        self.commandBroadcaster = nil
+        self.sendCommand(CMD.off)
     }
     /// See the FLIP enum for list of available flip directions
     func flip(_ direction: FLIP) {
+        guard self.commandable else {
+            return
+        }
         self.commandBroadcaster?.cancel()
-        usleep(100000)
+        self.commandBroadcaster = nil
         self.sendCommand(direction.commandValue)
-        self.commandBroadcaster = Timer.publish(every: self.commandDelay, on: .main, in: .default)
-            .autoconnect()
-            .delay(for: .seconds(1.2), scheduler: self.commandQueue)
-            .receive(on: self.commandQueue)
-            .sink(receiveValue: { _ in
-                if self.leftRight + self.forwardBack + self.upDown + self.yaw == 0 {
-                    // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
-                    // Send an extra because UDP packets can be lost
-                    self.sendCommand(self.moveCommand)
-                    self.commandBroadcaster?.cancel()
-                }
-                self.sendCommand(self.moveCommand)
-            })
     }
     
     // MARK: - Handle Data Streams

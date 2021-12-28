@@ -25,7 +25,7 @@ struct DroneController: View {
     @StateObject var rightJoystick: JoystickMonitor = JoystickMonitor()
     @State var image: CGImage?
     
-    var joystickQueue: DispatchQueue = DispatchQueue(label: "JoystickMonitor")
+    var joystickQueue: DispatchQueue = DispatchQueue.main
     
     var body: some View {
         GeometryReader { parent in
@@ -169,7 +169,7 @@ struct DroneController: View {
             self.tello.flip(flip)
         }) {
             Image(systemName: imageName).resizable()
-                .frame(width: 30, height: 30, alignment: .bottom)
+                .frame(width: 40, height: 40, alignment: .bottom)
                 .foregroundColor(.telloBlue)
         }
         .contentShape(Rectangle())
@@ -182,7 +182,7 @@ struct DroneController: View {
             self.tello.flip(FLIP.all[newIndex])
         }) {
             Image(systemName: self.randomFlipImage).resizable()
-                .frame(width: 30, height: 30, alignment: .bottom)
+                .frame(width: 40, height: 40, alignment: .bottom)
                 .foregroundColor(.telloBlue)
         }
         .contentShape(Rectangle())

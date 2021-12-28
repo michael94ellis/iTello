@@ -16,8 +16,8 @@ struct iTelloApp: App {
     
     @StateObject private var telloStore: TelloStoreViewModel = TelloStoreViewModel()
     @StateObject private var tello: TelloController = TelloController()
-    @State private var displayAppSettings: Bool = false
-    @State private var displayMediaGallery: Bool = true
+    @State private var displayAppSettings: Bool = true
+    @State private var displayMediaGallery: Bool = false
     
     var wifiConnectionListener: AnyCancellable?
     var droneConnectionListener: AnyCancellable?
@@ -35,16 +35,19 @@ struct iTelloApp: App {
                     .onReceive(WifiManager.shared.$isConnected, perform: { [self] isConectedToWiFi in
                         print("WiFi Connection: \(isConectedToWiFi)")
                         // Listen for announcement of WiFi connection and then initiate command mode async
-                        if isConectedToWiFi,
-                           !self.tello.connected {
+                        if isConectedToWiFi {
                             self.tello.beginCommandMode()
+                        } else {
+                            self.tello.exitCommandMode()
                         }
                     })
                 if displayAppSettings {
                     AppSettings(telloStore: self.telloStore, tello: self.tello, isDisplayed: self.$displayAppSettings, mediaGalleryDisplayed: self.$displayMediaGallery)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .edgesIgnoringSafeArea(.all)
-                        .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
+                        .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd)
+                                        .onTapGesture{ self.displayAppSettings.toggle() })
+                        .edgesIgnoringSafeArea(.all)
                 }
                 if displayMediaGallery {
                     MediaGallery(telloStore: self.telloStore, displayMediaGallery: self.$displayMediaGallery)

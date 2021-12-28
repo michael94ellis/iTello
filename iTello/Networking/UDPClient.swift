@@ -23,7 +23,6 @@ class UDPClient: ObservableObject {
             print("ERROR! Error sending data. NWError: \n \(NWError!)")
             return
         }
-        print("Data sent")
     }
     
     init?(address newAddress: String, port newPort: NWEndpoint.Port) {

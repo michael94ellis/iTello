@@ -33,6 +33,12 @@ class VideoStreamManager: NSObject, VideoFrameDecoderDelegate, ObservableObject 
         self.videoResponseListener?.cancel()
     }
     
+    func cancel() {
+        self.currentFrame = nil
+        self.videoListener?.cancel()
+        self.videoResponseListener?.cancel()
+    }
+    
     func setup() {
         // Start listening for video stream frames
         self.videoListener = UDPListener(on: Tello.VideoStreamPort)
