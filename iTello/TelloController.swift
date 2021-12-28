@@ -50,6 +50,7 @@ class TelloController: ObservableObject {
     lazy var videoManager: VideoStreamManager = VideoStreamManager()
     
     func beginCommandMode() {
+        self.commandable = false
         self.commandClient = UDPClient(address: Tello.IPAddress, port: Tello.CommandPort)
         self.commandClientResponseListener = self.commandClient?
             .$messageReceived
