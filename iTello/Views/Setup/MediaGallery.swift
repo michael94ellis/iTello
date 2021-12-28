@@ -73,14 +73,13 @@ struct MediaGallery: View {
                             }
                         }) {
                             HStack {
-                                Image(systemName: "doc.circle")
-                                    .foregroundColor(Color.telloDark)
-                                Text("See Files")
-                                    .foregroundColor(Color.telloDark)
+                                Image(systemName: "photo.on.rectangle.angled")
+                                    .foregroundColor(Color.telloLight)
+                                Text("Files")
+                                    .foregroundColor(Color.telloLight)
                             }
+                            .frame(width: 80)
                             .padding(.vertical, 8)
-                            .padding(.horizontal, 16)
-                            .background(RoundedRectangle(cornerRadius: 4).fill(Color.telloSilver))
                         }
                         .contentShape(Rectangle())
                     }
@@ -118,14 +117,19 @@ struct MediaGallery: View {
                 }
                 Spacer()
             }
+            .onAppear { self.viewModel.reloadData() }
         }
     }
     
     var body: some View {
         GeometryReader { container in
             HStack {
-                videosList.frame(width: container.size.width / 3, height: container.size.height)
-                videoPlayer.frame(width: container.size.width * (2 / 3), height: container.size.height)
+                videosList
+                    .padding(.leading, 16)
+                    .frame(width: container.size.width / 3, height: container.size.height)
+                videoPlayer
+                    .padding(.trailing, 16)
+                    .frame(width: container.size.width * (2 / 3), height: container.size.height)
             }
         }
     }
@@ -149,13 +153,17 @@ class MediaGalleryViewModel: ObservableObject {
         }
     }
     
+    func reloadData() {
+        self.videoURLs = self.fetchExistingVideos()
+    }
+    
     func fetchExistingVideos() -> [URL] {
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         do {
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
             print(fileURLs)
-            return fileURLs
+            return fileURLs.filter { !$0.lastPathComponent.hasPrefix(".Trash") }
         } catch {
             print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
         }

@@ -113,6 +113,12 @@ class TelloController: ObservableObject {
     
     // MARK: - Tello Commands
     
+    func beginMovementBroadcast() {
+        if self.commandBroadcaster == nil {
+            self.commandBroadcaster = self.joystickMovementHandler()
+        }
+    }
+    
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func joystickMovementHandler() -> AnyCancellable? {
         //        guard self.commandable else {
@@ -126,6 +132,9 @@ class TelloController: ObservableObject {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                     // Send an extra because UDP packets can be lost
                     self.sendCommand(self.moveCommand)
+                    self.commandBroadcaster?.cancel()
+                    self.commandBroadcaster = nil
+                    
                 }
                 self.sendCommand(self.moveCommand)
             })
@@ -137,8 +146,8 @@ class TelloController: ObservableObject {
     }
     /// Can sometimes be ignored, especially if within first 5 seconds or so of flight time
     func land() {
-        self.sendCommand(CMD.land)
         self.commandBroadcaster?.cancel()
+        self.sendCommand(CMD.land)
     }
     /// EMERGENCY STOP, drone motors will cease immediately, should not always be viasible to user
     func emergencyLand() {
@@ -148,16 +157,18 @@ class TelloController: ObservableObject {
     /// See the FLIP enum for list of available flip directions
     func flip(_ direction: FLIP) {
         self.commandBroadcaster?.cancel()
+        usleep(100000)
         self.sendCommand(direction.commandValue)
         self.commandBroadcaster = Timer.publish(every: self.commandDelay, on: .main, in: .default)
             .autoconnect()
-            .debounce(for: .seconds(0.5), scheduler: self.commandQueue)
+            .delay(for: .seconds(1.2), scheduler: self.commandQueue)
             .receive(on: self.commandQueue)
             .sink(receiveValue: { _ in
                 if self.leftRight + self.forwardBack + self.upDown + self.yaw == 0 {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                     // Send an extra because UDP packets can be lost
                     self.sendCommand(self.moveCommand)
+                    self.commandBroadcaster?.cancel()
                 }
                 self.sendCommand(self.moveCommand)
             })
@@ -172,9 +183,7 @@ class TelloController: ObservableObject {
                   print("Error with command client response - Data: \(String(describing: messageData)))")
                   return
               }
-        print("Command Response: \(message)")
-        guard message == "ok",
-              self.commandable else {
+        guard self.commandable else {
                   DispatchQueue.main.async {
                       self.commandable = true
                       self.streaming = true
@@ -182,6 +191,11 @@ class TelloController: ObservableObject {
                   print("Commandable Mode Initiated")
                   return
               }
+        if message == "ok" {
+            print("OK Received")
+        } else {
+            print(message)
+        }
     }
     
     /// Read data from the ongoing STATE stream

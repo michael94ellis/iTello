@@ -54,5 +54,6 @@ enum FLIP: String {
     var commandValue: String {
         "flip \(self.rawValue)"
     }
+    static let all: [FLIP] = [FLIP.f, FLIP.l, FLIP.r, FLIP.b]
 }
 

@@ -25,36 +25,7 @@ struct DroneController: View {
     @StateObject var rightJoystick: JoystickMonitor = JoystickMonitor()
     @State var image: CGImage?
     
-    let flips = [FLIP.f, FLIP.l, FLIP.r, FLIP.b]
-    let flipImageNames = ["arrow.uturn.forward",
-                          "arrow.uturn.up",
-                          "arrow.uturn.down",
-                          "arrow.uturn.backward"]
-    @State var randomFlipImage: String = "arrow.uturn.forward"
-    
-    @ViewBuilder func flipButton(for flip: FLIP, imageName: String) -> some View {
-        Button(action: {
-            self.tello.flip(flip)
-        }) {
-            Image(systemName: imageName).resizable()
-                .frame(width: 30, height: 30, alignment: .bottom)
-                .foregroundColor(.telloBlue)
-        }
-        .contentShape(Rectangle())
-    }
-    
-    @ViewBuilder func randomFlipButton() -> some View {
-        Button(action: {
-            let newIndex = Int.random(in: 0...3)
-            self.randomFlipImage = self.flipImageNames[newIndex]
-            self.tello.flip(flips[newIndex])
-        }) {
-            Image(systemName: self.randomFlipImage).resizable()
-                .frame(width: 30, height: 30, alignment: .bottom)
-                .foregroundColor(.telloBlue)
-        }
-        .contentShape(Rectangle())
-    }
+    var joystickQueue: DispatchQueue = DispatchQueue(label: "JoystickMonitor")
     
     var body: some View {
         GeometryReader { parent in
@@ -65,16 +36,18 @@ struct DroneController: View {
                     HStack {
                         Joystick(monitor: self.leftJoystick, width: 200)
                             .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-                            .onReceive(self.leftJoystick.$xyPoint, perform: { leftThumbPoint in
+                            .onReceive(self.leftJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { leftThumbPoint in
                                 self.tello.yaw = Int(leftThumbPoint.x / 2)
                                 self.tello.upDown = Int(leftThumbPoint.y / 2) * -1
+                                self.tello.beginMovementBroadcast()
                             })
                         Spacer()
                         Joystick(monitor: self.rightJoystick, width: 200)
                             .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-                            .onReceive(self.rightJoystick.$xyPoint, perform: { rightThumbPoint in
+                            .onReceive(self.rightJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { rightThumbPoint in
                                 self.tello.leftRight = Int(rightThumbPoint.x / 2)
                                 self.tello.forwardBack = Int(rightThumbPoint.y / 2) * -1
+                                self.tello.beginMovementBroadcast()
                             })
                     }
                     .padding(parent.size.width / 20)
@@ -94,7 +67,7 @@ struct DroneController: View {
                         Spacer()
                         if self.showAllFlipButtons {
                             ForEach(0...3, id: \.self) { index in
-                                self.flipButton(for: self.flips[index], imageName: self.flipImageNames[index])
+                                self.flipButton(for: FLIP.all[index], imageName: self.flipImageNames[index])
                             }
                         } else if self.showRandomFlipButton {
                             self.randomFlipButton()
@@ -181,5 +154,37 @@ struct DroneController: View {
                 self.image = newImage
             })
         }
+    }
+    
+    // MARK: - Flips
+    
+    private let flipImageNames = ["arrow.uturn.forward",
+                          "arrow.uturn.up",
+                          "arrow.uturn.down",
+                          "arrow.uturn.backward"]
+    @State var randomFlipImage: String = "arrow.uturn.forward"
+    
+    @ViewBuilder func flipButton(for flip: FLIP, imageName: String) -> some View {
+        Button(action: {
+            self.tello.flip(flip)
+        }) {
+            Image(systemName: imageName).resizable()
+                .frame(width: 30, height: 30, alignment: .bottom)
+                .foregroundColor(.telloBlue)
+        }
+        .contentShape(Rectangle())
+    }
+    
+    @ViewBuilder func randomFlipButton() -> some View {
+        Button(action: {
+            let newIndex = Int.random(in: 0...3)
+            self.randomFlipImage = self.flipImageNames[newIndex]
+            self.tello.flip(FLIP.all[newIndex])
+        }) {
+            Image(systemName: self.randomFlipImage).resizable()
+                .frame(width: 30, height: 30, alignment: .bottom)
+                .foregroundColor(.telloBlue)
+        }
+        .contentShape(Rectangle())
     }
 }
