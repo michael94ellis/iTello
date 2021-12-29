@@ -91,8 +91,8 @@ struct DroneController: View {
                     VStack {
                         HStack {
                             Rectangle()
+                                .opacity(0)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color.clear)
                                 .gesture(
                                     DragGesture(minimumDistance: 0, coordinateSpace: .local)
                                         .onChanged({ value in
@@ -114,8 +114,8 @@ struct DroneController: View {
                                     self.tello.beginMovementBroadcast()
                                 })
                             Rectangle()
+                                .opacity(0)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color.clear)
                                 .gesture(
                                     DragGesture(minimumDistance: 0, coordinateSpace: .local)
                                         .onChanged({ value in

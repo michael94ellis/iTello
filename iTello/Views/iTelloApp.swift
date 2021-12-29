@@ -32,6 +32,7 @@ struct iTelloApp: App {
         WindowGroup {
             ZStack(alignment: .center) {
                 DroneController(tello: self.tello, displaySettings: self.$displayAppSettings)
+                    .background(LinearGradient(.darkEnd, .darkStart, .darkStart, .darkEnd))
                     .onReceive(WifiManager.shared.$isConnected, perform: { [self] isConectedToWiFi in
                         print("WiFi Connection: \(isConectedToWiFi)")
                         // Listen for announcement of WiFi connection and then initiate command mode async
