@@ -5,19 +5,19 @@
   ],
   "products" : [
     {
-      "displayPrice" : "2.99",
-      "familyShareable" : true,
-      "internalID" : "02416A6E",
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "F297B3AC",
       "localizations" : [
         {
-          "description" : "",
-          "displayName" : "",
+          "description" : "Upgrade iTello to unlock all the features",
+          "displayName" : "iTello Pro",
           "locale" : "en_US"
         }
       ],
-      "productID" : "videorecording1",
-      "referenceName" : "Video_Recording",
-      "type" : "NonConsumable"
+      "productID" : "itello.pro",
+      "referenceName" : "iTello Pro",
+      "type" : "Consumable"
     }
   ],
   "settings" : {

@@ -26,7 +26,8 @@ struct SetupInstructions: View {
         "2. Press the Connect button, the app will find your Tello!",
         "3. When the controller is displayed you can begin flying",
         "4. Photos will save to your photo gallery",
-        "5. Leave a great review on the App Store!"
+        "5. Hiding Joysticks removes the anchor point for movement",
+        "6. Leave a great review on the App Store!"
     ]
     
     var body: some View {

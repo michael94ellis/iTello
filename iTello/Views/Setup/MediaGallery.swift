@@ -45,9 +45,9 @@ struct MediaGallery: View {
                     }
                     .contentShape(Rectangle())
                     Spacer()
-                    if !self.telloStore.hasPurchasedRecording {
+                    if !self.telloStore.hasPurchasedPro {
                         Button(action: {
-                            self.telloStore.purchaseVideoRecording()
+                            self.telloStore.purchasePro()
                         }) {
                             HStack {
                                 Text("Upgrade iTello")
@@ -140,16 +140,10 @@ class MediaGalleryViewModel: ObservableObject {
     @Published private(set) public var videoURLs: [URL] = []
     
     init() {
-        PHPhotoLibrary.requestAuthorization { authStatus in
-            if authStatus != .authorized {
-                print(authStatus)
-                // TODO: Handle this error
-            }
-            DispatchQueue.main.async {
-                self.videoURLs = self.fetchExistingVideos()
-                let videoURL: URL = Bundle.main.url(forResource: "itello-initial", withExtension: "mov")!
-                self.videoURLs.insert(videoURL, at: 0)
-            }
+        DispatchQueue.main.async {
+            self.videoURLs = self.fetchExistingVideos()
+            let videoURL: URL = Bundle.main.url(forResource: "itello-initial", withExtension: "mov")!
+            self.videoURLs.insert(videoURL, at: 0)
         }
     }
     
@@ -177,12 +171,9 @@ public extension UIApplication {
             .filter({
                 $0.activationState == .foregroundActive})
             .compactMap({$0 as? UIWindowScene})
-        
         let window = connectedScenes.first?
             .windows
             .first { $0.isKeyWindow }
-
         return window
-        
     }
 }

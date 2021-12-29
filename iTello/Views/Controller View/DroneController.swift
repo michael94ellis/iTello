@@ -13,13 +13,15 @@ import AVKit
 
 struct DroneController: View {
     
-    @AppStorage("showRandomFlipButton") public var showRandomFlipButton: Bool = true
-    @AppStorage("showAllFlipButtons") public var showAllFlipButtons: Bool = false
+    @AppStorage("showFlipButtons") public var showFlipButtons: Int = 0
     @AppStorage("showCameraButton") public var showCameraButton: Bool = true
+    @AppStorage("showJoysticks") public var showJoysticks: Bool = true
     @AppStorage("showRecordVideoButton") public var showRecordVideoButton: Bool = false
     
     @ObservedObject var tello: TelloController
     @Binding var displaySettings: Bool
+    @State var emergencyLandCounter = 0
+    @State var emergencyLandButtonTimer: AnyCancellable?
     @State var alertDisplayed: Bool = false
     @StateObject var leftJoystick: JoystickMonitor = JoystickMonitor()
     @StateObject var rightJoystick: JoystickMonitor = JoystickMonitor()
@@ -27,31 +29,116 @@ struct DroneController: View {
     
     var joystickQueue: DispatchQueue = DispatchQueue.main
     
+    @ViewBuilder var landingButton: some View {
+            Button(action: {
+                self.tello.land()
+                self.emergencyLandCounter += 1
+                self.emergencyLandButtonTimer?.cancel()
+                self.emergencyLandButtonTimer = Timer.publish(every: 3, on: .main, in: .default).autoconnect().sink(receiveValue: { _ in
+                    self.emergencyLandCounter = 0
+                    self.emergencyLandButtonTimer?.cancel()
+                })
+            }) {
+                Image(systemName: "pause.fill").resizable()
+                    .foregroundColor(.telloBlue)
+            }
+            .frame(width: 45, height: 45)
+            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
+            .contentShape(Rectangle())
+    }
+    @ViewBuilder var emergencyLandButton: some View {
+            Button(action: {
+                self.tello.land()
+                self.emergencyLandCounter += 1
+            }) {
+                Image(systemName: "hand.raised.slash").resizable()
+                    .foregroundColor(.red)
+            }
+            .frame(width: 45, height: 45)
+            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
+            .contentShape(Rectangle())
+    }
+    
     var body: some View {
         GeometryReader { parent in
             ZStack {
                 // Joysticks
-                VStack {
-                    Spacer()
-                    HStack {
-                        Joystick(monitor: self.leftJoystick, width: 200)
-                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-                            .onReceive(self.leftJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { leftThumbPoint in
-                                self.tello.yaw = Int(leftThumbPoint.x / 2)
-                                self.tello.upDown = Int(leftThumbPoint.y / 2) * -1
-                                self.tello.beginMovementBroadcast()
-                            })
+                if self.showJoysticks {
+                    VStack {
                         Spacer()
-                        Joystick(monitor: self.rightJoystick, width: 200)
-                            .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-                            .onReceive(self.rightJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { rightThumbPoint in
-                                self.tello.leftRight = Int(rightThumbPoint.x / 2)
-                                self.tello.forwardBack = Int(rightThumbPoint.y / 2) * -1
-                                self.tello.beginMovementBroadcast()
-                            })
+                        HStack {
+                            Joystick(monitor: self.leftJoystick, width: 200)
+                                .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
+                                .onReceive(self.leftJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { leftThumbPoint in
+                                    self.tello.yaw = Int(leftThumbPoint.x / 2)
+                                    self.tello.upDown = Int(leftThumbPoint.y / 2) * -1
+                                    self.tello.beginMovementBroadcast()
+                                })
+                            Spacer()
+                            Joystick(monitor: self.rightJoystick, width: 200)
+                                .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
+                                .onReceive(self.rightJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { rightThumbPoint in
+                                    self.tello.leftRight = Int(rightThumbPoint.x / 2)
+                                    self.tello.forwardBack = Int(rightThumbPoint.y / 2) * -1
+                                    self.tello.beginMovementBroadcast()
+                                })
+                        }
+                        .padding(parent.size.width / 20)
+                        .edgesIgnoringSafeArea(.all)
                     }
-                    .padding(parent.size.width / 20)
-                    .edgesIgnoringSafeArea(.all)
+                } else {
+                    VStack {
+                        HStack {
+                            Rectangle()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Color.clear)
+                                .gesture(
+                                    DragGesture(minimumDistance: 0, coordinateSpace: .local)
+                                        .onChanged({ value in
+                                            var thumbDistance = value.location - value.startLocation
+                                            thumbDistance.y = thumbDistance.y * -1
+                                            if thumbDistance.x > 100 { thumbDistance.x = 100 }
+                                            else if thumbDistance.x < -100 { thumbDistance.x = -100 }
+                                            if thumbDistance.y > 100 { thumbDistance.y = 100 }
+                                            else if thumbDistance.y < -100 { thumbDistance.y = -100 }
+                                            self.leftJoystick.xyPoint = thumbDistance
+                                        })
+                                        .onEnded({ value in
+                                            self.leftJoystick.xyPoint = .zero
+                                        })
+                                )
+                                .onReceive(self.leftJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { leftThumbPoint in
+                                    self.tello.yaw = Int(leftThumbPoint.x)
+                                    self.tello.upDown = Int(leftThumbPoint.y)
+                                    self.tello.beginMovementBroadcast()
+                                })
+                            Rectangle()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Color.clear)
+                                .gesture(
+                                    DragGesture(minimumDistance: 0, coordinateSpace: .local)
+                                        .onChanged({ value in
+                                            var thumbDistance = value.location - value.startLocation
+                                            thumbDistance.y = thumbDistance.y * -1
+                                            if thumbDistance.x > 100 { thumbDistance.x = 100 }
+                                            else if thumbDistance.x < -100 { thumbDistance.x = -100 }
+                                            if thumbDistance.y > 100 { thumbDistance.y = 100 }
+                                            else if thumbDistance.y < -100 { thumbDistance.y = -100 }
+                                            self.rightJoystick.xyPoint = thumbDistance
+                                        })
+                                        .onEnded({ value in
+                                            self.rightJoystick.xyPoint = .zero
+                                        })
+                                )
+                                .onReceive(self.rightJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { rightThumbPoint in
+                                    self.tello.leftRight = Int(rightThumbPoint.x)
+                                    self.tello.forwardBack = Int(rightThumbPoint.y)
+                                    self.tello.beginMovementBroadcast()
+                                })
+                        }
+                        .padding(parent.size.width / 20)
+                        .edgesIgnoringSafeArea(.all)
+                    }
                 }
                 VStack {
                     if let image = image {
@@ -65,11 +152,11 @@ struct DroneController: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        if self.showAllFlipButtons {
+                        if self.showFlipButtons == 2 {
                             ForEach(0...3, id: \.self) { index in
                                 self.flipButton(for: FLIP.all[index], imageName: self.flipImageNames[index])
                             }
-                        } else if self.showRandomFlipButton {
+                        } else if self.showFlipButtons == 1 {
                             self.randomFlipButton()
                         }
                         Spacer()
@@ -136,15 +223,14 @@ struct DroneController: View {
                             Spacer()
                         }
                         // Land Button
-                        Button(action: {
-                            self.tello.land()
-                        }) {
-                            Image(systemName: "pause.fill").resizable()
-                                .foregroundColor(.telloBlue)
+                        if self.emergencyLandCounter >= 3 {
+                            HStack {
+                                self.emergencyLandButton
+                                self.landingButton
+                            }
+                        } else {
+                            self.landingButton
                         }
-                        .frame(width: 45, height: 45)
-                        .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-                        .contentShape(Rectangle())
                     }
                     .padding(30)
                     Spacer()
@@ -159,9 +245,9 @@ struct DroneController: View {
     // MARK: - Flips
     
     private let flipImageNames = ["arrow.uturn.forward",
-                          "arrow.uturn.up",
-                          "arrow.uturn.down",
-                          "arrow.uturn.backward"]
+                                  "arrow.uturn.up",
+                                  "arrow.uturn.down",
+                                  "arrow.uturn.backward"]
     @State var randomFlipImage: String = "arrow.uturn.forward"
     
     @ViewBuilder func flipButton(for flip: FLIP, imageName: String) -> some View {

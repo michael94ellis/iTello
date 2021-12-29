@@ -13,10 +13,10 @@ import Combine
 /// Currently only supports video recording IAP
 class TelloStoreViewModel: ObservableObject {
     
-    @Published private(set) public var hasPurchasedRecording: Bool = false
+    @Published private(set) public var hasPurchasedPro: Bool = false
     private var products: [Product] = []
     
-    private let videoRecordingProductId = "videorecording1"
+    private let iTelloProPurchaseId = "itello.pro"
     private var purchaseUpdateListener: Task<Void, Never>?
     
     @MainActor init() {
@@ -38,8 +38,8 @@ class TelloStoreViewModel: ObservableObject {
         Task {
             for await result in Transaction.currentEntitlements {
                 guard case .verified(let transaction) = result else { continue }
-                if transaction.productID == videoRecordingProductId {
-                    self.hasPurchasedRecording = transaction.revocationDate == nil
+                if transaction.productID == self.iTelloProPurchaseId {
+                    self.hasPurchasedPro = transaction.revocationDate == nil
                 }
             }
         }
@@ -47,11 +47,11 @@ class TelloStoreViewModel: ObservableObject {
     
     func fetchProducts() throws {
         Task {
-            self.products = try await Product.products(for: ["videorecording1"])
+            self.products = try await Product.products(for: ["itello.pro"])
         }
     }
     
-    func purchaseVideoRecording() {
+    func purchasePro() {
         Task {
             try await self.purchase(self.products.first!)
         }
@@ -65,7 +65,7 @@ class TelloStoreViewModel: ObservableObject {
             switch verification {
             case .verified(let transaction):
                 await transaction.finish()
-                self.hasPurchasedRecording = transaction.revocationDate == nil
+                self.hasPurchasedPro = transaction.revocationDate == nil
             case .unverified(_, _):
                 print("Unverified Purchase")
             }
@@ -91,7 +91,7 @@ class TelloStoreViewModel: ObservableObject {
                 // Ignore unverified transactions.
                 continue
             }
-            self.hasPurchasedRecording = transaction.revocationDate == nil
+            self.hasPurchasedPro = transaction.revocationDate == nil
         }
     }
 }

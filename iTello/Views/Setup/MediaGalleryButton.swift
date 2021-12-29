@@ -17,10 +17,6 @@ struct MediaGalleryButton: View {
     
     var body: some View {
         VStack {
-            Text("")
-                .font(.callout)
-                .foregroundColor(Color.white)
-                .frame(height: 25)
             Spacer()
             Button(action: {
                 self.displayMediaGallery.toggle()
@@ -39,13 +35,11 @@ struct MediaGalleryButton: View {
                     })
                     Button(action: {
                         self.alertDisplayed = false
-                        print("Purchase Video Recording Begin")
-                        self.telloStore.purchaseVideoRecording()
+                        self.telloStore.purchasePro()
                     }, label: {
                         Text("OK")
                     })
                 })
-            Spacer()
         }
     }
 }
