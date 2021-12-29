@@ -46,6 +46,8 @@ struct AppSettings: View {
                 .alert("Purchase Video Recording?", isPresented: self.$alertDisplayed, actions: {
                     Button(action: {
                         self.alertDisplayed = false
+                        self.hideJoysticks = false
+                        self.showRecordVideoButton = false
                     }, label: {
                         Text("Maybe Later")
                     })
@@ -55,6 +57,10 @@ struct AppSettings: View {
                     }, label: {
                         Text("OK")
                     })
+                })
+                .onAppear(perform: {
+                    self.hideJoysticks = false
+                    self.showRecordVideoButton = false
                 })
         }
     }
@@ -80,6 +86,8 @@ struct AppSettings: View {
                 .alert("Purchase iTello Pro?", isPresented: self.$alertDisplayed2, actions: {
                     Button(action: {
                         self.alertDisplayed2 = false
+                        self.hideJoysticks = false
+                        self.showRecordVideoButton = false
                     }, label: {
                         Text("Maybe Later")
                     })

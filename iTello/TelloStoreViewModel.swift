@@ -19,8 +19,10 @@ class TelloStoreViewModel: ObservableObject {
     private let iTelloProPurchaseId = "itello.pro"
     private var purchaseUpdateListener: Task<Void, Never>?
     
-    @MainActor init() {
-        self.updatePurchases()
+    init() {
+        DispatchQueue.main.async {
+            self.updatePurchases()
+        }
         self.purchaseUpdateListener = Task {
             await self.listenForTransactions()
         }

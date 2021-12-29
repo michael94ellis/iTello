@@ -20,6 +20,7 @@ class VideoRecorder: NSObject {
     var nextPTS: CMTime = CMTimeMake(value: 0, timescale: 0)
     var assetWriter: AVAssetWriter?
     var assetWriterInput: AVAssetWriterInput?
+    private let store = TelloStoreViewModel()
     private var path = ""
     private var outputURL: URL?
     
@@ -68,6 +69,10 @@ class VideoRecorder: NSObject {
     func startRecording() {
         guard !self.isRecording else {
             print("Warning: Cannot start recording because \(Self.self) is already recording")
+            return
+        }
+        guard self.store.hasPurchasedPro else {
+            WifiManager.shared.isConnected = false
             return
         }
         // 30 fps - 30 pictures will equal 1 second of video
