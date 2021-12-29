@@ -15,8 +15,9 @@ struct DroneController: View {
     
     @AppStorage("showFlipButtons") public var showFlipButtons: Int = 0
     @AppStorage("showCameraButton") public var showCameraButton: Bool = true
-    @AppStorage("showJoysticks") public var showJoysticks: Bool = true
+    @AppStorage("hideJoysticks") public var hideJoysticks: Bool = false
     @AppStorage("showRecordVideoButton") public var showRecordVideoButton: Bool = false
+    @AppStorage("firstTimeNoJoysticks") public var firstTimeNoJoysticks: Bool = true
     
     @ObservedObject var tello: TelloController
     @Binding var displaySettings: Bool
@@ -63,7 +64,7 @@ struct DroneController: View {
         GeometryReader { parent in
             ZStack {
                 // Joysticks
-                if self.showJoysticks {
+                if !self.hideJoysticks {
                     VStack {
                         Spacer()
                         HStack {
@@ -139,6 +140,19 @@ struct DroneController: View {
                         .padding(parent.size.width / 20)
                         .edgesIgnoringSafeArea(.all)
                     }
+                    .onAppear {
+                        if self.hideJoysticks && self.firstTimeNoJoysticks {
+                            self.alertDisplayed = true
+                            self.firstTimeNoJoysticks = false
+                        }
+                    }
+                    .alert("Touch and drag anywhere on either the left or right half of the screen to move the Tello", isPresented: self.$alertDisplayed, actions: {
+                        Button(action: {
+                            self.alertDisplayed = false
+                        }, label: {
+                            Text("OK")
+                        })
+                    })
                 }
                 VStack {
                     if let image = image {
