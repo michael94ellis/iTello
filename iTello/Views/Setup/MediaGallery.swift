@@ -15,14 +15,15 @@ struct MediaGallery: View {
     @StateObject var viewModel: MediaGalleryViewModel = MediaGalleryViewModel()
     @ObservedObject var telloStore: TelloStoreViewModel
     
-    @State var selectedVideo: URL?
+    @State var selectedVideoIndex = 0
     @Binding var displayMediaGallery: Bool
     
     var videoPlayer: some View {
-        if let  selectedVideo = selectedVideo {
-            return VideoPlayer(player: AVPlayer(url: selectedVideo))
+        if self.viewModel.videoURLs.indices.contains(self.selectedVideoIndex) {
+            let videoURL = self.viewModel.videoURLs[self.selectedVideoIndex]
+            return VideoPlayer(player: AVPlayer(url: videoURL))
         } else {
-            let videoURL: URL = Bundle.main.url(forResource: "itello-initial", withExtension: "mov")!
+            let videoURL: URL = Bundle.main.url(forResource: "itello-instructions", withExtension: "mov")!
             return VideoPlayer(player: AVPlayer(url: videoURL))
         }
     }
@@ -91,12 +92,14 @@ struct MediaGallery: View {
                 ForEach(self.viewModel.videoURLs, id: \.self) { videoURL in
                     HStack {
                         Button(action: {
-                            self.selectedVideo = videoURL
+                            if let newVideoIndex = self.viewModel.videoURLs.firstIndex(where: { $0 == videoURL }) {
+                                self.selectedVideoIndex = newVideoIndex
+                            }
                         }) {
                             Text(videoURL.lastPathComponent)
                                 .foregroundColor(Color.white)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 4)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
                             Spacer()
                         }
                         .contentShape(Rectangle())
@@ -106,7 +109,7 @@ struct MediaGallery: View {
                         }) {
                             Image(systemName: "square.and.arrow.up")
                                 .foregroundColor(Color.white)
-                                .padding(.horizontal, 16)
+                                .padding(.trailing, 16)
                         }
                         .contentShape(Rectangle())
                         
@@ -125,12 +128,11 @@ struct MediaGallery: View {
         GeometryReader { container in
             HStack {
                 videosList
-                    .padding(.leading, 16)
                     .frame(width: container.size.width / 3, height: container.size.height)
                 videoPlayer
-                    .padding(.trailing, 16)
                     .frame(width: container.size.width * (2 / 3), height: container.size.height)
             }
+            .padding(.horizontal, 16)
         }
     }
 }
@@ -140,15 +142,14 @@ class MediaGalleryViewModel: ObservableObject {
     @Published private(set) public var videoURLs: [URL] = []
     
     init() {
-        DispatchQueue.main.async {
-            self.videoURLs = self.fetchExistingVideos()
-            let videoURL: URL = Bundle.main.url(forResource: "itello-initial", withExtension: "mov")!
-            self.videoURLs.insert(videoURL, at: 0)
-        }
+        self.reloadData()
     }
     
     func reloadData() {
-        self.videoURLs = self.fetchExistingVideos()
+        var newURLs = self.fetchExistingVideos()
+        let videoURL: URL = Bundle.main.url(forResource: "itello-instructions", withExtension: "mov")!
+        newURLs.insert(videoURL, at: 0)
+        self.videoURLs = newURLs
     }
     
     func fetchExistingVideos() -> [URL] {
@@ -156,7 +157,6 @@ class MediaGalleryViewModel: ObservableObject {
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         do {
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
-            print(fileURLs)
             return fileURLs.filter { !$0.lastPathComponent.hasPrefix(".Trash") }
         } catch {
             print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")

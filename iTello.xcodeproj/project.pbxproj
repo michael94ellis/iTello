@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2F2AA30F2778C13B000D59EF /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2AA30E2778C13B000D59EF /* Logger.swift */; };
 		2F2AA3112778D442000D59EF /* MediaGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2AA3102778D442000D59EF /* MediaGallery.swift */; };
-		2F2AA3132778D79F000D59EF /* itello-initial.mov in Resources */ = {isa = PBXBuildFile; fileRef = 2F2AA3122778D79F000D59EF /* itello-initial.mov */; };
 		2F2C4799276F83CF0080D616 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2C4798276F83CF0080D616 /* AppSettings.swift */; };
 		2F374E57274290DB0073E24A /* VideoStreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F374E56274290DB0073E24A /* VideoStreamManager.swift */; };
 		2F399CA22741F3B70016BE8B /* WiFiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F399C9F2741F3B70016BE8B /* WiFiManager.swift */; };
@@ -32,6 +31,7 @@
 		2FA58425276F81D100DED90E /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 2FA58424276F81D100DED90E /* FirebaseDatabase */; };
 		2FB332A4276D526C002E9AF2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2FB332A3276D526C002E9AF2 /* README.md */; };
 		2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB55D2C24854368000EF166 /* UDPClient.swift */; };
+		2FD3A092277BF3E2000F0B87 /* itello-instructions.mov in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3A091277BF3E2000F0B87 /* itello-instructions.mov */; };
 		2FDB56ED275E3B9C00DF04DF /* LinearGradient-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */; };
 		2FDB56EF275EDF9200DF04DF /* Joystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EE275EDF9200DF04DF /* Joystick.swift */; };
 		2FDE4B762474902B00B8C422 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDE4B752474902B00B8C422 /* NetworkExtension.framework */; };
@@ -44,7 +44,6 @@
 /* Begin PBXFileReference section */
 		2F2AA30E2778C13B000D59EF /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		2F2AA3102778D442000D59EF /* MediaGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaGallery.swift; sourceTree = "<group>"; };
-		2F2AA3122778D79F000D59EF /* itello-initial.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "itello-initial.mov"; sourceTree = "<group>"; };
 		2F2C4798276F83CF0080D616 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		2F374E56274290DB0073E24A /* VideoStreamManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoStreamManager.swift; sourceTree = "<group>"; };
 		2F399C9F2741F3B70016BE8B /* WiFiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiManager.swift; sourceTree = "<group>"; };
@@ -65,6 +64,7 @@
 		2F8C8D8424748F51006D40EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FB332A3276D526C002E9AF2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2FB55D2C24854368000EF166 /* UDPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPClient.swift; sourceTree = "<group>"; };
+		2FD3A091277BF3E2000F0B87 /* itello-instructions.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "itello-instructions.mov"; sourceTree = "<group>"; };
 		2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LinearGradient-Extension.swift"; sourceTree = "<group>"; };
 		2FDB56EE275EDF9200DF04DF /* Joystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Joystick.swift; sourceTree = "<group>"; };
 		2FDE4B742474902500B8C422 /* iTello.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iTello.entitlements; sourceTree = "<group>"; };
@@ -149,7 +149,7 @@
 				2FDE4B742474902500B8C422 /* iTello.entitlements */,
 				2F8C8D8424748F51006D40EC /* Info.plist */,
 				2F65C7CE27763BBE00811593 /* TelloStore.storekit */,
-				2F2AA3122778D79F000D59EF /* itello-initial.mov */,
+				2FD3A091277BF3E2000F0B87 /* itello-instructions.mov */,
 				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
 				2F78E506276780770003A788 /* TelloController.swift */,
 				2F65C7CF27763E7700811593 /* TelloStoreViewModel.swift */,
@@ -280,8 +280,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FD3A092277BF3E2000F0B87 /* itello-instructions.mov in Resources */,
 				2F8C8D8024748F51006D40EC /* Assets.xcassets in Resources */,
-				2F2AA3132778D79F000D59EF /* itello-initial.mov in Resources */,
 				2F78E5032766CCA70003A788 /* LaunchScreen.storyboard in Resources */,
 				2FB332A4276D526C002E9AF2 /* README.md in Resources */,
 				2F3C36DC276CC84F005E4D57 /* GoogleService-Info.plist in Resources */,
