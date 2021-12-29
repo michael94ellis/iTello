@@ -96,7 +96,6 @@ class TelloController: ObservableObject {
             .sink(receiveValue: { _ in
                 print("BEGIN CMD and STREAM")
                 self.sendCommand(CMD.on)
-                usleep(200000) // will sleep for 0.2 seconds
                 self.sendCommand(CMD.streamOn)
                 guard self.commandable, self.streaming else {
                     return
