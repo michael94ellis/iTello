@@ -117,7 +117,7 @@ class TelloController: ObservableObject {
     // MARK: - Tello Commands
     
     func beginMovementBroadcast() {
-        guard self.commandable,
+        guard
               self.commandBroadcaster == nil else {
             return
         }
@@ -133,15 +133,15 @@ class TelloController: ObservableObject {
             .autoconnect()
             .receive(on: self.commandQueue)
             .sink(receiveValue: { _ in
+                print(self.moveCommand)
+                self.sendCommand(self.moveCommand)
                 if self.leftRight + self.forwardBack + self.upDown + self.yaw == 0 {
                     // The joysticks go back to 0 when the user lets go, therefore if the value isnt 0
                     // Send an extra because UDP packets can be lost
                     self.sendCommand(self.moveCommand)
                     self.commandBroadcaster?.cancel()
                     self.commandBroadcaster = nil
-                    
                 }
-                self.sendCommand(self.moveCommand)
             })
     }
     

@@ -13,7 +13,6 @@ import AVKit
 
 struct DroneController: View {
     
-    @AppStorage("showFlipButtons") public var showFlipButtons: Int = 0
     @AppStorage("showCameraButton") public var showCameraButton: Bool = true
     @AppStorage("hideJoysticks") public var hideJoysticks: Bool = false
     @AppStorage("showRecordVideoButton") public var showRecordVideoButton: Bool = false
@@ -42,8 +41,9 @@ struct DroneController: View {
             }) {
                 Image(systemName: "pause.fill").resizable()
                     .foregroundColor(.telloBlue)
+                    .frame(width: 45, height: 45)
             }
-            .frame(width: 45, height: 45)
+            .frame(width: 70, height: 70)
             .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
             .contentShape(Rectangle())
     }
@@ -91,8 +91,9 @@ struct DroneController: View {
                     VStack {
                         HStack {
                             Rectangle()
-                                .opacity(0)
+                                .fill(Color.clear)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .contentShape(Rectangle())
                                 .gesture(
                                     DragGesture(minimumDistance: 0, coordinateSpace: .local)
                                         .onChanged({ value in
@@ -102,20 +103,21 @@ struct DroneController: View {
                                             else if thumbDistance.x < -100 { thumbDistance.x = -100 }
                                             if thumbDistance.y > 100 { thumbDistance.y = 100 }
                                             else if thumbDistance.y < -100 { thumbDistance.y = -100 }
-                                            self.leftJoystick.xyPoint = thumbDistance
+                                            self.tello.yaw = Int(thumbDistance.x)
+                                            self.tello.upDown = Int(thumbDistance.y)
+                                            self.tello.beginMovementBroadcast()
+
                                         })
                                         .onEnded({ value in
-                                            self.leftJoystick.xyPoint = .zero
+                                            self.tello.yaw = 0
+                                            self.tello.upDown = 0
+                                            self.tello.beginMovementBroadcast()
                                         })
                                 )
-                                .onReceive(self.leftJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { leftThumbPoint in
-                                    self.tello.yaw = Int(leftThumbPoint.x)
-                                    self.tello.upDown = Int(leftThumbPoint.y)
-                                    self.tello.beginMovementBroadcast()
-                                })
                             Rectangle()
-                                .opacity(0)
+                                .fill(Color.clear)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .contentShape(Rectangle())
                                 .gesture(
                                     DragGesture(minimumDistance: 0, coordinateSpace: .local)
                                         .onChanged({ value in
@@ -125,17 +127,17 @@ struct DroneController: View {
                                             else if thumbDistance.x < -100 { thumbDistance.x = -100 }
                                             if thumbDistance.y > 100 { thumbDistance.y = 100 }
                                             else if thumbDistance.y < -100 { thumbDistance.y = -100 }
-                                            self.rightJoystick.xyPoint = thumbDistance
+                                            self.tello.leftRight = Int(thumbDistance.x)
+                                            self.tello.forwardBack = Int(thumbDistance.y)
+                                            self.tello.beginMovementBroadcast()
+
                                         })
                                         .onEnded({ value in
-                                            self.rightJoystick.xyPoint = .zero
+                                            self.tello.leftRight = 0
+                                            self.tello.forwardBack = 0
+                                            self.tello.beginMovementBroadcast()
                                         })
                                 )
-                                .onReceive(self.rightJoystick.$xyPoint.receive(on: self.joystickQueue), perform: { rightThumbPoint in
-                                    self.tello.leftRight = Int(rightThumbPoint.x)
-                                    self.tello.forwardBack = Int(rightThumbPoint.y)
-                                    self.tello.beginMovementBroadcast()
-                                })
                         }
                         .padding(parent.size.width / 20)
                         .edgesIgnoringSafeArea(.all)
@@ -155,28 +157,20 @@ struct DroneController: View {
                     })
                 }
                 VStack {
-                    if let image = image {
+                    if let image = image, !self.hideJoysticks {
                         Image(decorative: image, scale: 1.0, orientation: .up)
                             .resizable()
                             .scaledToFit()
+                            .frame(maxWidth: parent.size.width * 0.65, maxHeight: .infinity)
+                    } else if let image = image {
+                        Image(decorative: image, scale: 1.0, orientation: .up)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        Image(systemName: "camera")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
-                .frame(width: parent.size.width * 0.65)
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        if self.showFlipButtons == 2 {
-                            ForEach(0...3, id: \.self) { index in
-                                self.flipButton(for: FLIP.all[index], imageName: self.flipImageNames[index])
-                            }
-                        } else if self.showFlipButtons == 1 {
-                            self.randomFlipButton()
-                        }
-                        Spacer()
-                    }
-                    .padding(.bottom, 20)
-                }
+                FlipButtons(tello: self.tello)
                 // Controls
                 VStack {
                     HStack {
@@ -186,8 +180,9 @@ struct DroneController: View {
                         }) {
                             Image(systemName: "play.fill").resizable()
                                 .foregroundColor(.telloBlue)
+                                .frame(width: 45, height: 45)
                         }
-                        .frame(width: 45, height: 45)
+                        .frame(width: 70, height: 70)
                         .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
                         .contentShape(Rectangle())
                         Spacer()
@@ -209,20 +204,20 @@ struct DroneController: View {
                         }, label: {
                             HStack {
                                 Image(systemName: "gearshape")
-                                    .foregroundColor(.telloBlue)
+                                    .foregroundColor(.white)
                                 if self.tello.battery.isEmpty {
                                     Text("Settings")
-                                        .foregroundColor(.telloBlue)
+                                        .foregroundColor(.white)
                                 } else {
                                     Text("Battery: \(self.tello.battery)%")
                                         .font(.body)
-                                        .foregroundColor(.telloBlue)
+                                        .foregroundColor(.white)
                                 }
                             }
                             .padding(.horizontal, 8)
                         })
                             .frame(height: 45)
-                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.1)))
+                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.5)))
                         Spacer()
                         // Record Video Button
                         if self.showRecordVideoButton {
@@ -254,37 +249,5 @@ struct DroneController: View {
                 self.image = newImage
             })
         }
-    }
-    
-    // MARK: - Flips
-    
-    private let flipImageNames = ["arrow.uturn.forward",
-                                  "arrow.uturn.up",
-                                  "arrow.uturn.down",
-                                  "arrow.uturn.backward"]
-    @State var randomFlipImage: String = "arrow.uturn.forward"
-    
-    @ViewBuilder func flipButton(for flip: FLIP, imageName: String) -> some View {
-        Button(action: {
-            self.tello.flip(flip)
-        }) {
-            Image(systemName: imageName).resizable()
-                .frame(width: 40, height: 40, alignment: .bottom)
-                .foregroundColor(.telloBlue)
-        }
-        .contentShape(Rectangle())
-    }
-    
-    @ViewBuilder func randomFlipButton() -> some View {
-        Button(action: {
-            let newIndex = Int.random(in: 0...3)
-            self.randomFlipImage = self.flipImageNames[newIndex]
-            self.tello.flip(FLIP.all[newIndex])
-        }) {
-            Image(systemName: self.randomFlipImage).resizable()
-                .frame(width: 40, height: 40, alignment: .bottom)
-                .foregroundColor(.telloBlue)
-        }
-        .contentShape(Rectangle())
     }
 }

@@ -32,6 +32,7 @@
 		2FB332A4276D526C002E9AF2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2FB332A3276D526C002E9AF2 /* README.md */; };
 		2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB55D2C24854368000EF166 /* UDPClient.swift */; };
 		2FD3A092277BF3E2000F0B87 /* itello-instructions.mov in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3A091277BF3E2000F0B87 /* itello-instructions.mov */; };
+		2FD3A094277C9883000F0B87 /* FlipButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3A093277C9883000F0B87 /* FlipButtons.swift */; };
 		2FDB56ED275E3B9C00DF04DF /* LinearGradient-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */; };
 		2FDB56EF275EDF9200DF04DF /* Joystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EE275EDF9200DF04DF /* Joystick.swift */; };
 		2FDE4B762474902B00B8C422 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDE4B752474902B00B8C422 /* NetworkExtension.framework */; };
@@ -65,6 +66,7 @@
 		2FB332A3276D526C002E9AF2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2FB55D2C24854368000EF166 /* UDPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPClient.swift; sourceTree = "<group>"; };
 		2FD3A091277BF3E2000F0B87 /* itello-instructions.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "itello-instructions.mov"; sourceTree = "<group>"; };
+		2FD3A093277C9883000F0B87 /* FlipButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipButtons.swift; sourceTree = "<group>"; };
 		2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LinearGradient-Extension.swift"; sourceTree = "<group>"; };
 		2FDB56EE275EDF9200DF04DF /* Joystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Joystick.swift; sourceTree = "<group>"; };
 		2FDE4B742474902500B8C422 /* iTello.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iTello.entitlements; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		2F78E5052766F6A90003A788 /* Controller View */ = {
 			isa = PBXGroup;
 			children = (
+				2FD3A093277C9883000F0B87 /* FlipButtons.swift */,
 				2F43CB6427604347005F6CB0 /* DroneController.swift */,
 				2FDB56EE275EDF9200DF04DF /* Joystick.swift */,
 			);
@@ -325,6 +328,7 @@
 				2F374E57274290DB0073E24A /* VideoStreamManager.swift in Sources */,
 				2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */,
 				2FDB56EF275EDF9200DF04DF /* Joystick.swift in Sources */,
+				2FD3A094277C9883000F0B87 /* FlipButtons.swift in Sources */,
 				2F65C7C3277631F500811593 /* Color-Extension.swift in Sources */,
 				2F2AA3112778D442000D59EF /* MediaGallery.swift in Sources */,
 				2F43CB6527604347005F6CB0 /* DroneController.swift in Sources */,
