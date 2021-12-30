@@ -165,9 +165,6 @@ struct DroneController: View {
                     } else if let image = image {
                         Image(decorative: image, scale: 1.0, orientation: .up)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    } else {
-                        Image(systemName: "camera")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
                 FlipButtons(tello: self.tello)
