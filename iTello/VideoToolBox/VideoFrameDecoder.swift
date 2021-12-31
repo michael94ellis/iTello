@@ -9,7 +9,7 @@ protocol VideoFrameDecoderDelegate {
     func receivedDisplayableFrame(_ frame: CVPixelBuffer)
 }
 
-class VideoFrameDecoder: ObservableObject {
+final class VideoFrameDecoder: ObservableObject {
     
     // I dislike this pattern but not as much as working in Obj-C
     static var delegate: VideoFrameDecoderDelegate?

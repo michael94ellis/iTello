@@ -21,11 +21,13 @@ struct iTelloApp: App {
     
     var wifiConnectionListener: AnyCancellable?
     var droneConnectionListener: AnyCancellable?
-    
-    // TODO: Tab View for help page, settings pages, and connection page
-    
+        
     init() {
         FirebaseApp.configure()
+        
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white  as Any], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "TelloLight") as Any], for: .normal)
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.lightGray
     }
     
     var body: some Scene {

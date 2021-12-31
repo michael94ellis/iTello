@@ -18,10 +18,12 @@
 		2F3C36DC276CC84F005E4D57 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F3C36DB276CC84F005E4D57 /* GoogleService-Info.plist */; };
 		2F43CB6527604347005F6CB0 /* DroneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F43CB6427604347005F6CB0 /* DroneController.swift */; };
 		2F45EEB024763C0200F5C9BE /* TelloConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */; };
+		2F472758277E90D3001A2688 /* ControllerJoysticks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F472757277E90D3001A2688 /* ControllerJoysticks.swift */; };
 		2F65C7C127762D0100811593 /* MediaGalleryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65C7C027762D0100811593 /* MediaGalleryButton.swift */; };
 		2F65C7C3277631F500811593 /* Color-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65C7C2277631F500811593 /* Color-Extension.swift */; };
 		2F65C7C527763A7300811593 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F65C7C427763A7300811593 /* StoreKit.framework */; };
 		2F65C7D027763E7700811593 /* TelloStoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65C7CF27763E7700811593 /* TelloStoreViewModel.swift */; };
+		2F69D5B1277F3BE200C1C8C1 /* itello-instructions.mov in Resources */ = {isa = PBXBuildFile; fileRef = 2F69D5B0277F3BE200C1C8C1 /* itello-instructions.mov */; };
 		2F78E5032766CCA70003A788 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F78E5022766CCA70003A788 /* LaunchScreen.storyboard */; };
 		2F78E507276780770003A788 /* TelloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F78E506276780770003A788 /* TelloController.swift */; };
 		2F808039276E381600F78D5B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2F808038276E381600F78D5B /* FirebaseAnalytics */; };
@@ -31,7 +33,6 @@
 		2FA58425276F81D100DED90E /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 2FA58424276F81D100DED90E /* FirebaseDatabase */; };
 		2FB332A4276D526C002E9AF2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2FB332A3276D526C002E9AF2 /* README.md */; };
 		2FB55D2D24854368000EF166 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB55D2C24854368000EF166 /* UDPClient.swift */; };
-		2FD3A092277BF3E2000F0B87 /* itello-instructions.mov in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3A091277BF3E2000F0B87 /* itello-instructions.mov */; };
 		2FD3A094277C9883000F0B87 /* FlipButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3A093277C9883000F0B87 /* FlipButtons.swift */; };
 		2FDB56ED275E3B9C00DF04DF /* LinearGradient-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */; };
 		2FDB56EF275EDF9200DF04DF /* Joystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB56EE275EDF9200DF04DF /* Joystick.swift */; };
@@ -53,11 +54,13 @@
 		2F3C36DB276CC84F005E4D57 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2F43CB6427604347005F6CB0 /* DroneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneController.swift; sourceTree = "<group>"; };
 		2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelloConstants.swift; sourceTree = "<group>"; };
+		2F472757277E90D3001A2688 /* ControllerJoysticks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerJoysticks.swift; sourceTree = "<group>"; };
 		2F65C7C027762D0100811593 /* MediaGalleryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaGalleryButton.swift; sourceTree = "<group>"; };
 		2F65C7C2277631F500811593 /* Color-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color-Extension.swift"; sourceTree = "<group>"; };
 		2F65C7C427763A7300811593 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2F65C7CE27763BBE00811593 /* TelloStore.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = TelloStore.storekit; sourceTree = "<group>"; };
 		2F65C7CF27763E7700811593 /* TelloStoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelloStoreViewModel.swift; sourceTree = "<group>"; };
+		2F69D5B0277F3BE200C1C8C1 /* itello-instructions.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "itello-instructions.mov"; sourceTree = "<group>"; };
 		2F78E5022766CCA70003A788 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2F78E506276780770003A788 /* TelloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelloController.swift; sourceTree = "<group>"; };
 		2F8C8D7324748F4E006D40EC /* iTello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTello.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,7 +68,6 @@
 		2F8C8D8424748F51006D40EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FB332A3276D526C002E9AF2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2FB55D2C24854368000EF166 /* UDPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPClient.swift; sourceTree = "<group>"; };
-		2FD3A091277BF3E2000F0B87 /* itello-instructions.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "itello-instructions.mov"; sourceTree = "<group>"; };
 		2FD3A093277C9883000F0B87 /* FlipButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipButtons.swift; sourceTree = "<group>"; };
 		2FDB56EC275E3B9C00DF04DF /* LinearGradient-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LinearGradient-Extension.swift"; sourceTree = "<group>"; };
 		2FDB56EE275EDF9200DF04DF /* Joystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Joystick.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			children = (
 				2FD3A093277C9883000F0B87 /* FlipButtons.swift */,
 				2F43CB6427604347005F6CB0 /* DroneController.swift */,
+				2F472757277E90D3001A2688 /* ControllerJoysticks.swift */,
 				2FDB56EE275EDF9200DF04DF /* Joystick.swift */,
 			);
 			path = "Controller View";
@@ -150,9 +153,9 @@
 				2F3C36DB276CC84F005E4D57 /* GoogleService-Info.plist */,
 				2F78E5022766CCA70003A788 /* LaunchScreen.storyboard */,
 				2FDE4B742474902500B8C422 /* iTello.entitlements */,
+				2F69D5B0277F3BE200C1C8C1 /* itello-instructions.mov */,
 				2F8C8D8424748F51006D40EC /* Info.plist */,
 				2F65C7CE27763BBE00811593 /* TelloStore.storekit */,
-				2FD3A091277BF3E2000F0B87 /* itello-instructions.mov */,
 				2F45EEAF24763C0200F5C9BE /* TelloConstants.swift */,
 				2F78E506276780770003A788 /* TelloController.swift */,
 				2F65C7CF27763E7700811593 /* TelloStoreViewModel.swift */,
@@ -283,7 +286,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FD3A092277BF3E2000F0B87 /* itello-instructions.mov in Resources */,
+				2F69D5B1277F3BE200C1C8C1 /* itello-instructions.mov in Resources */,
 				2F8C8D8024748F51006D40EC /* Assets.xcassets in Resources */,
 				2F78E5032766CCA70003A788 /* LaunchScreen.storyboard in Resources */,
 				2FB332A4276D526C002E9AF2 /* README.md in Resources */,
@@ -321,6 +324,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F2AA30F2778C13B000D59EF /* Logger.swift in Sources */,
+				2F472758277E90D3001A2688 /* ControllerJoysticks.swift in Sources */,
 				2F3C36D8276C3C16005E4D57 /* UDPListener.swift in Sources */,
 				2F399CD62741FDA30016BE8B /* iTelloApp.swift in Sources */,
 				2F65C7D027763E7700811593 /* TelloStoreViewModel.swift in Sources */,
@@ -477,7 +481,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = michaelrobertellis.itello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -501,7 +505,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = michaelrobertellis.itello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

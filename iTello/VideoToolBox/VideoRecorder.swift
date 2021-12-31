@@ -13,7 +13,7 @@ import UIKit
 import AVFoundation
 import AssetsLibrary
 
-class VideoRecorder: NSObject {
+final class VideoRecorder: NSObject {
     
     var isRecording: Bool = false
     var frameDuration: CMTime = CMTimeMake(value: 0, timescale: 0)
@@ -55,18 +55,17 @@ class VideoRecorder: NSObject {
         }
     }
     
-    func startStop() {
-        if !self.isRecording {
-            self.startRecording()
-        } else {
+    public func startStop() {
+        if self.isRecording {
             self.stopRecording() { successfulCompletion in
                 print("Stopped Recording: \(successfulCompletion)")
-            
             }
+        } else {
+            self.startRecording()
         }
     }
     
-    func startRecording() {
+    private func startRecording() {
         guard !self.isRecording else {
             print("Warning: Cannot start recording because \(Self.self) is already recording")
             return
@@ -75,14 +74,12 @@ class VideoRecorder: NSObject {
             WifiManager.shared.isConnected = false
             return
         }
-        // 30 fps - 30 pictures will equal 1 second of video
-        self.frameDuration = CMTime(value: 1, timescale: 30)
         self.createFilePath()
         print("Started Recording")
         self.isRecording = true
     }
     
-    func appendFrame(_ sampleBuffer: CMSampleBuffer) {
+    public func appendFrame(_ sampleBuffer: CMSampleBuffer) {
         // set up the AVAssetWriter using the format description from the first sample buffer captured
         if self.assetWriter == nil {
             let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
@@ -163,7 +160,7 @@ class VideoRecorder: NSObject {
         return true
     }
 
-    func stopRecording(completion: @escaping (Bool) -> ()) {
+    private func stopRecording(completion: @escaping (Bool) -> ()) {
         guard self.isRecording else {
             print("Warning: Cannot stop recording because \(Self.self) is not recording")
             completion(false)
@@ -177,7 +174,6 @@ class VideoRecorder: NSObject {
         }
         assetWriterInput!.markAsFinished()
         assetWriter?.finishWriting() {
-            self.nextPTS = CMTimeMake(value: 0, timescale: 0)
             self.assetWriter = nil
             self.assetWriterInput = nil
             self.path = ""

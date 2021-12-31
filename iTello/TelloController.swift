@@ -46,6 +46,7 @@ class TelloController: ObservableObject {
     private let stateQueue: DispatchQueue = DispatchQueue(label: "StateStream", qos: .userInteractive)
     /// Used for broadcasting movement commands to the drone, uses `commandDelay`
     private var commandBroadcaster: AnyCancellable?
+    private var initializerBroadcaster: AnyCancellable?
     
     lazy var videoManager: VideoStreamManager = VideoStreamManager()
     
@@ -74,6 +75,8 @@ class TelloController: ObservableObject {
     }
     
     func exitCommandMode() {
+        self.initializerBroadcaster?.cancel()
+        self.initializerBroadcaster = nil
         self.commandClient?.cancel()
         self.commandClient = nil
         self.commandClientResponseListener?.cancel()
@@ -89,7 +92,7 @@ class TelloController: ObservableObject {
     
     /// Repeats a comment until an `ok` is received from the Tello
     private func initializeCommandMode() {
-        self.commandBroadcaster = Timer.publish(every: 2, on: .main, in: .default)
+        self.initializerBroadcaster = Timer.publish(every: 2, on: .main, in: .default)
             .autoconnect()
         // Because this is setting up the drone's commandable state we use the main thread
             .receive(on: DispatchQueue.main)
@@ -101,7 +104,14 @@ class TelloController: ObservableObject {
                     return
                 }
                 // Because this is using the main thread we cancel when we are done
-                self.commandBroadcaster?.cancel()
+                self.initializerBroadcaster?.cancel()
+                self.initializerBroadcaster = nil
+                self.initializerBroadcaster = Timer.publish(every: 8, on: .main, in: .default).autoconnect()
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveValue: { _ in
+                        // stay connected
+                        self.sendCommand(CMD.on)
+                    })
             })
     }
     
@@ -117,8 +127,7 @@ class TelloController: ObservableObject {
     // MARK: - Tello Commands
     
     func beginMovementBroadcast() {
-        guard
-              self.commandBroadcaster == nil else {
+        guard self.commandBroadcaster == nil else {
             return
         }
         self.commandBroadcaster = self.joystickMovementHandler()
@@ -126,9 +135,6 @@ class TelloController: ObservableObject {
     
     /// Handles continuous movement events from the Joysticks, limiting output commands to once per `commandDelay`
     func joystickMovementHandler() -> AnyCancellable? {
-        //        guard self.commandable else {
-        //            return nil
-        //        }
         return Timer.publish(every: self.commandDelay, on: .main, in: .default)
             .autoconnect()
             .receive(on: self.commandQueue)

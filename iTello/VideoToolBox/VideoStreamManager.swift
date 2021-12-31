@@ -11,7 +11,7 @@ import Combine
 import Photos
 import UIKit.UIImage
 
-class VideoStreamManager: NSObject, VideoFrameDecoderDelegate, ObservableObject {
+final class VideoStreamManager: NSObject, VideoFrameDecoderDelegate, ObservableObject {
     
     /// A reference to the image view where the video will be displayed
     private var videoListener: UDPListener?

@@ -20,7 +20,6 @@ struct AppSettings: View {
     @Binding var isDisplayed: Bool
     @Binding var mediaGalleryDisplayed: Bool
     @State var alertDisplayed: Bool = false
-    @State var alertDisplayed2: Bool = false
     @AppStorage("showCameraButton") public var cameraButton: Bool = true
     @AppStorage("showFlipButtons") public var showFlipButtons: Int = 0
     @State private var selectedFlip = 0
@@ -59,7 +58,6 @@ struct AppSettings: View {
                     })
                 })
                 .onAppear(perform: {
-                    self.hideJoysticks = false
                     self.showRecordVideoButton = false
                 })
         }
@@ -67,39 +65,18 @@ struct AppSettings: View {
     
     @ViewBuilder
     var showJoysticksToggle: some View {
-        if self.telloStore.hasPurchasedPro {
-            Toggle("Hide Joysticks", isOn: self.$hideJoysticks)
-                .frame(height: 30)
-                .foregroundColor(.white)
-                .padding(.horizontal)
-                .onChange(of: self.hideJoysticks, perform: { newValue in
-                    self.hideJoysticks = newValue
-                })
-                .onAppear(perform: {
-                    self.hideJoysticks = self.hideJoysticks
-                })
-        } else {
-            Toggle("Hide Joysticks", isOn: self.$alertDisplayed2)
-                .frame(height: 30)
-                .foregroundColor(.white)
-                .padding(.horizontal)
-                .alert("Purchase iTello Pro?", isPresented: self.$alertDisplayed2, actions: {
-                    Button(action: {
-                        self.alertDisplayed2 = false
-                        self.hideJoysticks = false
-                        self.showRecordVideoButton = false
-                    }, label: {
-                        Text("Maybe Later")
-                    })
-                    Button(action: {
-                        self.alertDisplayed2 = false
-                        self.telloStore.purchasePro()
-                    }, label: {
-                        Text("OK")
-                    })
-                })
-        }
+        Toggle("Hide Joysticks", isOn: self.$hideJoysticks)
+            .frame(height: 30)
+            .foregroundColor(.white)
+            .padding(.horizontal)
+            .onChange(of: self.hideJoysticks, perform: { newValue in
+                self.hideJoysticks = newValue
+            })
+            .onAppear(perform: {
+                self.hideJoysticks = self.hideJoysticks
+            })
     }
+    
     var body: some View {
         VStack {
             Spacer()
