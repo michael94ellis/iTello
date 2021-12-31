@@ -27,25 +27,6 @@ struct DroneController: View {
     
     var joystickQueue: DispatchQueue = DispatchQueue.main
     
-    @ViewBuilder var landingButton: some View {
-        Button(action: {
-            self.tello.land()
-            self.emergencyLandCounter += 1
-            self.emergencyLandButtonTimer?.cancel()
-            self.emergencyLandButtonTimer = Timer.publish(every: 3, on: .main, in: .default).autoconnect().sink(receiveValue: { _ in
-                self.emergencyLandCounter = 0
-                self.emergencyLandButtonTimer?.cancel()
-            })
-        }) {
-            Image(systemName: "pause.fill").resizable()
-                .foregroundColor(.telloBlue)
-                .frame(width: 45, height: 45)
-        }
-        .frame(width: 70, height: 70)
-        .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
-        .contentShape(Rectangle())
-    }
-    
     @ViewBuilder var takeOffButton: some View {
         Button(action: {
             self.tello.takeOff()
@@ -63,10 +44,12 @@ struct DroneController: View {
         Button(action: {
             self.tello.videoManager.takePhoto(cgImage: self.image)
         }) {
-            Image(systemName: "camera.fill").resizable()
+            Image(systemName: "camera.fill")
+                .resizable()
+                .frame(width: 40, height: 30)
                 .foregroundColor(.telloBlue)
         }
-        .frame(width: 40, height: 30)
+        .frame(width: 50, height: 50)
         .contentShape(Rectangle())
     }
     
@@ -92,21 +75,28 @@ struct DroneController: View {
             .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.5)))
     }
     
-    @ViewBuilder var recordVideoButton: some View {
+    @ViewBuilder var landingButton: some View {
         Button(action: {
-            VideoFrameDecoder.shared.videoRecorder.startStop()
+            self.tello.land()
+            self.emergencyLandCounter += 1
+            self.emergencyLandButtonTimer?.cancel()
+            self.emergencyLandButtonTimer = Timer.publish(every: 3, on: .main, in: .default).autoconnect().sink(receiveValue: { _ in
+                self.emergencyLandCounter = 0
+                self.emergencyLandButtonTimer?.cancel()
+            })
         }) {
-            Image(systemName: VideoFrameDecoder.shared.videoRecorder.isRecording ? "video.slash.fill" : "video.fill").resizable()
+            Image(systemName: "pause.fill").resizable()
                 .foregroundColor(.telloBlue)
+                .frame(width: 45, height: 45)
         }
-        .frame(width: 40, height: 30)
+        .frame(width: 70, height: 70)
+        .shadow(color: .darkEnd, radius: 3, x: 1, y: 2)
         .contentShape(Rectangle())
     }
     
     @ViewBuilder var emergencyLandButton: some View {
         Button(action: {
-            self.tello.land()
-            self.emergencyLandCounter += 1
+            self.tello.emergencyLand()
         }) {
             Image(systemName: "hand.raised.slash").resizable()
                 .foregroundColor(.red)
@@ -123,7 +113,6 @@ struct DroneController: View {
                     if let image = image {
                         Image(decorative: image, scale: 1.0, orientation: .up)
                             .resizable()
-                            .scaledToFit()
                             .frame(maxWidth: parent.size.width, maxHeight: parent.size.height)
                     }
                 }
@@ -146,7 +135,16 @@ struct DroneController: View {
                         Spacer()
                         // Record Video Button
                         if self.showRecordVideoButton {
-                            self.recordVideoButton
+                            Button(action: {
+                                VideoFrameDecoder.shared.videoRecorder.startStop()
+                            }) {
+                                Image(systemName: VideoFrameDecoder.shared.videoRecorder.isRecording ? "video.slash.fill" : "video.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 30)
+                                    .foregroundColor(.telloBlue)
+                            }
+                            .frame(width: 50, height: 50)
+                            .contentShape(Rectangle())
                             Spacer()
                         }
                         // Land Button

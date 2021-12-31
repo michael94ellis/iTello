@@ -16,10 +16,10 @@ import AssetsLibrary
 final class VideoRecorder: NSObject {
     
     var isRecording: Bool = false
-    var frameDuration: CMTime = CMTimeMake(value: 0, timescale: 0)
-    var nextPTS: CMTime = CMTimeMake(value: 0, timescale: 0)
-    var assetWriter: AVAssetWriter?
-    var assetWriterInput: AVAssetWriterInput?
+    private var frameDuration: CMTime = CMTime(value: 1, timescale: 30)
+    private var nextPTS: CMTime = .zero
+    private var assetWriter: AVAssetWriter?
+    private var assetWriterInput: AVAssetWriterInput?
     private let store = TelloStoreViewModel()
     private var path = ""
     private var outputURL: URL?
@@ -68,10 +68,6 @@ final class VideoRecorder: NSObject {
     private func startRecording() {
         guard !self.isRecording else {
             print("Warning: Cannot start recording because \(Self.self) is already recording")
-            return
-        }
-        guard self.store.hasPurchasedPro else {
-            WifiManager.shared.isConnected = false
             return
         }
         self.createFilePath()
