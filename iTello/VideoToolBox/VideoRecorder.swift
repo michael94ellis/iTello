@@ -168,7 +168,7 @@ final class VideoRecorder: NSObject {
             completion(false)
             return
         }
-        assetWriterInput!.markAsFinished()
+        assetWriterInput?.markAsFinished()
         assetWriter?.finishWriting() {
             self.assetWriter = nil
             self.assetWriterInput = nil

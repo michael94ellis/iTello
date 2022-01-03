@@ -55,7 +55,11 @@ class TelloStoreViewModel: ObservableObject {
     
     func purchasePro() {
         Task {
-            try await self.purchase(self.products.first!)
+            if let iTelloPro = self.products.first {
+                try await self.purchase(iTelloPro)
+            } else {
+                print("Error: No products found to purchase")
+            }
         }
     }
     

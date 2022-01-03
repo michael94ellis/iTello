@@ -20,7 +20,7 @@ class UDPClient: ObservableObject {
     
     var resultHandler = NWConnection.SendCompletion.contentProcessed { NWError in
         guard NWError == nil else {
-            print("ERROR! Error sending data. NWError: \n \(NWError!)")
+            print("ERROR: Error sending data. NWError: \n \(NWError!)")
             return
         }
     }
