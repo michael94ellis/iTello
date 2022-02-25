@@ -20,7 +20,6 @@ final class VideoRecorder: NSObject {
     private var nextPTS: CMTime = .zero
     private var assetWriter: AVAssetWriter?
     private var assetWriterInput: AVAssetWriterInput?
-    private let store = TelloStoreViewModel()
     private var path = ""
     private var outputURL: URL?
     

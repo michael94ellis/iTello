@@ -11,7 +11,6 @@ import SwiftUI
 struct AppSettings: View {
     
     // Paid Feature
-    @ObservedObject var telloStore: TelloStoreViewModel
     @AppStorage("showRecordVideoButton") public var showRecordVideoButton: Bool = false
     @AppStorage("hideJoysticks") public var hideJoysticks: Bool = true
     
@@ -26,41 +25,16 @@ struct AppSettings: View {
 
     @ViewBuilder
     var showRecordingButtonToggle: some View {
-        if self.telloStore.hasPurchasedPro {
-            Toggle("Show Record Button", isOn: self.$showRecordVideoButton)
-                .frame(height: 30)
-                .foregroundColor(.white)
-                .padding(.horizontal)
-                .onChange(of: self.showRecordVideoButton, perform: { newValue in
-                    self.showRecordVideoButton = newValue
-                })
-                .onAppear(perform: {
-                    self.showRecordVideoButton = self.showRecordVideoButton
-                })
-        } else {
-            Toggle("Show Record Button", isOn: self.$alertDisplayed)
-                .frame(height: 30)
-                .foregroundColor(.white)
-                .padding(.horizontal)
-                .alert("Purchase Video Recording?", isPresented: self.$alertDisplayed, actions: {
-                    Button(action: {
-                        self.alertDisplayed = false
-                        self.hideJoysticks = false
-                        self.showRecordVideoButton = false
-                    }, label: {
-                        Text("Maybe Later")
-                    })
-                    Button(action: {
-                        self.alertDisplayed = false
-                        self.telloStore.purchasePro()
-                    }, label: {
-                        Text("OK")
-                    })
-                })
-                .onAppear(perform: {
-                    self.showRecordVideoButton = false
-                })
-        }
+        Toggle("Show Record Button", isOn: self.$showRecordVideoButton)
+            .frame(height: 30)
+            .foregroundColor(.white)
+            .padding(.horizontal)
+            .onChange(of: self.showRecordVideoButton, perform: { newValue in
+                self.showRecordVideoButton = newValue
+            })
+            .onAppear(perform: {
+                self.showRecordVideoButton = self.showRecordVideoButton
+            })
     }
     
     @ViewBuilder

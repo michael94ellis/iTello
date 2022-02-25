@@ -13,7 +13,6 @@ import AVKit
 struct MediaGallery: View {
     
     @StateObject var viewModel: MediaGalleryViewModel = MediaGalleryViewModel()
-    @ObservedObject var telloStore: TelloStoreViewModel
     
     @State var selectedVideoIndex = 0
     @Binding var displayMediaGallery: Bool
@@ -46,43 +45,27 @@ struct MediaGallery: View {
                     }
                     .contentShape(Rectangle())
                     Spacer()
-                    if !self.telloStore.hasPurchasedPro {
-                        Button(action: {
-                            self.telloStore.purchasePro()
-                        }) {
-                            HStack {
-                                Text("Upgrade iTello")
-                                    .foregroundColor(Color.telloLight)
-                            }
-                            .padding(8)
-                            .padding(.trailing, 4)
-                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.telloBlue))
-                            .shadow(radius: 4)
+                    Button(action: {
+                        let fileManager = FileManager.default
+                        let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
+                        guard let documentDirectoryURL: URL = urls.first as URL?,
+                              var documentDirComponents = URLComponents(url: documentDirectoryURL, resolvingAgainstBaseURL: true) else {
+                                  print("Error: Could Not Open Files App to s Directory")
+                                  return
+                              }
+                        documentDirComponents.scheme = "shareddocuments"
+                        if let docURL = documentDirComponents.url {
+                            UIApplication.shared.open(docURL)
                         }
-                    } else {
-                        Button(action: {
-                            let fileManager = FileManager.default
-                            let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
-                            guard let documentDirectoryURL: URL = urls.first as URL?,
-                                  var documentDirComponents = URLComponents(url: documentDirectoryURL, resolvingAgainstBaseURL: true) else {
-                                print("Error: Could Not Open Files App to s Directory")
-                                return
-                            }
-                            documentDirComponents.scheme = "shareddocuments"
-                            if let docURL = documentDirComponents.url {
-                                UIApplication.shared.open(docURL)
-                            }
-                        }) {
-                            HStack {
-                                Image(systemName: "photo.on.rectangle.angled")
-                                    .foregroundColor(Color.telloLight)
-                                Text("Files")
-                                    .foregroundColor(Color.telloLight)
-                            }
-                            .frame(width: 80)
-                            .padding(.vertical, 8)
+                    }) {
+                        HStack {
+                            Image(systemName: "photo.on.rectangle.angled")
+                                .foregroundColor(Color.telloLight)
+                            Text("Files")
+                                .foregroundColor(Color.telloLight)
                         }
-                        .contentShape(Rectangle())
+                        .frame(width: 80)
+                        .padding(.vertical, 8)
                     }
                 }
                 .padding(.top, 20)
