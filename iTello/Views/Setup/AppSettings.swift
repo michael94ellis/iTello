@@ -22,6 +22,7 @@ struct AppSettings: View {
     @AppStorage("showCameraButton") public var cameraButton: Bool = true
     @AppStorage("showFlipButtons") public var showFlipButtons: Int = 0
     @State private var selectedFlip = 0
+    @State private var showHideJoystickWarning = false
 
     @ViewBuilder
     var showRecordingButtonToggle: some View {
@@ -44,11 +45,24 @@ struct AppSettings: View {
             .foregroundColor(.white)
             .padding(.horizontal)
             .onChange(of: self.hideJoysticks, perform: { newValue in
-                self.hideJoysticks = newValue
+                if newValue {
+                    self.showHideJoystickWarning = true
+                } else {
+                    self.hideJoysticks = false
+                }
             })
             .onAppear(perform: {
                 self.hideJoysticks = self.hideJoysticks
             })
+            .alert("Warning",
+                   isPresented: $showHideJoystickWarning,
+                   actions: {
+                Button("OK", action: { self.hideJoysticks = true })
+                Button("Cancel", action: {
+                    self.hideJoysticks = false
+                    self.showHideJoystickWarning = false
+                })
+            }, message: { Text("Joysticks will become hidden! The left and right sides of the screen become invisible joysticks.") })
     }
     
     var body: some View {

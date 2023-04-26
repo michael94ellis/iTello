@@ -39,6 +39,7 @@ struct SetupInstructions: View {
                 .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray))
         }
         .contentShape(Rectangle())
+        .frame(width: 300, height: 80)
         .popover(isPresented: self.$displayPopover, content: {
             VStack(alignment: .center) {
                 Text(self.title)
