@@ -96,6 +96,10 @@ final public class WifiManager: ObservableObject {
                     return "Permission denied by User"
                 case .unknown:
                     return "Could not find Tello WiFi"
+                case .systemDenied:
+                    return "System Denied Access (MDM?)"
+                case .userUnauthorized:
+                    return "User not authorized (by MDM?)"
                 @unknown default:
                     return "Unknown Error"
                 }

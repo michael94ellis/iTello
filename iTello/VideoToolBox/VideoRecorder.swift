@@ -115,7 +115,6 @@ final class VideoRecorder: NSObject {
         if writeInput.append(sbufWithNewTiming) {
             self.nextPTS = CMTimeAdd(self.frameDuration, self.nextPTS)
         } else if let error = self.assetWriter?.error {
-            logError(error)
             print("Error: Failed to append sample buffer: \(error)")
         } else {
             print("Error: Something went horribly wrong with appending sample buffer")
@@ -129,7 +128,6 @@ final class VideoRecorder: NSObject {
         do {
             videoWriter = try AVAssetWriter(outputURL: URL(fileURLWithPath: self.path), fileType: AVFileType.mp4)
         } catch {
-            logError(error)
             return false
         }
         guard formatDescription != nil else {

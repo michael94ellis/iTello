@@ -93,7 +93,6 @@ final class VideoStreamManager: NSObject, VideoFrameDecoderDelegate, ObservableO
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             // we got back an error!
-            logError(error)
             print(error)
         } else {
             print("Your image has been saved to your photos.")

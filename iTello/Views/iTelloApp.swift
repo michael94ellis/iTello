@@ -8,7 +8,6 @@
 
 import SwiftUI
 import Combine
-import Firebase
 import Photos
 
 @main
@@ -22,8 +21,6 @@ struct iTelloApp: App {
     var droneConnectionListener: AnyCancellable?
         
     init() {
-        FirebaseApp.configure()
-        
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white  as Any], for: .selected)
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "TelloLight") as Any], for: .normal)
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.lightGray
